@@ -1,0 +1,10 @@
+BlazingTiger A 7 3 5
+FrozenWolf 9 1 8 6
+SilentEagle 5 4 A 7
+SwiftLion 6 3 9 2
+MightyRhino 4 8 7 1
+GoldenFalcon A 5 2 9
+ShadowBear 2 A 6 4
+CunningFox 8 7 4 3
+FierceCobra 9 6 3 1
+GentleDove 3 2 9 5
