@@ -1,0 +1,16 @@
+BlazingPhoenix 9 7 A 5
+FrozenDragon 6 A 4 8
+ThunderLion 3 9 5 A
+ShadowWolf A 2 7 6
+MysticGolem 8 4 A 3
+CrimsonSerpent 7 6 9 A
+EtherealKnight 5 A 3 7
+LunarBear A 9 8 2
+RadiantTiger 4 7 6 A
+PhantomRaven 2 5 A 8
+GoldenHawk A 6 3 9
+SavageBeast 9 8 A 4
+CursedGiant 7 5 4 A
+FeralFox A 3 9 6
+VenomousSpider 6 A 7 3
+IronTurtle A 8 5 9
