@@ -3,57 +3,95 @@ package cs3500.three.trios.model.card;
 import static cs3500.three.trios.util.Requirements.requireNonNull;
 
 import cs3500.three.trios.model.Direction;
-import cs3500.three.trios.util.Requirements;
 
 public class CardImpl implements Card {
 
-  private final String cardName;
-  private final AttackValue north;
-  private final AttackValue south;
-  private final AttackValue east;
-  private final AttackValue west;
+  private final String name;
+  private final AttackValue northAttackValue;
+  private final AttackValue southAttackValue;
+  private final AttackValue eastAttackValue;
+  private final AttackValue westAttackValue;
 
   public CardImpl(
-      String cardName, AttackValue north, AttackValue south, AttackValue east, AttackValue west
+      String name,
+      AttackValue northAttackValue,
+      AttackValue southAttackValue,
+      AttackValue eastAttackValue,
+      AttackValue westAttackValue
   ) {
-    this.cardName = requireNonNull(cardName);
-    this.north = requireNonNull(north);
-    this.south = requireNonNull(south);
-    this.east = requireNonNull(east);
-    this.west = requireNonNull(west);
+    this.name = requireNonNull(name);
+    this.northAttackValue = requireNonNull(northAttackValue);
+    this.southAttackValue = requireNonNull(southAttackValue);
+    this.eastAttackValue = requireNonNull(eastAttackValue);
+    this.westAttackValue = requireNonNull(westAttackValue);
   }
 
   @Override
   public AttackValue getNorthAttackValue() {
-    throw new UnsupportedOperationException("not implemented");
+    return northAttackValue;
   }
 
   @Override
   public AttackValue getEastAttackValue() {
-    throw new UnsupportedOperationException("not implemented");
+    return eastAttackValue;
   }
 
   @Override
   public AttackValue getSouthAttackValue() {
-    throw new UnsupportedOperationException("not implemented");
+    return southAttackValue;
 
   }
 
   @Override
   public AttackValue getWestAttackValue() {
-    throw new UnsupportedOperationException("not implemented");
+    return westAttackValue;
 
   }
 
   @Override
   public AttackValue getAttackValue(Direction direction) {
-    throw new UnsupportedOperationException("not implemented");
-
+    requireNonNull(direction);
+    switch (direction) {
+      case NORTH:
+        return northAttackValue;
+      case EAST:
+        return eastAttackValue;
+      case SOUTH:
+        return southAttackValue;
+      case WEST:
+        return westAttackValue;
+      default:
+        throw new IllegalArgumentException();
+    }
   }
 
   @Override
   public String getName() {
-    throw new UnsupportedOperationException("not implemented");
+    return name;
+  }
 
+  @Override
+  public String toString() {
+    return String.join(
+        " ",
+        name,
+        northAttackValue.toString(),
+        southAttackValue.toString(),
+        eastAttackValue.toString(),
+        westAttackValue.toString()
+    );
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other instanceof Card) {
+      Card otherCard = (Card) other;
+      return otherCard.getName().equals(getName()) &&
+          otherCard.getNorthAttackValue().equals(getNorthAttackValue()) &&
+          otherCard.getSouthAttackValue().equals(getSouthAttackValue()) &&
+          otherCard.getEastAttackValue().equals(getEastAttackValue()) &&
+          otherCard.getWestAttackValue().equals(getWestAttackValue());
+    }
+    return false;
   }
 }

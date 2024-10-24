@@ -15,6 +15,8 @@ import static org.junit.Assert.assertEquals;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardListFactory;
 import cs3500.three.trios.model.card.CardImpl;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,7 +32,7 @@ public class TestCardListFactory {
   }
 
   @Test
-  public void testCreate10CardsFromConfigurationFilePath() {
+  public void testCreate10CardsFromConfigurationFilePath() throws IOException {
     List<Card> expectedCards = List.of(
         new CardImpl("BlazingTiger", TEN, SEVEN, THREE, FIVE),
         new CardImpl("FrozenWolf", NINE, ONE, EIGHT, SIX),
@@ -48,7 +50,7 @@ public class TestCardListFactory {
   }
 
   @Test
-  public void testCreate16CardsFromConfigurationFilePath() {
+  public void testCreate16CardsFromConfigurationFilePath() throws IOException {
     List<Card> expectedCards = List.of(
         new CardImpl("BlazingPhoenix", NINE, SEVEN, TEN, FIVE),
         new CardImpl("FrozenDragon", SIX, TEN, FOUR, EIGHT),

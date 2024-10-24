@@ -1,58 +1,62 @@
 package cs3500.three.trios.model;
 
-import cs3500.three.trios.model.card.Card;
-import java.util.Optional;
+import static cs3500.three.trios.util.Requirements.requireNonNull;
+
+import cs3500.three.trios.model.card.PlayerCard;
 
 public class Cell {
+  private final boolean isHole;
+  private final PlayerCard card;
 
-  private final Optional<Card> card;
-  private final Optional<Player> player;
-
-  public enum Type {
-    CARD, HOLE
-  }
-
-  private Type type;
-
-  private Cell(Type type, Optional<Card> card, Optional<Player> player) {
-    this.type = type;
+  private Cell(boolean isHole, PlayerCard card) {
+    this.isHole = isHole;
     this.card = card;
-    this.player = player;
   }
 
   public static Cell createHoleCell() {
-    return new Cell(Type.HOLE, Optional.empty(), Optional.empty());
+    return new Cell(true, null);
   }
 
   public static Cell createEmptyCardCell() {
-    return new Cell(Type.CARD, Optional.empty(), Optional.empty());
+    return new Cell(false, null);
   }
 
-  public static Cell createCardCell(Card card, Player player) {
-    return new Cell(Type.CARD, Optional.of(card), Optional.of(player));
-  }
-
-  public Card getCard() {
-    return card.orElseThrow();
-  }
-
-  public Player getPlayer() {
-    return player.orElseThrow();
+  public static Cell createOccupiedCardCell(PlayerCard card) {
+    return new Cell(false, requireNonNull(card));
   }
 
   public boolean isHole() {
-    return type.equals(Type.HOLE);
+    return isHole;
   }
 
   public boolean isCardCell() {
-    return type.equals(Type.CARD);
+    return isEmptyCardCell() || isOccupiedCardCell();
   }
 
   public boolean isEmptyCardCell() {
-    return isCardCell() && card.isEmpty();
+    return !isHole && card == null;
   }
 
-  public boolean hasCard() {
-    return card.isPresent();
+  public boolean isOccupiedCardCell() {
+    return !isHole && card != null;
+  }
+
+  public PlayerCard getCard() {
+    if (!isOccupiedCardCell()) {
+      throw new IllegalStateException("Cell is not an occupied card cell");
+    }
+    return card;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other instanceof Cell) {
+      Cell otherCell = (Cell) other;
+      if (otherCell.isOccupiedCardCell() && this.isOccupiedCardCell()) {
+        return otherCell.getCard().equals(this.getCard());
+      }
+      return otherCell.isHole == this.isHole;
+    }
+    return false;
   }
 }

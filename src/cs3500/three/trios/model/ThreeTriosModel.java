@@ -26,11 +26,11 @@ public interface ThreeTriosModel {
    * Returns a copy of the specified player's hand. Modifying the returned list does not affect this
    * model.
    *
-   * @param player the player whose hand is to be returned
+   * @param playerColor the player whose hand is to be returned
    * @return a copy of the hand of the specified player
    * @throws IllegalArgumentException if player is null
    */
-  List<Card> getHand(Player player);
+  List<Card> getHand(PlayerColor playerColor);
 
   // todo: make sure we are also cloning the cells in the grid and not just the grid
   // we need to make sure that setting the cells of the grid does not affect the grid in the model
@@ -62,12 +62,12 @@ public interface ThreeTriosModel {
    *
    * @throws IllegalStateException if the game is not over
    */
-  Player getWinner();
+  PlayerColor getWinner();
 
   /**
    * Returns the player whose turn it currently is.
    *
    * @throws IllegalStateException if the game is over.
    */
-  Player getCurrentPlayer();
+  PlayerColor getCurrentPlayer();
 }

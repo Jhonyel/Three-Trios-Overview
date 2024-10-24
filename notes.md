@@ -7,12 +7,12 @@
     - four attack values, one for each direction (north, east, south, west)
         - attack values are hexadecimal integers [1, A]
 - placing phase
-    - a player can only play a card to a cell if the cell is not a hole and not occupied by a card
+    - a playerColor can only play a card to a cell if the cell is not a hole and not occupied by a card
         - when a card is placed on a card cell it is removed from the hand
 - attack phase
-    - let player A be the player that just placed a card, and player B be the other player
+    - let playerColor A be the playerColor that just placed a card, and playerColor B be the other playerColor
         - let placedCard be the just placed card
-        - the cards to battle are the cards adjacent to placedCard belonging to player B
+        - the cards to battle are the cards adjacent to placedCard belonging to playerColor B
             - cards diagonal to each other are not adjacent
         - battle
             - let enemyCard be the card placedCard battles
@@ -24,7 +24,7 @@
               placedCard
             - if placedAttackValue is greater than enemyAttackValue, enemyCard becomes A's card (
               flips)
-            - each flipped card battles its adjacent cards belonging to player B
+            - each flipped card battles its adjacent cards belonging to playerColor B
 - components
     - model
         - nouns
@@ -80,8 +80,8 @@
     - as a consequence, we should not have adjacency fields because that could be annoying to
       implement
 - i don't like having three different cell classes. we should have one class for a cell. it should
-  have an enum for which type of cell it is and fields for player and card
-- we could have a sub class of card called player card specifically for cards that are associated
+  have an enum for which type of cell it is and fields for playerColor and card
+- we could have a sub class of card called playerColor card specifically for cards that are associated
   with players
 - when we battle, we would check the adjacent positions to see if they qualify for battling
   - not a hole
@@ -102,6 +102,6 @@
       - get attack value of enemy card in opposite direction
       - if placed card attack value > enemy card attack value
         - flip enemy card
-          - replace with new cell with same card but new player 
+          - replace with new cell with same card but new playerColor 
         - battle at enemy card
   - 
