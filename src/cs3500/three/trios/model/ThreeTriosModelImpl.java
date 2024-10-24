@@ -1,6 +1,5 @@
 package cs3500.three.trios.model;
 
-import cs3500.three.trios.model.card.AttackValue;
 import cs3500.three.trios.model.card.Card;
 import java.util.List;
 
@@ -10,7 +9,7 @@ import java.util.List;
 public class ThreeTriosModelImpl implements ThreeTriosModel {
 
   private final Cell[][] grid;
-  private Player currentPlayer;
+  private PlayerColor currentPlayerColor;
 
   /**
    * Creates a new ThreeTriosModelImpl representing a game with the specified grid and cards. If
@@ -69,24 +68,24 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     // require adjacent cell is not empty
     // require adjacent player is enemy
 
-    Cell cell = getCellAt(rowIndex, colIndex);
-    Card card = cell.getCard();
-    int adjacentRowIndex = rowIndex + direction.getRowOffset();
-    int adjacentColIndex = colIndex + direction.getColOffset();
-    Cell adjacentCell = getCellAt(adjacentRowIndex, adjacentColIndex);
-    Card enemyCard = adjacentCell.getCard();
-    AttackValue attackValue = card.getAttackValue(direction);
-    AttackValue enemyAttackValue = enemyCard.getAttackValue(direction);
-    boolean isEnemyWeaker = attackValue.compareTo(enemyAttackValue) > 0;
-    if (isEnemyWeaker) {
-      Cell flippedCell = Cell.createCardCell(enemyCard, getCurrentPlayer());
-      grid[adjacentRowIndex][adjacentColIndex] = flippedCell;
-      battle(adjacentRowIndex, adjacentColIndex);
-    }
+    // Cell cell = getCellAt(rowIndex, colIndex);
+    // Card card = cell.getCard();
+    // int adjacentRowIndex = rowIndex + direction.getRowOffset();
+    // int adjacentColIndex = colIndex + direction.getColOffset();
+    // Cell adjacentCell = getCellAt(adjacentRowIndex, adjacentColIndex);
+    // Card enemyCard = adjacentCell.getCard();
+    // AttackValue attackValue = card.getAttackValue(direction);
+    // AttackValue enemyAttackValue = enemyCard.getAttackValue(direction);
+    // boolean isEnemyWeaker = attackValue.compareTo(enemyAttackValue) > 0;
+    // if (isEnemyWeaker) {
+    //   Cell flippedCell = Cell.createCardCell(enemyCard, getCurrentPlayer());
+    //   grid[adjacentRowIndex][adjacentColIndex] = flippedCell;
+    //   battle(adjacentRowIndex, adjacentColIndex);
+    // }
   }
 
   @Override
-  public List<Card> getHand(Player player) {
+  public List<Card> getHand(PlayerColor playerColor) {
     throw new UnsupportedOperationException();
   }
 
@@ -106,12 +105,12 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   }
 
   @Override
-  public Player getWinner() {
+  public PlayerColor getWinner() {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public Player getCurrentPlayer() {
+  public PlayerColor getCurrentPlayer() {
     throw new UnsupportedOperationException();
   }
 }
