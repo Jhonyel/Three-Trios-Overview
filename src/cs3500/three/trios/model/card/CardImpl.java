@@ -4,6 +4,9 @@ import static cs3500.three.trios.util.Requirements.requireNonNull;
 
 import cs3500.three.trios.model.Direction;
 
+/**
+ * An implementation of our Card interface.
+ */
 public class CardImpl implements Card {
 
   private final String name;
@@ -12,6 +15,16 @@ public class CardImpl implements Card {
   private final AttackValue eastAttackValue;
   private final AttackValue westAttackValue;
 
+  /**
+   * Creates a new CardImpl with the given name and attack values.
+   *
+   * @param name the name of the card
+   * @param northAttackValue the attack value in the north direction
+   * @param southAttackValue the attack value in the south direction
+   * @param eastAttackValue the attack value in the east direction
+   * @param westAttackValue the attack value in the west direction
+   * @throws IllegalArgumentException if any of the arguments are null
+   */
   public CardImpl(
       String name,
       AttackValue northAttackValue,

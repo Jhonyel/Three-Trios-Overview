@@ -45,6 +45,13 @@ public class CardListFactory {
     return cards;
   }
 
+  /**
+   * Returns a card based on the given line of the configuration file. `line` is assumed to be in
+   * the format:
+   * <br>CARD_NAME NORTH SOUTH EAST WEST
+   * <br>where CARD_NAME is the name of the card, and NORTH SOUTH EAST and WEST are the attack
+   * values in each direction
+   */
   private static Card getCardFromString(String line) {
     String[] tokens = line.split(" ");
     String cardName = tokens[0];
@@ -61,6 +68,9 @@ public class CardListFactory {
     );
   }
 
+  /**
+   * Checks that `line` has 5 tokens. Throws an IllegalArgumentException if not.
+   */
   private static void requireLineHasFiveTokens(String line) {
     String[] tokens = line.split(" ");
     if (tokens.length != 5) {

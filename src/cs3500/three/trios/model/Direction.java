@@ -36,10 +36,16 @@ public enum Direction {
     }
   }
 
+  /**
+   * Returns the row offset of this direction: -1 for north, 1 for south, 0 otherwise.
+   */
   public int getRowOffset() {
     return rowOffset;
   }
 
+  /**
+   * Returns the column offset of this direction. -1 for west, 1 for east, 0 otherwise.
+   */
   public int getColOffset() {
     return colOffset;
   }
