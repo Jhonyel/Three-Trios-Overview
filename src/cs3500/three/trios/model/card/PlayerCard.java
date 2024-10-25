@@ -5,11 +5,20 @@ import static cs3500.three.trios.util.Requirements.requireNonNull;
 import cs3500.three.trios.model.Direction;
 import cs3500.three.trios.model.PlayerColor;
 
+/**
+ * A card that is aware of the color of the player that owns this card.
+ */
 public class PlayerCard implements Card {
 
   private final Card card;
   private final PlayerColor playerColor;
 
+  /**
+   * Creates a new PlayerCard with the given card and player color.
+   *
+   * @param card the card containing the attack values and name of this card.
+   * @param playerColor the color of the player who owns this card.
+   */
   public PlayerCard(Card card, PlayerColor playerColor) {
     this.card = requireNonNull(card);
     this.playerColor = requireNonNull(playerColor);
@@ -45,6 +54,9 @@ public class PlayerCard implements Card {
     return card.getName();
   }
 
+  /**
+   * Returns the color of the player who owns this card.
+   */
   public PlayerColor getPlayerColor() {
     return playerColor;
   }

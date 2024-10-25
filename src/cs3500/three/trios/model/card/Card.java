@@ -4,8 +4,6 @@ import cs3500.three.trios.model.Direction;
 
 /**
  * An interface representing a card.
- * <p>
- * ? should our cards store references to which player owns them? in solo red the answer was no.
  */
 public interface Card {
 
@@ -45,6 +43,9 @@ public interface Card {
    */
   AttackValue getAttackValue(Direction direction);
 
+  /**
+   * Returns the name of this card.
+   */
   String getName();
 
   /**

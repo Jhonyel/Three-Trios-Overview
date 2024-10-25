@@ -59,18 +59,30 @@ public class GridFactory {
     return grid;
   }
 
+  /**
+   * Checks that the specified line's length is equal to the specified number of columns. Throws an
+   * IllegalArgumentException if not.
+   */
   private static void requireLineLengthEqualsNumCols(String line, int numCols) {
     if (line.length() != numCols) {
       throw new IllegalArgumentException("Invalid number of grid columns in line: " + line);
     }
   }
 
+  /**
+   * Checks that the specified number of lines is equal to the specified number of rows. Throws an
+   * IllegalArgumentException if not.
+   */
   private static void requireNumLinesEqualsNumRows(List<String> lines, int numRows) {
     if (lines.size() != numRows) {
       throw new IllegalArgumentException("Invalid number of grid lines");
     }
   }
 
+  /**
+   * Checks that the first line of the configuration file has two integers separated by whitespace.
+   * Throws an IllegalArgumentException if not.
+   */
   private static void requireFirstLineHasTwoIntegers(String line) {
     requireNonNull(line);
     if (!line.matches("\\d+\\s+\\d+")) {
@@ -78,6 +90,12 @@ public class GridFactory {
     }
   }
 
+  /**
+   * Parses the specified line into a row of cells and returns it.
+   *
+   * @param line the line to parse into a row of cells.
+   * @return the row of cells parsed from the specified line.
+   */
   private static Cell[] getRowFromString(String line) {
     int numCols = line.length();
     Cell[] row = new Cell[numCols];
