@@ -1,4 +1,4 @@
-package cs3500.three.trios;
+package cs3500.three.trios.model;
 
 import static cs3500.three.trios.model.card.AttackValue.ONE;
 import static org.junit.Assert.assertFalse;

@@ -1,8 +1,9 @@
-package cs3500.three.trios;
+package cs3500.three.trios.model;
 
 import static cs3500.three.trios.TestUtils.assert2DArrayEquals;
 import static org.junit.Assert.assertThrows;
 
+import cs3500.three.trios.Examples;
 import cs3500.three.trios.model.Cell;
 import cs3500.three.trios.model.GridFactory;
 import java.io.IOException;

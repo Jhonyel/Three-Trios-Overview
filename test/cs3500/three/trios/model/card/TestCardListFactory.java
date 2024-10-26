@@ -1,4 +1,4 @@
-package cs3500.three.trios;
+package cs3500.three.trios.model.card;
 
 import static cs3500.three.trios.model.card.AttackValue.EIGHT;
 import static cs3500.three.trios.model.card.AttackValue.FIVE;
@@ -12,6 +12,7 @@ import static cs3500.three.trios.model.card.AttackValue.THREE;
 import static cs3500.three.trios.model.card.AttackValue.TWO;
 import static org.junit.Assert.assertEquals;
 
+import cs3500.three.trios.Examples;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardListFactory;
 import cs3500.three.trios.model.card.CardImpl;
