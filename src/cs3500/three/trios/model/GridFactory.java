@@ -41,16 +41,15 @@ public class GridFactory {
     Path path = Paths.get(configurationFilePath);
     List<String> lines = Files.readAllLines(path);
 
-    // we remove the first line so that the lines list only contains the row strings
-    String firstLine = lines.remove(0);
-    requireFirstLineHasTwoIntegers(firstLine);
+    String firstLine = lines.get(0);
+    requireLineHasTwoIntegers(firstLine);
 
     int numRows = Integer.parseInt(firstLine.split(" ")[0]);
     int numCols = Integer.parseInt(firstLine.split(" ")[1]);
-    requireNumLinesEqualsNumRows(lines, numRows);
+    requireNumLinesEqualsNumRowsPlusOne(lines, numRows);
 
     Cell[][] grid = new Cell[numRows][numCols];
-    for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
+    for (int rowIndex = 1; rowIndex <= numRows; rowIndex++) {
       String line = lines.get(rowIndex);
       requireLineLengthEqualsNumCols(line, numCols);
       Cell[] row = getRowFromString(line);
@@ -73,19 +72,19 @@ public class GridFactory {
    * Checks that the specified number of lines is equal to the specified number of rows. Throws an
    * IllegalArgumentException if not.
    */
-  private static void requireNumLinesEqualsNumRows(List<String> lines, int numRows) {
-    if (lines.size() != numRows) {
+  private static void requireNumLinesEqualsNumRowsPlusOne(List<String> lines, int numRows) {
+    if (lines.size() != numRows + 1) {
       throw new IllegalArgumentException("Invalid number of grid lines");
     }
   }
 
   /**
-   * Checks that the first line of the configuration file has two integers separated by whitespace.
+   * Checks that the first line of the configuration file has two integers separated by a space.
    * Throws an IllegalArgumentException if not.
    */
-  private static void requireFirstLineHasTwoIntegers(String line) {
+  private static void requireLineHasTwoIntegers(String line) {
     requireNonNull(line);
-    if (!line.matches("\\d+\\s+\\d+")) {
+    if (!line.matches("\\d+ \\d+")) {
       throw new IllegalArgumentException("Invalid grid line: " + line);
     }
   }

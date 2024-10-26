@@ -32,9 +32,6 @@ public interface ThreeTriosModel {
    */
   List<Card> getHand(PlayerColor playerColor);
 
-  // todo: make sure we are also cloning the cells in the grid and not just the grid
-  // we need to make sure that setting the cells of the grid does not affect the grid in the model
-
   /**
    * Returns a copy of the grid as a 2D array. The element at (i, j) is the cell at row i and col j.
    * Modifying the returned 2D array does not affect this model.

@@ -1,4 +1,4 @@
-package cs3500.three.trios;
+package cs3500.three.trios.model;
 
 import org.junit.Before;
 import org.junit.Test;
