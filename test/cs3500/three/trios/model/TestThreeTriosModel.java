@@ -115,9 +115,9 @@ public class TestThreeTriosModel {
 
   @Test
   public void testPlayCardToEmptyCardCell() {
-    Assert.assertNotEquals(this.model.getCellAt(5,6).getCard(), );
+    Assert.assertNotEquals(this.model.getCellAt(5,6).getCard(),this.cardEx);
     this.model.playCardAt(5, 6, this.cardEx);
-
+    Assert.assertEquals(this.model.getCellAt(5, 6).getCard(),this.cardEx);
   }
 
   @Test
@@ -135,7 +135,8 @@ public class TestThreeTriosModel {
 
   @Test
   public void testPlayNullCard() {
-
+    Assert.assertThrows(IllegalArgumentException.class,
+            () -> this.model.playCardAt(1, 2, null));
   }
 
   ////////////////////////////////////////////////////////////////////////////
