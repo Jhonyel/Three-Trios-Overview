@@ -1,5 +1,6 @@
 package cs3500.three.trios.model;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -7,8 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cs3500.three.trios.model.Cell;
-import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.AttackValue;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
@@ -27,6 +26,7 @@ public class TestThreeTriosModel {
   private Cell[][] evenCardGrid;
   private List<Card> evenCards;
   private Card cardEx;
+  private ThreeTriosModel model;
 
   @Before
   public void setUp() throws IOException {
@@ -49,6 +49,7 @@ public class TestThreeTriosModel {
     this.evenCards = new ArrayList<>();
     this.evenCards.add(this.cardEx);
     this.evenCards.add(this.cardEx);
+    this.model = new ThreeTriosModelImpl(this.grid, this.cards, false);
   }
 
   @Test
@@ -90,34 +91,46 @@ public class TestThreeTriosModel {
 
   @Test
   public void testModifyingCardAfterConstructionDoesNotAffectModel() {
-
+    List<Card> hand = this.model.getHand(PlayerColor.RED);
+    Assert.assertEquals(this.model.getHand(PlayerColor.RED), hand);
+    hand.remove(0);
+    Assert.assertNotEquals(this.model.getHand(PlayerColor.RED), hand);
   }
 
   @Test
   public void testModifyingGridAfterConstructionDoesNotAffectModel() {
-
+    Cell[][] grid = this.model.getGrid();
+    Assert.assertEquals(this.model.getGrid(), grid);
+    grid[0][0] = this.holeCell;
+    Assert.assertNotEquals(this.model.getGrid(), grid);
   }
 
   ////////////////////////////////////////////////////////////////////////////
 
   @Test
   public void testPlayCardToOutOfBoundsCell() {
-
+    Assert.assertThrows(IndexOutOfBoundsException.class,
+            () -> this.model.playCardAt(5,6, this.cardEx));
   }
 
   @Test
   public void testPlayCardToEmptyCardCell() {
+    Assert.assertNotEquals(this.model.getCellAt(5,6).getCard(), );
+    this.model.playCardAt(5, 6, this.cardEx);
 
   }
 
   @Test
   public void testPlayCardToOccupiedCardCell() {
-
+    this.model.playCardAt(1, 2, this.cardEx);
+    Assert.assertThrows(IllegalStateException.class,
+            () -> this.model.playCardAt(1, 2, this.cardEx));
   }
 
   @Test
   public void testPlayCardToHole() {
-
+    Assert.assertThrows(IllegalStateException.class,
+            () -> this.model.playCardAt(0, 2, this.cardEx));
   }
 
   @Test
