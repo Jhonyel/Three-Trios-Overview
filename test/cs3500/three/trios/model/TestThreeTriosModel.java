@@ -88,15 +88,6 @@ public class TestThreeTriosModel {
             () -> new ThreeTriosModelImpl(this.grid, this.evenCards, true));
   }
 
-
-  @Test
-  public void testModifyingCardAfterConstructionDoesNotAffectModel() {
-    List<Card> hand = this.model.getHand(PlayerColor.RED);
-    Assert.assertEquals(this.model.getHand(PlayerColor.RED), hand);
-    hand.remove(0);
-    Assert.assertNotEquals(this.model.getHand(PlayerColor.RED), hand);
-  }
-
   @Test
   public void testModifyingGridAfterConstructionDoesNotAffectModel() {
     Cell[][] grid = this.model.getGrid();
@@ -115,9 +106,9 @@ public class TestThreeTriosModel {
 
   @Test
   public void testPlayCardToEmptyCardCell() {
-    Assert.assertNotEquals(this.model.getCellAt(5,6).getCard(),this.cardEx);
-    this.model.playCardAt(5, 6, this.cardEx);
-    Assert.assertEquals(this.model.getCellAt(5, 6).getCard(),this.cardEx);
+    Assert.assertNotEquals(this.model.getCellAt(4,6).getCard(),this.cardEx);
+    this.model.playCardAt(4, 6, this.cardEx);
+    Assert.assertEquals(this.model.getCellAt(4, 6).getCard(),this.cardEx);
   }
 
   @Test
@@ -148,7 +139,8 @@ public class TestThreeTriosModel {
 
   @Test
   public void testGetHandNullPlayer() {
-
+    Assert.assertThrows(IllegalArgumentException.class,
+            () -> this.model.getHand(null));
   }
 
   @Test
@@ -158,41 +150,40 @@ public class TestThreeTriosModel {
 
   @Test
   public void testModifyingHandDoesNotAffectModel() {
-
+    List<Card> hand = this.model.getHand(PlayerColor.RED);
+    Assert.assertEquals(this.model.getHand(PlayerColor.RED), hand);
+    hand.remove(0);
+    Assert.assertNotEquals(this.model.getHand(PlayerColor.RED), hand);
   }
 
   ////////////////////////////////////////////////////////////////////////////
 
   @Test
   public void testGetGrid() {
-
+    Cell[][] grid = this.model.getGrid();
+    Assert.assertEquals(this.model.getGrid(), grid);
   }
 
   @Test
   public void testPlayCardThenGetGrid() {
-
-  }
-
-  @Test
-  public void testModifyingGridDoesNotAffectModel() {
-
+    Cell[][] grid = this.model.getGrid();
+    Assert.assertEquals(this.model.getGrid(), grid);
+    this.model.playCardAt(4, 6, this.cardEx);
+    Assert.assertNotEquals(this.model.getGrid(), grid);
   }
 
   ////////////////////////////////////////////////////////////////////////////
 
   @Test
   public void testGetCell() {
-
+    Cell cell = this.model.getCellAt(4, 6);
+    Assert.assertEquals(this.model.getCellAt(4, 6), cell);
   }
 
   @Test
   public void testGetOutOfBoundsCell() {
-
-  }
-
-  @Test
-  public void testPlayCardThenGetCell() {
-
+    Assert.assertThrows(IndexOutOfBoundsException.class,
+            () -> this.model.getCellAt(8, 6));
   }
 
   ////////////////////////////////////////////////////////////////////////////
