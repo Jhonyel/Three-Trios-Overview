@@ -18,6 +18,7 @@ public class CardImpl implements Card {
   /**
    * Creates a new CardImpl with the given name and attack values.
    *
+   *
    * @param name the name of the card
    * @param northAttackValue the attack value in the north direction
    * @param southAttackValue the attack value in the south direction

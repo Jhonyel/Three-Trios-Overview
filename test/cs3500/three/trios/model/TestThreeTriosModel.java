@@ -4,11 +4,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import cs3500.three.trios.model.Cell;
 import cs3500.three.trios.model.ThreeTriosModelImpl;
+import cs3500.three.trios.model.card.AttackValue;
 import cs3500.three.trios.model.card.Card;
+import cs3500.three.trios.model.card.CardImpl;
 
 import static cs3500.three.trios.Examples.create16Cards;
 import static cs3500.three.trios.Examples.create5x7GridWith15CardCells;
@@ -22,6 +25,8 @@ public class TestThreeTriosModel {
   private Cell emptyCell;
   private Cell holeCell;
   private Cell[][] evenCardGrid;
+  private List<Card> evenCards;
+  private Card cardEx;
 
   @Before
   public void setUp() throws IOException {
@@ -39,6 +44,11 @@ public class TestThreeTriosModel {
             {this.holeCell, this.holeCell},
             {this.holeCell, this.holeCell}
     };
+    this.cardEx = new CardImpl(
+            "Example", AttackValue.EIGHT, AttackValue.FIVE, AttackValue.TEN, AttackValue.ONE);
+    this.evenCards = new ArrayList<>();
+    this.evenCards.add(this.cardEx);
+    this.evenCards.add(this.cardEx);
   }
 
   @Test
@@ -73,7 +83,8 @@ public class TestThreeTriosModel {
 
   @Test
   public void testConstructionWithWrongNumberOfCards() {
-
+    assertThrows(IllegalArgumentException.class,
+            () -> new ThreeTriosModelImpl(this.grid, this.evenCards, true));
   }
 
 
