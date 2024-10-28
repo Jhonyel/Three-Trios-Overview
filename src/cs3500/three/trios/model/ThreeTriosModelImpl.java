@@ -1,6 +1,8 @@
 package cs3500.three.trios.model;
 
 import cs3500.three.trios.model.card.Card;
+import cs3500.three.trios.model.card.PlayerCard;
+
 import java.util.List;
 
 /**
@@ -45,6 +47,18 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
 
   @Override
   public void playCardAt(int rowIndex, int colIndex, Card card) {
+    if (rowIndex < 0 || rowIndex >= this.grid.length) {
+      throw new IndexOutOfBoundsException("row index out of bounds");
+    }
+    if (colIndex < 0 || colIndex >= grid[0].length) {
+      throw new IndexOutOfBoundsException("column index out of bounds");
+    }
+    if (card == null) {
+      throw new IllegalArgumentException("Card cannot be null");
+    }
+    if (grid[rowIndex][colIndex].getCard() != null) {
+      throw new IllegalArgumentException("Card already played");
+    }
     // require:
     // the game has started
     // row index is valid
@@ -52,7 +66,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     // card is non-null
     // specified cell is an empty card cell
 
-    // grid[rowIndex][colIndex] = card;
+    this.grid[rowIndex][colIndex] = Cell.createOccupiedCardCell(card);
     throw new UnsupportedOperationException();
   }
 
