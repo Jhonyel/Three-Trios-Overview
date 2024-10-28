@@ -11,6 +11,7 @@ import java.util.List;
 import cs3500.three.trios.model.card.AttackValue;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
+import cs3500.three.trios.model.card.PlayerCard;
 
 import static cs3500.three.trios.Examples.create16Cards;
 import static cs3500.three.trios.Examples.create5x7GridWith15CardCells;
@@ -29,6 +30,7 @@ public class TestThreeTriosModel {
   private ThreeTriosModel model;
   private Cell[][] smallGrid;
   private ThreeTriosModel smallModel;
+  private Card playerCard;
 
   @Before
   public void setUp() throws IOException {
@@ -57,6 +59,7 @@ public class TestThreeTriosModel {
             {this.emptyCell, this.emptyCell}
     };
     this.smallModel = new ThreeTriosModelImpl(this.smallGrid, this.cards, true);
+    this.playerCard = new PlayerCard(this.cardEx, PlayerColor.BLUE);
   }
 
   @Test
@@ -212,18 +215,23 @@ public class TestThreeTriosModel {
 
   @Test
   public void testGetWinnerWhenGameIsNotOver() {
-
+    Assert.assertThrows(IllegalStateException.class,
+            () -> this.model.getWinner());
   }
 
   @Test
   public void testGetWinnerWhenGameIsOver() {
-
+    this.smallModel.playCardAt(0, 1, this.playerCard);
+    this.smallModel.playCardAt(1, 1, this.playerCard);
+    this.smallModel.playCardAt(1, 0, this.playerCard);
+    Assert.assertEquals(this.model.getWinner(), PlayerColor.BLUE);
   }
 
   ////////////////////////////////////////////////////////////////////////////
 
   @Test
   public void testGetCurrentPlayer() {
+    PlayerColor color = PlayerColor.BLUE;
 
   }
 
