@@ -30,7 +30,7 @@ public class TestThreeTriosModel {
   private ThreeTriosModel model;
   private Cell[][] smallGrid;
   private ThreeTriosModel smallModel;
-  private Card playerCard;
+  private PlayerCard playerCard;
 
   @Before
   public void setUp() throws IOException {
@@ -111,27 +111,27 @@ public class TestThreeTriosModel {
   @Test
   public void testPlayCardToOutOfBoundsCell() {
     Assert.assertThrows(IndexOutOfBoundsException.class,
-            () -> this.model.playCardAt(5,6, this.cardEx));
+            () -> this.model.playCardAt(5,6, this.playerCard));
   }
 
   @Test
   public void testPlayCardToEmptyCardCell() {
     Assert.assertNotEquals(this.model.getCellAt(4,6).getCard(),this.cardEx);
-    this.model.playCardAt(4, 6, this.cardEx);
+    this.model.playCardAt(4, 6, this.playerCard);
     Assert.assertEquals(this.model.getCellAt(4, 6).getCard(),this.cardEx);
   }
 
   @Test
   public void testPlayCardToOccupiedCardCell() {
-    this.model.playCardAt(1, 2, this.cardEx);
+    this.model.playCardAt(1, 2, this.playerCard);
     Assert.assertThrows(IllegalStateException.class,
-            () -> this.model.playCardAt(1, 2, this.cardEx));
+            () -> this.model.playCardAt(1, 2, this.playerCard));
   }
 
   @Test
   public void testPlayCardToHole() {
     Assert.assertThrows(IllegalStateException.class,
-            () -> this.model.playCardAt(0, 2, this.cardEx));
+            () -> this.model.playCardAt(0, 2, this.playerCard));
   }
 
   @Test
@@ -140,11 +140,24 @@ public class TestThreeTriosModel {
             () -> this.model.playCardAt(1, 2, null));
   }
 
+  @Test
+  public void testPlayAfterGameEnds() {
+    this.smallModel.playCardAt(0, 1, this.playerCard);
+    this.smallModel.playCardAt(1, 1, this.playerCard);
+    this.smallModel.playCardAt(1, 0, this.playerCard);
+    Assert.assertThrows(IllegalStateException.class,
+            () -> this.smallModel.playCardAt(1, 2, this.playerCard));
+  }
+
   ////////////////////////////////////////////////////////////////////////////
 
   @Test
   public void testGetHand() {
-
+    List<PlayerCard> cards = new ArrayList<>();
+    for (int i = 0; i < this.cards.size()/2; i++) {
+      cards.add(new PlayerCard(this.cards.get(i), PlayerColor.RED));
+    }
+    Assert.assertEquals(cards, this.model.getHand(PlayerColor.RED));
   }
 
   @Test
@@ -155,12 +168,17 @@ public class TestThreeTriosModel {
 
   @Test
   public void testPlayCardThenGetHand() {
-
+    List<PlayerCard> cards = new ArrayList<>();
+    for (int i = 0; i < this.cards.size()/2; i++) {
+      cards.add(new PlayerCard(this.cards.get(i), PlayerColor.RED));
+    }
+    this.model.playCardAt(0, 1, cards.remove(0));
+    Assert.assertEquals(cards, this.model.getHand(PlayerColor.RED));
   }
 
   @Test
   public void testModifyingHandDoesNotAffectModel() {
-    List<Card> hand = this.model.getHand(PlayerColor.RED);
+    List<PlayerCard> hand = this.model.getHand(PlayerColor.RED);
     Assert.assertEquals(this.model.getHand(PlayerColor.RED), hand);
     hand.remove(0);
     Assert.assertNotEquals(this.model.getHand(PlayerColor.RED), hand);
@@ -178,7 +196,7 @@ public class TestThreeTriosModel {
   public void testPlayCardThenGetGrid() {
     Cell[][] grid = this.model.getGrid();
     Assert.assertEquals(this.model.getGrid(), grid);
-    this.model.playCardAt(4, 6, this.cardEx);
+    this.model.playCardAt(4, 6, this.playerCard);
     Assert.assertNotEquals(this.model.getGrid(), grid);
   }
 
@@ -205,9 +223,9 @@ public class TestThreeTriosModel {
 
   @Test
   public void testIsGameOverWhenGameIsOver() {
-    this.smallModel.playCardAt(0, 1, this.cardEx);
-    this.smallModel.playCardAt(1, 1, this.cardEx);
-    this.smallModel.playCardAt(1, 0, this.cardEx);
+    this.smallModel.playCardAt(0, 1, this.playerCard);
+    this.smallModel.playCardAt(1, 1, this.playerCard);
+    this.smallModel.playCardAt(1, 0, this.playerCard);
     Assert.assertTrue(this.smallModel.isGameOver());
   }
 
@@ -231,17 +249,25 @@ public class TestThreeTriosModel {
 
   @Test
   public void testGetCurrentPlayer() {
-    PlayerColor color = PlayerColor.BLUE;
-
+    PlayerColor color = PlayerColor.RED;
+    Assert.assertEquals(color, this.model.getCurrentPlayer());
   }
 
   @Test
   public void testPlayCardThenGetCurrentPlayer() {
-
+    PlayerColor color = PlayerColor.RED;
+    Assert.assertEquals(color, this.model.getCurrentPlayer());
+    this.model.playCardAt(4, 6, this.playerCard);
+    PlayerColor color2 = PlayerColor.BLUE;
+    Assert.assertEquals(color2, this.model.getCurrentPlayer());
   }
 
   @Test
   public void testGetCurrentPlayerWhenGameIsOver() {
-
+    this.smallModel.playCardAt(0, 1, this.playerCard);
+    this.smallModel.playCardAt(1, 1, this.playerCard);
+    this.smallModel.playCardAt(1, 0, this.playerCard);
+    Assert.assertThrows(IllegalStateException.class,
+            () -> this.smallModel.getCurrentPlayer());
   }
 }

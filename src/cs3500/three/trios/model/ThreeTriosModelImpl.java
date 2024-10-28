@@ -3,6 +3,8 @@ package cs3500.three.trios.model;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.PlayerCard;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -12,6 +14,9 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
 
   private final Cell[][] grid;
   private PlayerColor currentPlayerColor;
+  private final List<PlayerCard> RedHand;
+  private final List<PlayerCard> BlueHand;
+
 
   /**
    * Creates a new ThreeTriosModelImpl representing a game with the specified grid and cards. If
@@ -43,31 +48,56 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
         this.grid[rowIndex][colIndex] = grid[rowIndex][colIndex];
       }
     }
+    this.currentPlayerColor = PlayerColor.RED;
+    if (shouldShuffle) {
+      Collections.shuffle(cards);
+    }
+    this.RedHand = new ArrayList<>();
+    this.BlueHand = new ArrayList<>();
+    for (int i = 0; i < cards.size(); i++) {
+      if (i < cards.size()/2) {
+        PlayerCard card = new PlayerCard(cards.get(i), PlayerColor.RED);
+        this.RedHand.add(card);
+      }
+      else {
+        PlayerCard card = new PlayerCard(cards.get(i), PlayerColor.BLUE);
+        this.BlueHand.add(card);
+      }
+    }
+    this.currentPlayerColor = PlayerColor.RED;
   }
 
   @Override
-  public void playCardAt(int rowIndex, int colIndex, Card card) {
+  public void playCardAt(int rowIndex, int colIndex, PlayerCard card) {
+    if (this.isGameOver()) {
+      throw new IllegalStateException("Game is over");
+    }
     if (rowIndex < 0 || rowIndex >= this.grid.length) {
       throw new IndexOutOfBoundsException("row index out of bounds");
     }
     if (colIndex < 0 || colIndex >= grid[0].length) {
       throw new IndexOutOfBoundsException("column index out of bounds");
     }
-    if (card == null) {
-      throw new IllegalArgumentException("Card cannot be null");
-    }
     if (grid[rowIndex][colIndex].getCard() != null) {
       throw new IllegalArgumentException("Card already played");
     }
-    // require:
-    // the game has started
-    // row index is valid
-    // col index is valid
-    // card is non-null
-    // specified cell is an empty card cell
-
+    if (grid[rowIndex][colIndex].isHole()) {
+      throw new IllegalArgumentException("Cell is a hole");
+    }
+    if (card == null) {
+      throw new IllegalArgumentException("Card cannot be null");
+    }
+    this.getHand(this.currentPlayerColor).remove(card);
     this.grid[rowIndex][colIndex] = Cell.createOccupiedCardCell(card);
-    throw new UnsupportedOperationException();
+
+    //call battle here in between these steps
+
+    if (this.currentPlayerColor == PlayerColor.RED) {
+      this.currentPlayerColor = PlayerColor.BLUE;
+    }
+    else {
+      this.currentPlayerColor = PlayerColor.RED;
+    }
   }
 
   private void battle(int rowIndex, int colIndex) {
@@ -99,32 +129,83 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   }
 
   @Override
-  public List<Card> getHand(PlayerColor playerColor) {
-    throw new UnsupportedOperationException();
+  public List<PlayerCard> getHand(PlayerColor playerColor) {
+    if (playerColor == PlayerColor.RED) {
+      return this.RedHand;
+    }
+    return this.BlueHand;
   }
 
   @Override
   public Cell[][] getGrid() {
-    throw new UnsupportedOperationException();
+    Cell[][] grid = new Cell[this.grid.length][this.grid[0].length];
+    for (int rowIndex = 0; rowIndex < grid.length; rowIndex++) {
+      for (int colIndex = 0; colIndex < grid[0].length; colIndex++) {
+        grid[rowIndex][colIndex] = this.grid[rowIndex][colIndex];
+      }
+    }
+    return grid;
   }
 
   @Override
   public Cell getCellAt(int rowIndex, int colIndex) {
-    throw new UnsupportedOperationException();
+    Cell cell = this.grid[rowIndex][colIndex];
+    Cell cellR;
+    if (cell.isOccupiedCardCell()) {
+      cellR = Cell.createOccupiedCardCell(cell.getCard());
+    }
+    else if (cell.isEmptyCardCell()) {
+      cellR = Cell.createOccupiedCardCell(cell.getCard());
+    }
+    else {
+      cellR = Cell.createHoleCell();
+    }
+    return cellR;
   }
 
   @Override
   public boolean isGameOver() {
-    throw new UnsupportedOperationException();
+    boolean gameOver = true;
+    for (int rowIndex = 0; rowIndex < this.grid.length; rowIndex++) {
+      for (int colIndex = 0; colIndex < this.grid[0].length; colIndex++) {
+        Cell cell = this.grid[rowIndex][colIndex];
+        if (cell.isEmptyCardCell()) {
+          gameOver = false;
+        }
+      }
+    }
+    return gameOver;
   }
 
   @Override
   public PlayerColor getWinner() {
-    throw new UnsupportedOperationException();
+    if (!this.isGameOver()) {
+      throw new IllegalStateException("Game is not over");
+    }
+    int red = 0;
+    int blue = 0;
+    for (int rowIndex = 0; rowIndex < this.grid.length; rowIndex++) {
+      for (int colIndex = 0; colIndex < this.grid[0].length; colIndex++) {
+        Cell cell = this.grid[rowIndex][colIndex];
+        if (cell.isCardCell() && cell.getCard().getPlayerColor() == PlayerColor.RED) {
+          red++;
+        }
+        else if (cell.isCardCell()) {
+          blue++;
+        }
+      }
+    }
+    if (red > blue) {
+      return PlayerColor.RED;
+    }
+    return PlayerColor.BLUE;
   }
 
   @Override
   public PlayerColor getCurrentPlayer() {
-    throw new UnsupportedOperationException();
+    if (this.isGameOver()) {
+      throw new IllegalStateException("Game is over");
+    }
+    return this.currentPlayerColor;
   }
 }

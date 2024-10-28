@@ -1,6 +1,8 @@
 package cs3500.three.trios.model;
 
 import cs3500.three.trios.model.card.Card;
+import cs3500.three.trios.model.card.PlayerCard;
+
 import java.util.List;
 
 /**
@@ -13,14 +15,14 @@ public interface ThreeTriosModel {
    *
    * @param rowIndex the row index of the cell to place the card in
    * @param colIndex the col index of the cell to place the card in
-   * @param card     the card to place at the specified cell
+   * @param card     the index of the card to be played
    * @throws IndexOutOfBoundsException if rowIndex is not in the range [0, getHeight()], or colIndex
    *                                   is not in the range [0, getWidth()]
-   * @throws IllegalArgumentException  if card is null
+   * @throws IllegalArgumentException  if the provided card is null.
    * @throws IllegalStateException     if the specified cell is a hole, or the specified cell is
-   *                                   occupied by another card.
+   *                                   occupied by another card, or if the game is over.
    */
-  void playCardAt(int rowIndex, int colIndex, Card card);
+  void playCardAt(int rowIndex, int colIndex, PlayerCard card);
 
   /**
    * Returns a copy of the specified player's hand. Modifying the returned list does not affect this
@@ -30,7 +32,7 @@ public interface ThreeTriosModel {
    * @return a copy of the hand of the specified player
    * @throws IllegalArgumentException if player is null
    */
-  List<Card> getHand(PlayerColor playerColor);
+  List<PlayerCard> getHand(PlayerColor playerColor);
 
   /**
    * Returns a copy of the grid as a 2D array. The element at (i, j) is the cell at row i and col j.
