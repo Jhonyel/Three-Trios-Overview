@@ -27,6 +27,8 @@ public class TestThreeTriosModel {
   private List<Card> evenCards;
   private Card cardEx;
   private ThreeTriosModel model;
+  private Cell[][] smallGrid;
+  private ThreeTriosModel smallModel;
 
   @Before
   public void setUp() throws IOException {
@@ -50,6 +52,11 @@ public class TestThreeTriosModel {
     this.evenCards.add(this.cardEx);
     this.evenCards.add(this.cardEx);
     this.model = new ThreeTriosModelImpl(this.grid, this.cards, false);
+    this.smallGrid = new Cell[][]{
+            {this.holeCell, this.emptyCell},
+            {this.emptyCell, this.emptyCell}
+    };
+    this.smallModel = new ThreeTriosModelImpl(this.smallGrid, this.cards, true);
   }
 
   @Test
@@ -190,12 +197,15 @@ public class TestThreeTriosModel {
 
   @Test
   public void testIsGameOverWhenGameIsNotOver() {
-
+    Assert.assertFalse(this.model.isGameOver());
   }
 
   @Test
   public void testIsGameOverWhenGameIsOver() {
-
+    this.smallModel.playCardAt(0, 1, this.cardEx);
+    this.smallModel.playCardAt(1, 1, this.cardEx);
+    this.smallModel.playCardAt(1, 0, this.cardEx);
+    Assert.assertTrue(this.smallModel.isGameOver());
   }
 
   ////////////////////////////////////////////////////////////////////////////
