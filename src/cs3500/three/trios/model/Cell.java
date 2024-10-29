@@ -100,4 +100,16 @@ public class Cell {
     }
     return false;
   }
+
+  @Override
+  public String toString() {
+    if (isHole) {
+      return "HOLE";
+    } else if (isOccupiedCardCell()) {
+      return card.toString();
+    } else {
+      return "EMPTY";
+    }
+  }
+
 }

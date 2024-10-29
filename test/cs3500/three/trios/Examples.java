@@ -52,7 +52,7 @@ public class Examples {
   }
 
   public static ThreeTriosModel create5x3ModelWith9CardCells() throws IOException {
-    Cell[][] grid = create3x5GridWith9CardCells();
+    Cell[][] grid = create5x3GridWith9CardCells();
     List<Card> cards = create10Cards();
     return new ThreeTriosModelImpl(grid, cards, false);
   }

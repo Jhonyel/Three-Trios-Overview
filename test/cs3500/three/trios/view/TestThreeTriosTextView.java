@@ -6,7 +6,6 @@ import static cs3500.three.trios.Examples.create5x7ModelWith15CardCells;
 import static org.junit.Assert.assertEquals;
 
 import cs3500.three.trios.model.ThreeTriosModel;
-import cs3500.three.trios.view.ThreeTriosTextView;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;

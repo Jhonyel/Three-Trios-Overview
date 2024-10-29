@@ -1,276 +1,336 @@
 package cs3500.three.trios.model;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static cs3500.three.trios.model.PlayerColor.BLUE;
+import static cs3500.three.trios.model.PlayerColor.RED;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import cs3500.three.trios.Examples;
+import cs3500.three.trios.TestUtils;
 import cs3500.three.trios.model.card.AttackValue;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.model.card.PlayerCard;
-
-import static cs3500.three.trios.Examples.create16Cards;
-import static cs3500.three.trios.Examples.create5x7GridWith15CardCells;
-import static org.junit.Assert.assertThrows;
+import cs3500.three.trios.util.Utils;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * A class for testing the behavior of our model.
  */
 public class TestThreeTriosModel {
-  private Cell[][] grid;
-  private List<Card> cards;
-  private List<Card> nullCards;
+
+  private Cell[][] grid5x7With15CardCells;
+  private List<Card> listOf16Cards;
+  private List<Card> listOf10Cards;
   private Cell[][] jaggedGrid;
-  private Cell emptyCell;
-  private Cell holeCell;
-  private Cell[][] evenCardGrid;
-  private List<Card> evenCards;
-  private Card cardEx;
-  private ThreeTriosModel model;
-  private Cell[][] smallGrid;
-  private ThreeTriosModel smallModel;
-  private PlayerCard playerCard;
+
+  /**
+   * Grid:
+   * <p>CCXXXXC
+   * <p>CXCXXXC
+   * <p>CXXCXXC
+   * <p>CXXXCXC
+   * <p>CXXXXCC
+   */
+  private ThreeTriosModel model5x7With15CardCells;
+
+  /**
+   * Grid:
+   * <p>XC
+   * <p>CC
+   */
+  private ThreeTriosModel model2x2With3CardCells;
+  private Cell empty;
+  private Cell hole;
 
   @Before
   public void setUp() throws IOException {
-    this.grid = create5x7GridWith15CardCells();
-    this.cards = create16Cards();
-    this.nullCards = null;
-    this.emptyCell = Cell.createEmptyCardCell();
-    this.holeCell = Cell.createHoleCell();
-    this.jaggedGrid = new Cell[][]{
-            {this.holeCell, this.holeCell, this.emptyCell},
-            {this.emptyCell, this.emptyCell},
-            {this.holeCell}
+    empty = Cell.createEmptyCardCell();
+    hole = Cell.createHoleCell();
+
+    grid5x7With15CardCells = Examples.create5x7GridWith15CardCells();
+    model5x7With15CardCells = Examples.create5x7ModelWith15CardCells();
+    listOf16Cards = Examples.create16Cards();
+    listOf10Cards = Examples.create10Cards();
+
+    jaggedGrid = new Cell[][]{
+        {hole, hole, empty},
+        {empty, empty},
+        {hole}
     };
-    this.evenCardGrid = new Cell[][]{
-            {this.holeCell, this.holeCell},
-            {this.holeCell, this.holeCell}
+
+    Cell[][] grid2x2With3CardCells = new Cell[][]{
+        {hole, empty},
+        {empty, empty}
     };
-    this.cardEx = new CardImpl(
-            "Example", AttackValue.EIGHT, AttackValue.FIVE, AttackValue.TEN, AttackValue.ONE);
-    this.evenCards = new ArrayList<>();
-    this.evenCards.add(this.cardEx);
-    this.evenCards.add(this.cardEx);
-    this.model = new ThreeTriosModelImpl(this.grid, this.cards, false);
-    this.smallGrid = new Cell[][]{
-            {this.holeCell, this.emptyCell},
-            {this.emptyCell, this.emptyCell}
-    };
-    this.smallModel = new ThreeTriosModelImpl(this.smallGrid, this.cards, true);
-    this.playerCard = new PlayerCard(this.cardEx, PlayerColor.BLUE);
+    List<Card> listOf4Cards = listOf16Cards.subList(0, 4);
+    model2x2With3CardCells = new ThreeTriosModelImpl(grid2x2With3CardCells, listOf4Cards, true);
   }
 
   @Test
   public void testConstructionWithNullGrid() {
-    assertThrows(IllegalArgumentException.class,
-            () -> new ThreeTriosModelImpl(null, this.cards, true));
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> new ThreeTriosModelImpl(null, listOf16Cards, true)
+    );
   }
 
   @Test
   public void testConstructionWithNullCards() {
-    assertThrows(IllegalArgumentException.class,
-            () -> new ThreeTriosModelImpl(this.grid, null, true));
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> new ThreeTriosModelImpl(grid5x7With15CardCells, null, true)
+    );
   }
 
   @Test
   public void testConstructionWithListWithNullCards() {
-    assertThrows(IllegalArgumentException.class,
-            () -> new ThreeTriosModelImpl(this.grid, this.nullCards, true));
+    List<Card> listWithNull = new ArrayList<>(listOf16Cards);
+    listWithNull.add(null);
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> new ThreeTriosModelImpl(grid5x7With15CardCells, listWithNull, true)
+    );
   }
 
   @Test
   public void testConstructionWithNonRectangularGrid() {
-    assertThrows(IllegalArgumentException.class,
-            () -> new ThreeTriosModelImpl(this.jaggedGrid, this.cards, false));
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> new ThreeTriosModelImpl(jaggedGrid, listOf16Cards, false)
+    );
   }
 
   @Test
   public void testConstructionWithEvenNumberOfCardCells() {
-    assertThrows(IllegalArgumentException.class,
-            () -> new ThreeTriosModelImpl(this.evenCardGrid, this.cards, false));
+    Cell[][] evenCardGrid = new Cell[][]{
+        {empty, empty},
+        {empty, empty}
+    };
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> new ThreeTriosModelImpl(evenCardGrid, listOf16Cards, false)
+    );
   }
 
   @Test
   public void testConstructionWithWrongNumberOfCards() {
-    assertThrows(IllegalArgumentException.class,
-            () -> new ThreeTriosModelImpl(this.grid, this.evenCards, true));
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> new ThreeTriosModelImpl(grid5x7With15CardCells, listOf10Cards, true)
+    );
   }
 
   @Test
   public void testModifyingGridAfterConstructionDoesNotAffectModel() {
-    Cell[][] grid = this.model.getGrid();
-    Assert.assertEquals(this.model.getGrid(), grid);
-    grid[0][0] = this.holeCell;
-    Assert.assertNotEquals(this.model.getGrid(), grid);
+    // we construct model5x7 using grid5x7 in the setup method
+    Cell[][] originalGrid = Utils.copyArray2D(grid5x7With15CardCells);
+    Cell[][] gridToModify = grid5x7With15CardCells;
+
+    // switch the copied grid from a card cell to a hole
+    gridToModify[0][0] = Cell.createHoleCell();
+
+    // that switch should not affect the model
+    TestUtils.assert2DArrayEquals(originalGrid, model5x7With15CardCells.getGrid());
   }
 
   ////////////////////////////////////////////////////////////////////////////
 
   @Test
   public void testPlayCardToOutOfBoundsCell() {
-    Assert.assertThrows(IndexOutOfBoundsException.class,
-            () -> this.model.playCardAt(5,6, this.playerCard));
+    assertThrows(
+        IndexOutOfBoundsException.class,
+        () -> model5x7With15CardCells.playCardAt(5, 6, 0)
+    );
+    assertThrows(
+        IndexOutOfBoundsException.class,
+        () -> model5x7With15CardCells.playCardAt(-5, 6, 0)
+    );
+    assertThrows(
+        IndexOutOfBoundsException.class,
+        () -> model5x7With15CardCells.playCardAt(5, -6, 0)
+    );
   }
 
   @Test
   public void testPlayCardToEmptyCardCell() {
-    Assert.assertNotEquals(this.model.getCellAt(4,6).getCard(),this.cardEx);
-    this.model.playCardAt(4, 6, this.playerCard);
-    Assert.assertEquals(this.model.getCellAt(4, 6).getCard(),this.cardEx);
+    List<PlayerCard> hand = model5x7With15CardCells.getHand(RED);
+    PlayerCard card = hand.get(0);
+    Cell expectedCell = Cell.createOccupiedCardCell(card);
+
+    model5x7With15CardCells.playCardAt(0, 0, 0);
+    Cell actualCell = model5x7With15CardCells.getCellAt(0, 0);
+
+    assertEquals(expectedCell, actualCell);
   }
 
   @Test
   public void testPlayCardToOccupiedCardCell() {
-    this.model.playCardAt(1, 2, this.playerCard);
-    Assert.assertThrows(IllegalStateException.class,
-            () -> this.model.playCardAt(1, 2, this.playerCard));
+    model5x7With15CardCells.playCardAt(0, 0, 0);
+    assertThrows(
+        IllegalStateException.class,
+        () -> model5x7With15CardCells.playCardAt(0, 0, 0)
+    );
   }
 
   @Test
   public void testPlayCardToHole() {
-    Assert.assertThrows(IllegalStateException.class,
-            () -> this.model.playCardAt(0, 2, this.playerCard));
+    assertThrows(
+        IllegalStateException.class,
+        () -> model5x7With15CardCells.playCardAt(0, 2, 0)
+    );
   }
 
   @Test
   public void testPlayNullCard() {
-    Assert.assertThrows(IllegalArgumentException.class,
-            () -> this.model.playCardAt(1, 2, null));
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> model5x7With15CardCells.playCardAt(1, 2, null)
+    );
   }
 
   @Test
   public void testPlayAfterGameEnds() {
-    this.smallModel.playCardAt(0, 1, this.playerCard);
-    this.smallModel.playCardAt(1, 1, this.playerCard);
-    this.smallModel.playCardAt(1, 0, this.playerCard);
-    Assert.assertThrows(IllegalStateException.class,
-            () -> this.smallModel.playCardAt(1, 2, this.playerCard));
+    model2x2With3CardCells.playCardAt(0, 1, 0);
+    model2x2With3CardCells.playCardAt(1, 1, 0);
+    model2x2With3CardCells.playCardAt(1, 0, 0);
+    assertThrows(
+        IllegalStateException.class,
+        () -> model2x2With3CardCells.playCardAt(1, 2, 0)
+    );
   }
 
   ////////////////////////////////////////////////////////////////////////////
 
   @Test
   public void testGetHand() {
-    List<PlayerCard> cards = new ArrayList<>();
-    for (int i = 0; i < this.cards.size()/2; i++) {
-      cards.add(new PlayerCard(this.cards.get(i), PlayerColor.RED));
-    }
-    Assert.assertEquals(cards, this.model.getHand(PlayerColor.RED));
+    List<Card> listOfFirst8Cards = listOf16Cards.subList(0, 8);
+    List<Card> listOfLast8Cards = listOf16Cards.subList(8, 16);
+    assertEquals(listOfFirst8Cards, model5x7With15CardCells.getHand(RED));
+    assertEquals(listOfLast8Cards, model5x7With15CardCells.getHand(BLUE));
   }
 
   @Test
   public void testGetHandNullPlayer() {
-    Assert.assertThrows(IllegalArgumentException.class,
-            () -> this.model.getHand(null));
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> model5x7With15CardCells.getHand(null)
+    );
   }
 
   @Test
   public void testPlayCardThenGetHand() {
-    List<PlayerCard> cards = new ArrayList<>();
-    for (int i = 0; i < this.cards.size()/2; i++) {
-      cards.add(new PlayerCard(this.cards.get(i), PlayerColor.RED));
-    }
-    this.model.playCardAt(0, 1, cards.remove(0));
-    Assert.assertEquals(cards, this.model.getHand(PlayerColor.RED));
+    List<Card> expectedHand = listOf16Cards.subList(0, 8);
+    model5x7With15CardCells.playCardAt(0, 1, 0);
+    expectedHand.remove(0);
+    assertEquals(expectedHand, model5x7With15CardCells.getHand(RED));
   }
 
   @Test
   public void testModifyingHandDoesNotAffectModel() {
-    List<PlayerCard> hand = this.model.getHand(PlayerColor.RED);
-    Assert.assertEquals(this.model.getHand(PlayerColor.RED), hand);
-    hand.remove(0);
-    Assert.assertNotEquals(this.model.getHand(PlayerColor.RED), hand);
+    List<PlayerCard> originalHand = model5x7With15CardCells.getHand(RED);
+    model5x7With15CardCells.getHand(RED).clear();
+    assertEquals(originalHand, model5x7With15CardCells.getHand(RED));
   }
 
   ////////////////////////////////////////////////////////////////////////////
 
   @Test
   public void testGetGrid() {
-    Cell[][] grid = this.model.getGrid();
-    Assert.assertEquals(this.model.getGrid(), grid);
+    Cell[][] grid = model5x7With15CardCells.getGrid();
+    TestUtils.assert2DArrayEquals(model5x7With15CardCells.getGrid(), grid);
   }
 
   @Test
   public void testPlayCardThenGetGrid() {
-    Cell[][] grid = this.model.getGrid();
-    Assert.assertEquals(this.model.getGrid(), grid);
-    this.model.playCardAt(4, 6, this.playerCard);
-    Assert.assertNotEquals(this.model.getGrid(), grid);
+    Cell[][] grid = model5x7With15CardCells.getGrid();
+    TestUtils.assert2DArrayEquals(model5x7With15CardCells.getGrid(), grid);
+    model5x7With15CardCells.playCardAt(4, 6, 0);
+    Assert.assertNotEquals(model5x7With15CardCells.getGrid(), grid);
   }
 
   ////////////////////////////////////////////////////////////////////////////
 
   @Test
   public void testGetCell() {
-    Cell cell = this.model.getCellAt(4, 6);
-    Assert.assertEquals(this.model.getCellAt(4, 6), cell);
+    for (int rowIndex = 0; rowIndex < 5; rowIndex++) {
+      for (int colIndex = 0; colIndex < 7; colIndex++) {
+        Cell expectedCell = grid5x7With15CardCells[rowIndex][colIndex];
+        Cell actualCell = model5x7With15CardCells.getCellAt(rowIndex, colIndex);
+        assertEquals(expectedCell, actualCell);
+      }
+    }
   }
 
   @Test
   public void testGetOutOfBoundsCell() {
-    Assert.assertThrows(IndexOutOfBoundsException.class,
-            () -> this.model.getCellAt(8, 6));
+    assertThrows(
+        IndexOutOfBoundsException.class,
+        () -> model5x7With15CardCells.getCellAt(8, 6)
+    );
   }
 
   ////////////////////////////////////////////////////////////////////////////
 
   @Test
   public void testIsGameOverWhenGameIsNotOver() {
-    Assert.assertFalse(this.model.isGameOver());
+    assertFalse(model5x7With15CardCells.isGameOver());
   }
 
   @Test
   public void testIsGameOverWhenGameIsOver() {
-    this.smallModel.playCardAt(0, 1, this.playerCard);
-    this.smallModel.playCardAt(1, 1, this.playerCard);
-    this.smallModel.playCardAt(1, 0, this.playerCard);
-    Assert.assertTrue(this.smallModel.isGameOver());
+    model2x2With3CardCells.playCardAt(0, 1, 0);
+    model2x2With3CardCells.playCardAt(1, 1, 0);
+    model2x2With3CardCells.playCardAt(1, 0, 0);
+    Assert.assertTrue(model2x2With3CardCells.isGameOver());
   }
 
   ////////////////////////////////////////////////////////////////////////////
 
   @Test
   public void testGetWinnerWhenGameIsNotOver() {
-    Assert.assertThrows(IllegalStateException.class,
-            () -> this.model.getWinner());
+    assertThrows(
+        IllegalStateException.class,
+        () -> model5x7With15CardCells.getWinner()
+    );
   }
 
   @Test
   public void testGetWinnerWhenGameIsOver() {
-    this.smallModel.playCardAt(0, 1, this.playerCard);
-    this.smallModel.playCardAt(1, 1, this.playerCard);
-    this.smallModel.playCardAt(1, 0, this.playerCard);
-    Assert.assertEquals(this.model.getWinner(), PlayerColor.BLUE);
+    model2x2With3CardCells.playCardAt(0, 1, 0);
+    model2x2With3CardCells.playCardAt(1, 1, 0);
+    model2x2With3CardCells.playCardAt(1, 0, 0);
+    assertEquals(RED, model2x2With3CardCells.getWinner());
   }
 
   ////////////////////////////////////////////////////////////////////////////
 
   @Test
   public void testGetCurrentPlayer() {
-    PlayerColor color = PlayerColor.RED;
-    Assert.assertEquals(color, this.model.getCurrentPlayer());
+    assertEquals(RED, model5x7With15CardCells.getCurrentPlayer());
   }
 
   @Test
   public void testPlayCardThenGetCurrentPlayer() {
-    PlayerColor color = PlayerColor.RED;
-    Assert.assertEquals(color, this.model.getCurrentPlayer());
-    this.model.playCardAt(4, 6, this.playerCard);
-    PlayerColor color2 = PlayerColor.BLUE;
-    Assert.assertEquals(color2, this.model.getCurrentPlayer());
+    assertEquals(RED, model5x7With15CardCells.getCurrentPlayer());
+    model5x7With15CardCells.playCardAt(4, 6, 0);
+    assertEquals(BLUE, model5x7With15CardCells.getCurrentPlayer());
   }
 
   @Test
   public void testGetCurrentPlayerWhenGameIsOver() {
-    this.smallModel.playCardAt(0, 1, this.playerCard);
-    this.smallModel.playCardAt(1, 1, this.playerCard);
-    this.smallModel.playCardAt(1, 0, this.playerCard);
-    Assert.assertThrows(IllegalStateException.class,
-            () -> this.smallModel.getCurrentPlayer());
+    model2x2With3CardCells.playCardAt(0, 1, 0);
+    model2x2With3CardCells.playCardAt(1, 1, 0);
+    model2x2With3CardCells.playCardAt(1, 0, 0);
+    assertThrows(
+        IllegalStateException.class,
+        () -> model2x2With3CardCells.getCurrentPlayer()
+    );
   }
 }

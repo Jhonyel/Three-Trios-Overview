@@ -1,11 +1,17 @@
 package cs3500.three.trios.model;
 
+import static cs3500.three.trios.util.Requirements.requireNonNull;
+import static cs3500.three.trios.util.Requirements.requireNonNullArray2D;
+import static cs3500.three.trios.util.Requirements.requireNonNullCollection;
+
+import cs3500.three.trios.model.card.AttackValue;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.PlayerCard;
-
+import cs3500.three.trios.util.Utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A class for representing a game of Three Trios.
@@ -14,8 +20,10 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
 
   private final Cell[][] grid;
   private PlayerColor currentPlayerColor;
-  private final List<PlayerCard> RedHand;
-  private final List<PlayerCard> BlueHand;
+  private final List<PlayerCard> redHand;
+  private final List<PlayerCard> blueHand;
+  private final int gridWidth;
+  private final int gridHeight;
 
 
   /**
@@ -36,67 +44,115 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
    *                                  equal to the number of card cells in the grid plus one.
    */
   public ThreeTriosModelImpl(Cell[][] grid, List<Card> cards, boolean shouldShuffle) {
-    // require grid is non-null, non-empty, non-null containing
-    // require rows in grid are non-null, non-empty, non-null containing
-    // require all rows are the same width (i.e. the grid is rectangular)
-    // require width * height is odd
-    int height = grid.length;
-    int width = grid[0].length;
-    this.grid = new Cell[height][width];
-    for (int rowIndex = 0; rowIndex < height; rowIndex++) {
-      for (int colIndex = 0; colIndex < width; colIndex++) {
-        this.grid[rowIndex][colIndex] = grid[rowIndex][colIndex];
-      }
-    }
-    this.currentPlayerColor = PlayerColor.RED;
+    requireNonNullArray2D(grid);
+    requireGridIsRectangular(grid);
+    requireNonNullCollection(cards);
+    this.grid = Utils.copyArray2D(grid);
+    currentPlayerColor = PlayerColor.RED;
+    gridHeight = grid.length;
+    gridWidth = grid[0].length;
+
+    // copy the cards arg so that shuffling does not affect the cards arg
+    cards = new ArrayList<>(cards);
     if (shouldShuffle) {
       Collections.shuffle(cards);
     }
-    this.RedHand = new ArrayList<>();
-    this.BlueHand = new ArrayList<>();
-    for (int i = 0; i < cards.size(); i++) {
-      if (i < cards.size()/2) {
-        PlayerCard card = new PlayerCard(cards.get(i), PlayerColor.RED);
-        this.RedHand.add(card);
-      }
-      else {
-        PlayerCard card = new PlayerCard(cards.get(i), PlayerColor.BLUE);
-        this.BlueHand.add(card);
+
+    int numCardCells = getNumCardCells(grid);
+    requireNumCardCellsIsOdd(numCardCells);
+    requireNumCardsIsNumCardCellsPlusOne(cards, numCardCells);
+
+    int splitIndex = cards.size() / 2;
+    redHand = cards.subList(0, splitIndex).stream()
+        .map(card -> new PlayerCard(card, PlayerColor.RED))
+        .collect(Collectors.toList());
+
+    blueHand = cards.subList(splitIndex, cards.size()).stream()
+        .map(card -> new PlayerCard(card, PlayerColor.BLUE))
+        .collect(Collectors.toList());
+  }
+
+  private void requireNumCardsIsNumCardCellsPlusOne(List<Card> cards, int numCardCells) {
+    if (cards.size() != numCardCells + 1) {
+      throw new IllegalArgumentException(
+          "Number of cards must be equal to number of card cells + 1");
+    }
+  }
+
+  private void requireNumCardCellsIsOdd(int numCardCells) {
+    if (numCardCells % 2 == 0) {
+      throw new IllegalArgumentException("Number of card cells must be odd");
+    }
+  }
+
+  private int getNumCardCells(Cell[][] grid) {
+    int numCardCells = 0;
+    for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
+      for (int colIndex = 0; colIndex < gridWidth; colIndex++) {
+        Cell cell = grid[rowIndex][colIndex];
+        if (cell.isCardCell()) {
+          numCardCells++;
+        }
       }
     }
-    this.currentPlayerColor = PlayerColor.RED;
+    return numCardCells;
+  }
+
+  private void requireGridIsRectangular(Cell[][] grid) {
+    int height = grid.length;
+    if (height == 0) {
+      throw new IllegalArgumentException("Grid must have at least one row");
+    }
+    int width = grid[0].length;
+    for (Cell[] row : grid) {
+      if (row.length != width) {
+        throw new IllegalArgumentException("Grid must be rectangular");
+      }
+    }
   }
 
   @Override
   public void playCardAt(int rowIndex, int colIndex, PlayerCard card) {
-    if (this.isGameOver()) {
-      throw new IllegalStateException("Game is over");
-    }
-    if (rowIndex < 0 || rowIndex >= this.grid.length) {
-      throw new IndexOutOfBoundsException("row index out of bounds");
-    }
-    if (colIndex < 0 || colIndex >= grid[0].length) {
-      throw new IndexOutOfBoundsException("column index out of bounds");
-    }
-    if (grid[rowIndex][colIndex].getCard() != null) {
-      throw new IllegalArgumentException("Card already played");
-    }
-    if (grid[rowIndex][colIndex].isHole()) {
-      throw new IllegalArgumentException("Cell is a hole");
-    }
-    if (card == null) {
-      throw new IllegalArgumentException("Card cannot be null");
-    }
-    this.getHand(this.currentPlayerColor).remove(card);
-    this.grid[rowIndex][colIndex] = Cell.createOccupiedCardCell(card);
+    requireGameIsNotOver();
+    requireValidRowIndex(rowIndex);
+    requireValidColIndex(colIndex);
+    requireCellIsEmptyCardCell(rowIndex, colIndex);
+    requireNonNull(card);
+    requireCurrentHandContainsCard(card);
+
+    getCurrentHand().remove(card);
+    grid[rowIndex][colIndex] = Cell.createOccupiedCardCell(card);
 
     //call battle here in between these steps
 
-    if (this.currentPlayerColor == PlayerColor.RED) {
-      this.currentPlayerColor = PlayerColor.BLUE;
+    currentPlayerColor = (currentPlayerColor == PlayerColor.RED)
+        ? PlayerColor.BLUE
+        : PlayerColor.RED;
+  }
+
+  @Override
+  public void playCardAt(int rowIndex, int colIndex, int cardIndex) {
+    requireCardIndexIsValid(cardIndex);
+    PlayerCard card = getCurrentHand().get(cardIndex);
+    playCardAt(rowIndex, colIndex, card);
+  }
+
+  private void requireCardIndexIsValid(int cardIndex) {
+    if (cardIndex < 0 || cardIndex >= getCurrentHand().size()) {
+      throw new IndexOutOfBoundsException("Card index is not valid");
     }
-    else {
-      this.currentPlayerColor = PlayerColor.RED;
+  }
+
+
+  private void requireCurrentHandContainsCard(PlayerCard card) {
+    if (!getCurrentHand().contains(card)) {
+      throw new IllegalArgumentException("Current hand does not contain card");
+    }
+  }
+
+  private void requireCellIsEmptyCardCell(int rowIndex, int colIndex) {
+    if (!grid[rowIndex][colIndex].isEmptyCardCell()) {
+      throw new IllegalStateException("Cell is not an empty card cell");
     }
   }
 
@@ -107,105 +163,143 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   }
 
   private void battle(int rowIndex, int colIndex, Direction direction) {
-    // require indices are valid
-    // require adjacent cell exists
-    // require adjacent cell is not empty
-    // require adjacent player is enemy
+    requireValidRowIndex(rowIndex);
+    requireValidColIndex(colIndex);
+    if (!isAdjacentCellEnemy(rowIndex, colIndex, direction)) {
+      return;
+    }
+    int adjacentRowIndex = rowIndex + direction.getRowOffset();
+    int adjacentColIndex = colIndex + direction.getColOffset();
+    Card currentCard = getCellAt(rowIndex, colIndex).getCard();
+    Card enemyCard = getCellAt(adjacentRowIndex, adjacentColIndex).getCard();
+    Card winningCard = getWinningCard(currentCard, enemyCard, direction);
+    if (winningCard.equals(currentCard)) {
+      PlayerCard flippedCard = new PlayerCard(currentCard, getCurrentPlayer());
+      Cell flippedCell = Cell.createOccupiedCardCell(flippedCard);
+      grid[adjacentRowIndex][adjacentColIndex] = flippedCell;
+      battle(adjacentRowIndex, adjacentColIndex);
+    }
+  }
 
-    // Cell cell = getCellAt(rowIndex, colIndex);
-    // Card card = cell.getCard();
-    // int adjacentRowIndex = rowIndex + direction.getRowOffset();
-    // int adjacentColIndex = colIndex + direction.getColOffset();
-    // Cell adjacentCell = getCellAt(adjacentRowIndex, adjacentColIndex);
-    // Card enemyCard = adjacentCell.getCard();
-    // AttackValue attackValue = card.getAttackValue(direction);
-    // AttackValue enemyAttackValue = enemyCard.getAttackValue(direction);
-    // boolean isEnemyWeaker = attackValue.compareTo(enemyAttackValue) > 0;
-    // if (isEnemyWeaker) {
-    //   Cell flippedCell = Cell.createCardCell(enemyCard, getCurrentPlayer());
-    //   grid[adjacentRowIndex][adjacentColIndex] = flippedCell;
-    //   battle(adjacentRowIndex, adjacentColIndex);
-    // }
+  private Card getWinningCard(Card cardA, Card cardB, Direction direction) {
+    AttackValue attackValueA = cardA.getAttackValue(direction);
+    AttackValue attackValueB = cardB.getAttackValue(direction.getOppositeDirection());
+    return attackValueA.compareTo(attackValueB) > 0 ? cardA : cardB;
+  }
+
+  private boolean isAdjacentCellEnemy(int rowIndex, int colIndex, Direction direction) {
+    int adjacentRowIndex = rowIndex + direction.getRowOffset();
+    int adjacentColIndex = colIndex + direction.getColOffset();
+    if (!isRowIndexValid(adjacentRowIndex) || !isColIndexValid(adjacentColIndex)) {
+      return false;
+    }
+    Cell adjacentCell = getCellAt(adjacentRowIndex, adjacentColIndex);
+
+    if (!adjacentCell.isOccupiedCardCell()) {
+      return false;
+    }
+    PlayerColor adjacentPlayerColor = adjacentCell.getCard().getPlayerColor();
+    return !adjacentPlayerColor.equals(currentPlayerColor);
   }
 
   @Override
   public List<PlayerCard> getHand(PlayerColor playerColor) {
-    if (playerColor == PlayerColor.RED) {
-      return this.RedHand;
-    }
-    return this.BlueHand;
+    requireNonNull(playerColor);
+    return playerColor == PlayerColor.RED ? redHand : blueHand;
+  }
+
+  private List<PlayerCard> getCurrentHand() {
+    return getHand(currentPlayerColor);
   }
 
   @Override
   public Cell[][] getGrid() {
-    Cell[][] grid = new Cell[this.grid.length][this.grid[0].length];
-    for (int rowIndex = 0; rowIndex < grid.length; rowIndex++) {
-      for (int colIndex = 0; colIndex < grid[0].length; colIndex++) {
-        grid[rowIndex][colIndex] = this.grid[rowIndex][colIndex];
-      }
-    }
-    return grid;
+    return Utils.copyArray2D(grid);
   }
 
   @Override
   public Cell getCellAt(int rowIndex, int colIndex) {
-    Cell cell = this.grid[rowIndex][colIndex];
-    Cell cellR;
-    if (cell.isOccupiedCardCell()) {
-      cellR = Cell.createOccupiedCardCell(cell.getCard());
-    }
-    else if (cell.isEmptyCardCell()) {
-      cellR = Cell.createOccupiedCardCell(cell.getCard());
-    }
-    else {
-      cellR = Cell.createHoleCell();
-    }
-    return cellR;
+    requireValidRowIndex(rowIndex);
+    requireValidColIndex(colIndex);
+    return grid[rowIndex][colIndex];
   }
 
   @Override
   public boolean isGameOver() {
-    boolean gameOver = true;
-    for (int rowIndex = 0; rowIndex < this.grid.length; rowIndex++) {
-      for (int colIndex = 0; colIndex < this.grid[0].length; colIndex++) {
-        Cell cell = this.grid[rowIndex][colIndex];
+    for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
+      for (int colIndex = 0; colIndex < gridWidth; colIndex++) {
+        Cell cell = grid[rowIndex][colIndex];
         if (cell.isEmptyCardCell()) {
-          gameOver = false;
+          return false;
         }
       }
     }
-    return gameOver;
+    return true;
   }
 
   @Override
   public PlayerColor getWinner() {
-    if (!this.isGameOver()) {
-      throw new IllegalStateException("Game is not over");
-    }
-    int red = 0;
-    int blue = 0;
-    for (int rowIndex = 0; rowIndex < this.grid.length; rowIndex++) {
-      for (int colIndex = 0; colIndex < this.grid[0].length; colIndex++) {
-        Cell cell = this.grid[rowIndex][colIndex];
-        if (cell.isCardCell() && cell.getCard().getPlayerColor() == PlayerColor.RED) {
-          red++;
+    requireGameIsOver();
+
+    int numRedCells = 0;
+    int numBlueCells = 0;
+
+    for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
+      for (int colIndex = 0; colIndex < gridWidth; colIndex++) {
+        Cell cell = grid[rowIndex][colIndex];
+        if (cell.isHole()) {
+          continue;
         }
-        else if (cell.isCardCell()) {
-          blue++;
+        PlayerColor playerColor = cell.getCard().getPlayerColor();
+        if (playerColor.equals(PlayerColor.RED)) {
+          numRedCells++;
+        } else {
+          numBlueCells++;
         }
       }
     }
-    if (red > blue) {
-      return PlayerColor.RED;
-    }
-    return PlayerColor.BLUE;
+
+    return numRedCells > numBlueCells ? PlayerColor.RED : PlayerColor.BLUE;
   }
 
   @Override
   public PlayerColor getCurrentPlayer() {
-    if (this.isGameOver()) {
+    requireGameIsNotOver();
+    return currentPlayerColor;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////
+
+
+  private void requireValidColIndex(int colIndex) {
+    if (colIndex < 0 || colIndex >= gridWidth) {
+      throw new IndexOutOfBoundsException("Invalid column index");
+    }
+  }
+
+  private void requireValidRowIndex(int rowIndex) {
+    if (rowIndex < 0 || rowIndex >= gridHeight) {
+      throw new IndexOutOfBoundsException("Invalid row index");
+    }
+  }
+
+  private void requireGameIsOver() {
+    if (!isGameOver()) {
+      throw new IllegalStateException("Game is not over");
+    }
+  }
+
+  private void requireGameIsNotOver() {
+    if (isGameOver()) {
       throw new IllegalStateException("Game is over");
     }
-    return this.currentPlayerColor;
+  }
+
+  private boolean isRowIndexValid(int rowIndex) {
+    return rowIndex >= 0 && rowIndex < gridHeight;
+  }
+
+  private boolean isColIndexValid(int colIndex) {
+    return colIndex >= 0 && colIndex < gridWidth;
   }
 }
