@@ -49,8 +49,8 @@ public class GridFactory {
     requireNumLinesEqualsNumRowsPlusOne(lines, numRows);
 
     Cell[][] grid = new Cell[numRows][numCols];
-    for (int rowIndex = 1; rowIndex <= numRows; rowIndex++) {
-      String line = lines.get(rowIndex);
+    for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
+      String line = lines.get(rowIndex + 1);
       requireLineLengthEqualsNumCols(line, numCols);
       Cell[] row = getRowFromString(line);
       grid[rowIndex] = row;
