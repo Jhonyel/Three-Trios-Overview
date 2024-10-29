@@ -5,9 +5,8 @@ import static cs3500.three.trios.util.Requirements.requireNonNull;
 import cs3500.three.trios.model.Cell;
 import cs3500.three.trios.model.PlayerColor;
 import cs3500.three.trios.model.ThreeTriosModel;
-import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.PlayerCard;
-import cs3500.three.trios.util.Requirements;
+import cs3500.three.trios.util.Utils;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class ThreeTriosTextView implements ThreeTriosView {
 
   @Override
   public void render() {
-    appendLine(toString());
+    append(toString());
   }
 
   private void appendLine(String string) {
@@ -62,9 +61,7 @@ public class ThreeTriosTextView implements ThreeTriosView {
 
     List<PlayerCard> hand = model.getHand(currentPlayer);
     stringBuilder.append("Hand:\n");
-    for (Card card : hand) {
-      stringBuilder.append(String.format("%s\n", card));
-    }
+    stringBuilder.append(Utils.joinToString(hand, "\n"));
 
     return stringBuilder.toString();
   }

@@ -18,12 +18,11 @@ public class CardImpl implements Card {
   /**
    * Creates a new CardImpl with the given name and attack values.
    *
-   *
-   * @param name the name of the card
+   * @param name             the name of the card
    * @param northAttackValue the attack value in the north direction
    * @param southAttackValue the attack value in the south direction
-   * @param eastAttackValue the attack value in the east direction
-   * @param westAttackValue the attack value in the west direction
+   * @param eastAttackValue  the attack value in the east direction
+   * @param westAttackValue  the attack value in the west direction
    * @throws IllegalArgumentException if any of the arguments are null
    */
   public CardImpl(
@@ -100,11 +99,11 @@ public class CardImpl implements Card {
   public boolean equals(Object other) {
     if (other instanceof Card) {
       Card otherCard = (Card) other;
-      return otherCard.getName().equals(getName()) &&
-          otherCard.getNorthAttackValue().equals(getNorthAttackValue()) &&
-          otherCard.getSouthAttackValue().equals(getSouthAttackValue()) &&
-          otherCard.getEastAttackValue().equals(getEastAttackValue()) &&
-          otherCard.getWestAttackValue().equals(getWestAttackValue());
+      return otherCard.getName().equals(getName())
+          && otherCard.getNorthAttackValue().equals(getNorthAttackValue())
+          && otherCard.getSouthAttackValue().equals(getSouthAttackValue())
+          && otherCard.getEastAttackValue().equals(getEastAttackValue())
+          && otherCard.getWestAttackValue().equals(getWestAttackValue());
     }
     return false;
   }
