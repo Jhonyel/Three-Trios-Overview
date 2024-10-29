@@ -17,6 +17,9 @@ import static cs3500.three.trios.Examples.create16Cards;
 import static cs3500.three.trios.Examples.create5x7GridWith15CardCells;
 import static org.junit.Assert.assertThrows;
 
+/**
+ * A class for testing the behavior of our model.
+ */
 public class TestThreeTriosModel {
   private Cell[][] grid;
   private List<Card> cards;
