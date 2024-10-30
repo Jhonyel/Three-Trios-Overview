@@ -3,7 +3,8 @@ package cs3500.three.trios.model.card;
 import cs3500.three.trios.model.Direction;
 
 /**
- * An interface representing a card.
+ * An interface representing a card. A card contains attack values in each of the four directions
+ * and a name.
  */
 public interface Card {
 
@@ -53,4 +54,10 @@ public interface Card {
    * Where NORTH, SOUTH, EAST, WEST are the attack values of the card in the respective directions.
    */
   String toString();
+
+  /**
+   * Returns true if the attack value of this card in the specified direction is greater than the
+   * attack value of the specified other card in the opposite direction.
+   */
+  boolean beats(Card otherCard, Direction direction);
 }

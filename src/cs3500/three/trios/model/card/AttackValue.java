@@ -6,8 +6,7 @@ import static cs3500.three.trios.util.Requirements.requireNonNull;
  * An enum class representing the 10 different possible attack values of a card. The order in which
  * the enum constants are declared is important, because we compare attack values; when Java
  * compares enum constants (such as attack values), it takes the first declared enum to be the least
- * and the last declared enum to be the greatest, thus the order in which we declare the enum
- * constants is important.
+ * and the last declared enum to be the greatest, thus we declare the enums from least to greatest.
  */
 public enum AttackValue {
   ONE('1'),

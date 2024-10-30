@@ -4,12 +4,12 @@ import static cs3500.three.trios.util.Requirements.requireNonNull;
 import static cs3500.three.trios.util.Requirements.requireNonNullArray2D;
 import static cs3500.three.trios.util.Requirements.requireNonNullCollection;
 
-import cs3500.three.trios.model.card.AttackValue;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.util.Utils;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +24,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   private final List<PlayerCard> blueHand;
   private final int gridWidth;
   private final int gridHeight;
+  private boolean isGameOver;
 
 
   /**
@@ -40,17 +41,20 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
    * @param shouldShuffle whether the cards should be shuffled before starting the game
    * @throws IllegalArgumentException if the grid is null, the grid contains null elements, the grid
    *                                  is not rectangular, the number of card cells is not an odd
-   *                                  number, cards is null, contains null, or does not have a size
-   *                                  equal to the number of card cells in the grid plus one.
+   *                                  number, cards is null, contains null, does not have a size
+   *                                  equal to the number of card cells in the grid plus one, or has
+   *                                  duplicate cards.
    */
   public ThreeTriosModelImpl(Cell[][] grid, List<Card> cards, boolean shouldShuffle) {
     requireNonNullArray2D(grid);
     requireGridIsRectangular(grid);
     requireNonNullCollection(cards);
+    requireAllCardsAreUnique(cards);
     this.grid = Utils.copyArray2D(grid);
     currentPlayerColor = PlayerColor.RED;
     gridHeight = grid.length;
     gridWidth = grid[0].length;
+    isGameOver = false;
 
     // copy the cards arg so that shuffling does not affect the cards arg
     cards = new ArrayList<>(cards);
@@ -70,6 +74,14 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     blueHand = cards.subList(splitIndex, cards.size()).stream()
         .map(card -> new PlayerCard(card, PlayerColor.BLUE))
         .collect(Collectors.toList());
+  }
+
+  private void requireAllCardsAreUnique(List<Card> cards) {
+    // a set cannot contain duplicates.
+    // if a list does not contain duplicates, its size as a list will equal its size as a set.
+    if (cards.size() != new HashSet<>(cards).size()) {
+      throw new IllegalArgumentException("All cards must be unique");
+    }
   }
 
   private void requireNumCardsIsNumCardCellsPlusOne(List<Card> cards, int numCardCells) {
@@ -123,11 +135,15 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     getCurrentHand().remove(card);
     grid[rowIndex][colIndex] = Cell.createOccupiedCardCell(card);
 
-    //call battle here in between these steps
+    battle(rowIndex, colIndex);
 
     currentPlayerColor = (currentPlayerColor == PlayerColor.RED)
         ? PlayerColor.BLUE
         : PlayerColor.RED;
+
+    if (isGridFilled()) {
+      isGameOver = true;
+    }
   }
 
   @Override
@@ -170,21 +186,14 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     }
     int adjacentRowIndex = rowIndex + direction.getRowOffset();
     int adjacentColIndex = colIndex + direction.getColOffset();
-    Card currentCard = getCellAt(rowIndex, colIndex).getCard();
-    Card enemyCard = getCellAt(adjacentRowIndex, adjacentColIndex).getCard();
-    Card winningCard = getWinningCard(currentCard, enemyCard, direction);
-    if (winningCard.equals(currentCard)) {
-      PlayerCard flippedCard = new PlayerCard(currentCard, getCurrentPlayer());
+    Card currentCard = getCardAt(rowIndex, colIndex);
+    Card enemyCard = getCardAt(adjacentRowIndex, adjacentColIndex);
+    if (currentCard.beats(enemyCard, direction)) {
+      PlayerCard flippedCard = new PlayerCard(enemyCard, getCurrentPlayer());
       Cell flippedCell = Cell.createOccupiedCardCell(flippedCard);
       grid[adjacentRowIndex][adjacentColIndex] = flippedCell;
       battle(adjacentRowIndex, adjacentColIndex);
     }
-  }
-
-  private Card getWinningCard(Card cardA, Card cardB, Direction direction) {
-    AttackValue attackValueA = cardA.getAttackValue(direction);
-    AttackValue attackValueB = cardB.getAttackValue(direction.getOppositeDirection());
-    return attackValueA.compareTo(attackValueB) > 0 ? cardA : cardB;
   }
 
   private boolean isAdjacentCellEnemy(int rowIndex, int colIndex, Direction direction) {
@@ -225,7 +234,33 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   }
 
   @Override
+  public PlayerCard getCardAt(int rowIndex, int colIndex) {
+    requireValidRowIndex(rowIndex);
+    requireValidColIndex(colIndex);
+    Cell cell = getCellAt(rowIndex, colIndex);
+    if (!cell.isOccupiedCardCell()) {
+      throw new IllegalStateException("Cell is not an occupied card cell");
+    }
+    return cell.getCard();
+  }
+
+  @Override
+  public PlayerColor getPlayerAt(int rowIndex, int colIndex) {
+    requireValidRowIndex(rowIndex);
+    requireValidColIndex(colIndex);
+    Cell cell = getCellAt(rowIndex, colIndex);
+    if (!cell.isOccupiedCardCell()) {
+      throw new IllegalStateException("Cell is not an occupied card cell");
+    }
+    return cell.getCard().getPlayerColor();
+  }
+
+  @Override
   public boolean isGameOver() {
+    return isGameOver;
+  }
+
+  private boolean isGridFilled() {
     for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
       for (int colIndex = 0; colIndex < gridWidth; colIndex++) {
         Cell cell = grid[rowIndex][colIndex];

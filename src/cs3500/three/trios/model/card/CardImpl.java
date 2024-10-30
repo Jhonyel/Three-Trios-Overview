@@ -107,4 +107,11 @@ public class CardImpl implements Card {
     }
     return false;
   }
+
+  @Override
+  public boolean beats(Card otherCard, Direction direction) {
+    AttackValue thisAttackValue = getAttackValue(direction);
+    AttackValue otherAttackValue = otherCard.getAttackValue(direction.getOppositeDirection());
+    return thisAttackValue.compareTo(otherAttackValue) > 0;
+  }
 }
