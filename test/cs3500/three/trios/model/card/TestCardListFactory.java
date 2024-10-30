@@ -13,11 +13,8 @@ import static cs3500.three.trios.model.card.AttackValue.TWO;
 import static org.junit.Assert.assertEquals;
 
 import cs3500.three.trios.Examples;
-import cs3500.three.trios.model.card.Card;
-import cs3500.three.trios.model.card.CardListFactory;
-import cs3500.three.trios.model.card.CardImpl;
+
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;

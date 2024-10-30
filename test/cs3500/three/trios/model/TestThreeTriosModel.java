@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 import cs3500.three.trios.Examples;
 import cs3500.three.trios.TestUtils;
 import cs3500.three.trios.model.card.Card;
+import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.util.Utils;
 import java.io.IOException;
