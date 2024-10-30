@@ -50,19 +50,25 @@ public class ThreeTriosTextView implements ThreeTriosView {
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
 
-    PlayerColor currentPlayer = model.getCurrentPlayer();
-    stringBuilder.append(String.format("Player: %s\n", currentPlayer));
+    if (model.isGameOver()) {
+      PlayerColor winner = model.getWinner();
+      stringBuilder.append(String.format("Winner: %s\n", winner));
 
+    } else {
+      PlayerColor currentPlayer = model.getCurrentPlayer();
+      stringBuilder.append(String.format("Player: %s\n", currentPlayer));
+    }
     Cell[][] grid = model.getGrid();
     for (Cell[] row : grid) {
       String rowString = getRowString(row);
       stringBuilder.append(rowString);
     }
-
-    List<PlayerCard> hand = model.getHand(currentPlayer);
-    stringBuilder.append("Hand:\n");
-    stringBuilder.append(Utils.joinToString(hand, "\n"));
-
+    if (!model.isGameOver()) {
+      PlayerColor currentPlayer = model.getCurrentPlayer();
+      List<PlayerCard> hand = model.getHand(currentPlayer);
+      stringBuilder.append("Hand:\n");
+      stringBuilder.append(Utils.joinToString(hand, "\n"));
+    }
     return stringBuilder.toString();
   }
 
