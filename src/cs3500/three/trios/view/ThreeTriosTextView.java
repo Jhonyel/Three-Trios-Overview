@@ -59,11 +59,17 @@ public class ThreeTriosTextView implements ThreeTriosView {
       stringBuilder.append(String.format("Player: %s\n", currentPlayer));
     }
     Cell[][] grid = model.getGrid();
-    for (Cell[] row : grid) {
+    for (int rowIndex = 0; rowIndex < grid.length; rowIndex++) {
+      boolean isLastRow = rowIndex == grid.length - 1;
+      Cell[] row = grid[rowIndex];
       String rowString = getRowString(row);
       stringBuilder.append(rowString);
+      if (!isLastRow) {
+        stringBuilder.append("\n");
+      }
     }
     if (!model.isGameOver()) {
+      stringBuilder.append("\n");
       PlayerColor currentPlayer = model.getCurrentPlayer();
       List<PlayerCard> hand = model.getHand(currentPlayer);
       stringBuilder.append("Hand:\n");
@@ -82,7 +88,6 @@ public class ThreeTriosTextView implements ThreeTriosView {
       String cellCharacter = getCellCharacter(cell);
       stringBuilder.append(cellCharacter);
     }
-    stringBuilder.append("\n");
     return stringBuilder.toString();
   }
 
