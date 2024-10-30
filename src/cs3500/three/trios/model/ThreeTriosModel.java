@@ -65,6 +65,30 @@ public interface ThreeTriosModel {
   Cell getCellAt(int rowIndex, int colIndex);
 
   /**
+   * Returns the card at the specified row and column, if one exists, else throws an exception.
+   *
+   * @param rowIndex the row index of the card to get.
+   * @param colIndex the column index of the card to get.
+   * @return the card at the specified row and column.
+   * @throws IndexOutOfBoundsException if rowIndex is not in the range [0, getHeight()], or colIndex
+   *                                   is not in the range [0, getWidth()]
+   * @throws IllegalStateException     if there is no card at the specified row and column
+   */
+  PlayerCard getCardAt(int rowIndex, int colIndex);
+
+  /**
+   * Returns the player at the specified row and column.
+   *
+   * @param rowIndex the row index of the player to get.
+   * @param colIndex the column index of the player to get.
+   * @return the player at the specified row and column.
+   * @throws IndexOutOfBoundsException if rowIndex is not in the range [0, getHeight()], or colIndex
+   *                                   is not in the range [0, getWidth()]
+   * @throws IllegalStateException     if there is no player at the specified row and column
+   */
+  PlayerColor getPlayerAt(int rowIndex, int colIndex);
+
+  /**
    * Returns true if the game is over (i.e. if the grid is filled), false otherwise.
    */
   boolean isGameOver();

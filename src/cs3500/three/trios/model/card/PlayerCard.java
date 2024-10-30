@@ -56,4 +56,13 @@ public class PlayerCard extends CardImpl {
   public PlayerColor getPlayerColor() {
     return playerColor;
   }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other instanceof PlayerCard) {
+      PlayerCard otherCard = (PlayerCard) other;
+      return super.equals(otherCard) && playerColor == otherCard.playerColor;
+    }
+    return false;
+  }
 }
