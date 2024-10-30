@@ -24,7 +24,6 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   private final List<PlayerCard> blueHand;
   private final int gridWidth;
   private final int gridHeight;
-  private boolean isGameOver;
 
 
   /**
@@ -54,7 +53,6 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     currentPlayerColor = PlayerColor.RED;
     gridHeight = grid.length;
     gridWidth = grid[0].length;
-    isGameOver = false;
 
     // copy the cards arg so that shuffling does not affect the cards arg
     cards = new ArrayList<>(cards);
@@ -64,18 +62,21 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
 
     int numCardCells = getNumCardCells(grid);
     requireNumCardCellsIsOdd(numCardCells);
-    requireNumCardsIsNumCardCellsPlusOne(cards, numCardCells);
+    requireNumCardsIsGreaterThanNumCardCells(cards, numCardCells);
 
-    int splitIndex = cards.size() / 2;
+    int splitIndex = (numCardCells + 1) / 2;
     redHand = cards.subList(0, splitIndex).stream()
         .map(card -> new PlayerCard(card, PlayerColor.RED))
         .collect(Collectors.toList());
 
-    blueHand = cards.subList(splitIndex, cards.size()).stream()
+    blueHand = cards.subList(splitIndex, numCardCells + 1).stream()
         .map(card -> new PlayerCard(card, PlayerColor.BLUE))
         .collect(Collectors.toList());
   }
 
+  /**
+   * Checks that all cards in the given list are unique, else throws an IllegalArgumentException.
+   */
   private void requireAllCardsAreUnique(List<Card> cards) {
     // a set cannot contain duplicates.
     // if a list does not contain duplicates, its size as a list will equal its size as a set.
@@ -84,19 +85,30 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     }
   }
 
-  private void requireNumCardsIsNumCardCellsPlusOne(List<Card> cards, int numCardCells) {
-    if (cards.size() != numCardCells + 1) {
+  /**
+   * Checks that the number of cards in the given list is greater than the number of card cells in
+   * the grid, else throws an IllegalArgumentException.
+   */
+  private void requireNumCardsIsGreaterThanNumCardCells(List<Card> cards, int numCardCells) {
+    if (cards.size() <= numCardCells) {
       throw new IllegalArgumentException(
-          "Number of cards must be equal to number of card cells + 1");
+          "Number of cards must be at least the number of card cells + 1");
     }
   }
 
+  /**
+   * Checks that the number of card cells in the grid is odd, else throws an
+   * IllegalArgumentException.
+   */
   private void requireNumCardCellsIsOdd(int numCardCells) {
     if (numCardCells % 2 == 0) {
       throw new IllegalArgumentException("Number of card cells must be odd");
     }
   }
 
+  /**
+   * Returns the number of card cells in the given grid.
+   */
   private int getNumCardCells(Cell[][] grid) {
     int numCardCells = 0;
     for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
@@ -110,6 +122,10 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     return numCardCells;
   }
 
+  /**
+   * Checks that the grid is rectangular (i.e. is non-empty, and all rows have the same length),
+   * else throws an IllegalArgumentException.
+   */
   private void requireGridIsRectangular(Cell[][] grid) {
     int height = grid.length;
     if (height == 0) {
@@ -132,7 +148,8 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     requireNonNull(card);
     requireCurrentHandContainsCard(card);
 
-    getCurrentHand().remove(card);
+    List<PlayerCard> currentHand = currentPlayerColor == PlayerColor.RED ? redHand : blueHand;
+    currentHand.remove(card);
     grid[rowIndex][colIndex] = Cell.createOccupiedCardCell(card);
 
     battle(rowIndex, colIndex);
@@ -140,10 +157,6 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     currentPlayerColor = (currentPlayerColor == PlayerColor.RED)
         ? PlayerColor.BLUE
         : PlayerColor.RED;
-
-    if (isGridFilled()) {
-      isGameOver = true;
-    }
   }
 
   @Override
@@ -153,6 +166,10 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     playCardAt(rowIndex, colIndex, card);
   }
 
+  /**
+   * Checks that the given card index is an index of the current hand, else throws an
+   * IndexOutOfBoundsException.
+   */
   private void requireCardIndexIsValid(int cardIndex) {
     if (cardIndex < 0 || cardIndex >= getCurrentHand().size()) {
       throw new IndexOutOfBoundsException("Card index is not valid");
@@ -160,24 +177,37 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   }
 
 
+  /**
+   * Checks that the current hand contains the given card, else throws an IllegalArgumentException.
+   */
   private void requireCurrentHandContainsCard(PlayerCard card) {
     if (!getCurrentHand().contains(card)) {
       throw new IllegalArgumentException("Current hand does not contain card");
     }
   }
 
+  /**
+   * Checks that the given cell is an empty card cell, else throws an IllegalStateException.
+   */
   private void requireCellIsEmptyCardCell(int rowIndex, int colIndex) {
     if (!grid[rowIndex][colIndex].isEmptyCardCell()) {
       throw new IllegalStateException("Cell is not an empty card cell");
     }
   }
 
+  /**
+   * Conducts battle at the given row and column in all 4 directions.
+   */
   private void battle(int rowIndex, int colIndex) {
     for (Direction direction : Direction.values()) {
       battle(rowIndex, colIndex, direction);
     }
   }
 
+  /**
+   * Conducts battle at the given row and column in the given direction. If the card battled is
+   * flipped, the flipped card conducts battle in all 4 directions.
+   */
   private void battle(int rowIndex, int colIndex, Direction direction) {
     requireValidRowIndex(rowIndex);
     requireValidColIndex(colIndex);
@@ -189,13 +219,17 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     Card currentCard = getCardAt(rowIndex, colIndex);
     Card enemyCard = getCardAt(adjacentRowIndex, adjacentColIndex);
     if (currentCard.beats(enemyCard, direction)) {
-      PlayerCard flippedCard = new PlayerCard(enemyCard, getCurrentPlayer());
+      PlayerCard flippedCard = new PlayerCard(enemyCard, currentPlayerColor);
       Cell flippedCell = Cell.createOccupiedCardCell(flippedCard);
       grid[adjacentRowIndex][adjacentColIndex] = flippedCell;
       battle(adjacentRowIndex, adjacentColIndex);
     }
   }
 
+  /**
+   * Returns true if the card at the given row and column has an adjacent enemy cell in the given
+   * direction, else returns false.
+   */
   private boolean isAdjacentCellEnemy(int rowIndex, int colIndex, Direction direction) {
     int adjacentRowIndex = rowIndex + direction.getRowOffset();
     int adjacentColIndex = colIndex + direction.getColOffset();
@@ -214,10 +248,16 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   @Override
   public List<PlayerCard> getHand(PlayerColor playerColor) {
     requireNonNull(playerColor);
-    return playerColor == PlayerColor.RED ? redHand : blueHand;
+    return new ArrayList<>(playerColor == PlayerColor.RED ? redHand : blueHand);
   }
 
+  /**
+   * Returns the hand of the current player.
+   */
   private List<PlayerCard> getCurrentHand() {
+    // note: we use currentPlayerColor instead of getCurrentPlayer() because getCurrentPlayer()
+    // only works if the game is not over. we want to call getCurrentHand() even if the game is
+    // over because we still have to do battle after the last card is played.
     return getHand(currentPlayerColor);
   }
 
@@ -257,10 +297,6 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
 
   @Override
   public boolean isGameOver() {
-    return isGameOver;
-  }
-
-  private boolean isGridFilled() {
     for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
       for (int colIndex = 0; colIndex < gridWidth; colIndex++) {
         Cell cell = grid[rowIndex][colIndex];
@@ -276,8 +312,8 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   public PlayerColor getWinner() {
     requireGameIsOver();
 
-    int numRedCells = 0;
-    int numBlueCells = 0;
+    int numRedCards = 0;
+    int numBlueCards = 0;
 
     for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
       for (int colIndex = 0; colIndex < gridWidth; colIndex++) {
@@ -287,14 +323,17 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
         }
         PlayerColor playerColor = cell.getCard().getPlayerColor();
         if (playerColor.equals(PlayerColor.RED)) {
-          numRedCells++;
+          numRedCards++;
         } else {
-          numBlueCells++;
+          numBlueCards++;
         }
       }
     }
 
-    return numRedCells > numBlueCells ? PlayerColor.RED : PlayerColor.BLUE;
+    numRedCards += redHand.size();
+    numBlueCards += blueHand.size();
+
+    return numRedCards > numBlueCards ? PlayerColor.RED : PlayerColor.BLUE;
   }
 
   @Override
@@ -306,34 +345,52 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   ////////////////////////////////////////////////////////////////////////////
 
 
+  /**
+   * Checks that the given column index is valid, else throws an IndexOutOfBoundsException.
+   */
   private void requireValidColIndex(int colIndex) {
     if (colIndex < 0 || colIndex >= gridWidth) {
       throw new IndexOutOfBoundsException("Invalid column index");
     }
   }
 
+  /**
+   * Checks that the given row index is valid, else throws an IndexOutOfBoundsException.
+   */
   private void requireValidRowIndex(int rowIndex) {
     if (rowIndex < 0 || rowIndex >= gridHeight) {
       throw new IndexOutOfBoundsException("Invalid row index");
     }
   }
 
+  /**
+   * Checks that the game is over, else throws an IllegalStateException.
+   */
   private void requireGameIsOver() {
     if (!isGameOver()) {
       throw new IllegalStateException("Game is not over");
     }
   }
 
+  /**
+   * Checks that the game is not over, else throws an IllegalStateException.
+   */
   private void requireGameIsNotOver() {
     if (isGameOver()) {
       throw new IllegalStateException("Game is over");
     }
   }
 
+  /**
+   * Returns true if the given row index is valid, false otherwise.
+   */
   private boolean isRowIndexValid(int rowIndex) {
     return rowIndex >= 0 && rowIndex < gridHeight;
   }
 
+  /**
+   * Returns true if the given column index is valid, false otherwise.
+   */
   private boolean isColIndexValid(int colIndex) {
     return colIndex >= 0 && colIndex < gridWidth;
   }

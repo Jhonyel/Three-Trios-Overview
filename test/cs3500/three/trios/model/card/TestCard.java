@@ -4,14 +4,19 @@ import static cs3500.three.trios.model.Direction.EAST;
 import static cs3500.three.trios.model.Direction.NORTH;
 import static cs3500.three.trios.model.Direction.SOUTH;
 import static cs3500.three.trios.model.Direction.WEST;
+import static cs3500.three.trios.model.PlayerColor.BLUE;
+import static cs3500.three.trios.model.PlayerColor.RED;
 import static cs3500.three.trios.model.card.AttackValue.FOUR;
 import static cs3500.three.trios.model.card.AttackValue.ONE;
 import static cs3500.three.trios.model.card.AttackValue.THREE;
 import static cs3500.three.trios.model.card.AttackValue.TWO;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
-import cs3500.three.trios.model.PlayerColor;
+import cs3500.three.trios.model.Direction;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,10 +43,22 @@ public abstract class TestCard {
   }
 
   /**
-   * Creates an example card for testing. Implementation is delegated to extending classes.
-   * Extending classes should return an instance of the class being tested.
+   * Creates and returns an example card for testing. Implementation is delegated to extending
+   * classes. Extending classes should return an instance of the class being tested.
    */
   protected abstract Card createExampleCard();
+
+  /**
+   * Creates and returns a card with the given name and attack values. Implementation is delegated
+   * to extending  classes. Extending classes should return an instance of the class being tested.
+   */
+  protected abstract Card createCard(
+      String name,
+      AttackValue northAttackValue,
+      AttackValue southAttackValue,
+      AttackValue eastAttackValue,
+      AttackValue westAttackValue
+  );
 
   @Test
   public void testGetNorthAttackValue() {
@@ -81,6 +98,25 @@ public abstract class TestCard {
     );
   }
 
+  @Test
+  public void testBeats() {
+    Card card2222 = createCard("name", TWO, TWO, TWO, TWO);
+    Card card3333 = createCard("name", THREE, THREE, THREE, THREE);
+    Card card4222 = createCard("name", FOUR, TWO, TWO, TWO);
+
+    for (Direction direction : Direction.values()) {
+      assertTrue(card3333.beats(card2222, direction));
+      assertFalse(card2222.beats(card3333, direction));
+      assertFalse(card3333.beats(card3333, direction));
+    }
+
+    assertTrue(card4222.beats(card3333, NORTH));
+    assertTrue(card4222.beats(card4222, NORTH));
+    assertFalse(card4222.beats(card3333, SOUTH));
+    assertFalse(card4222.beats(card3333, EAST));
+    assertFalse(card4222.beats(card3333, WEST));
+  }
+
   /**
    * A subclass of TestCard to test CardImpl.
    */
@@ -94,6 +130,23 @@ public abstract class TestCard {
           exampleSouthAttackValue,
           exampleEastAttackValue,
           exampleWestAttackValue
+      );
+    }
+
+    @Override
+    protected Card createCard(
+        String name,
+        AttackValue northAttackValue,
+        AttackValue southAttackValue,
+        AttackValue eastAttackValue,
+        AttackValue westAttackValue
+    ) {
+      return new CardImpl(
+          name,
+          northAttackValue,
+          southAttackValue,
+          eastAttackValue,
+          westAttackValue
       );
     }
 
@@ -119,9 +172,24 @@ public abstract class TestCard {
           IllegalArgumentException.class,
           () -> new CardImpl("name", ONE, ONE, ONE, null)
       );
+
+    }
+
+    @Test
+    public void testEquals() {
+      assertEquals(
+          new CardImpl("name", ONE, ONE, ONE, ONE),
+          new CardImpl("name", ONE, ONE, ONE, ONE)
+      );
+      assertNotEquals(
+          new CardImpl("name", ONE, ONE, ONE, ONE),
+          new CardImpl("name", TWO, ONE, ONE, ONE));
     }
   }
 
+  /**
+   * A subclass of TestCard to test PlayerCard.
+   */
   public static class TestPlayerCard extends TestCard {
 
     @Override
@@ -133,18 +201,52 @@ public abstract class TestCard {
           exampleEastAttackValue,
           exampleWestAttackValue
       );
-      return new PlayerCard(card, PlayerColor.RED);
+      return new PlayerCard(card, RED);
+    }
+
+    @Override
+    protected Card createCard(
+        String name,
+        AttackValue northAttackValue,
+        AttackValue southAttackValue,
+        AttackValue eastAttackValue,
+        AttackValue westAttackValue
+    ) {
+      return new PlayerCard(
+          name,
+          northAttackValue,
+          southAttackValue,
+          eastAttackValue,
+          westAttackValue,
+          RED
+      );
     }
 
     @Test
     public void testConstructionWithNullArguments() {
       assertThrows(
           IllegalArgumentException.class,
-          () -> new PlayerCard(null, PlayerColor.RED)
+          () -> new PlayerCard(null, RED)
       );
       assertThrows(
           IllegalArgumentException.class,
           () -> new PlayerCard(exampleCard, null)
+      );
+    }
+
+    @Test
+    public void testEquals() {
+      assertEquals(
+          new PlayerCard(exampleCard, RED),
+          new PlayerCard(exampleCard, RED)
+      );
+      assertNotEquals(
+          new PlayerCard(exampleCard, RED),
+          new PlayerCard(exampleCard, BLUE)
+      );
+      assertNotEquals(
+          new PlayerCard("name", ONE, ONE, ONE, ONE, RED),
+          new PlayerCard("name", TWO, ONE, ONE, ONE, RED)
       );
     }
   }

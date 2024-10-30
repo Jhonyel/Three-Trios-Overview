@@ -5,6 +5,9 @@ import java.util.List;
 
 /**
  * An interface representing a Three Trios game.
+ *
+ * <p>Class invariant: The number of cards in the hand of any player is at most (n + 1) / 2,
+ * where n is the number of card cells in the grid.
  */
 public interface ThreeTriosModel {
 
