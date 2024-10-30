@@ -14,11 +14,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 import cs3500.three.trios.Examples;
-<<<<<<< HEAD
 
-=======
 import java.io.File;
->>>>>>> 523cc11a0ea069ca0098f6c47aa5fcd24486ef86
 import java.io.IOException;
 import java.util.List;
 import org.junit.Assert;
