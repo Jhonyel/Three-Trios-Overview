@@ -52,7 +52,7 @@ public class ThreeTriosTextView implements ThreeTriosView {
 
     if (model.isGameOver()) {
       PlayerColor winner = model.getWinner();
-      stringBuilder.append(String.format("Winner: %s\n", winner));
+      stringBuilder.append(String.format("Winner: %s\n", winner == null ? "Tie" : winner));
 
     } else {
       PlayerColor currentPlayer = model.getCurrentPlayer();
@@ -72,6 +72,10 @@ public class ThreeTriosTextView implements ThreeTriosView {
     return stringBuilder.toString();
   }
 
+  /**
+   * Returns a string representation of the given row, where each cell in the row is represented
+   * with a character.
+   */
   private String getRowString(Cell[] row) {
     StringBuilder stringBuilder = new StringBuilder();
     for (Cell cell : row) {
@@ -82,6 +86,10 @@ public class ThreeTriosTextView implements ThreeTriosView {
     return stringBuilder.toString();
   }
 
+  /**
+   * Returns a character representation of the given cell. A hole cell is a space, an empty card
+   * cell is an underscore, an occupied card cell is the first character of the cell's color.
+   */
   private String getCellCharacter(Cell cell) {
     if (cell.isHole()) {
       return " ";

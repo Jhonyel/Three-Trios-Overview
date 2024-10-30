@@ -11,17 +11,18 @@ import static cs3500.three.trios.model.card.AttackValue.TEN;
 import static cs3500.three.trios.model.card.AttackValue.THREE;
 import static cs3500.three.trios.model.card.AttackValue.TWO;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 import cs3500.three.trios.Examples;
-import cs3500.three.trios.model.card.Card;
-import cs3500.three.trios.model.card.CardListFactory;
-import cs3500.three.trios.model.card.CardImpl;
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * A class for testing CardListFactory.
+ */
 public class TestCardListFactory {
 
   @Test
@@ -72,5 +73,31 @@ public class TestCardListFactory {
     );
     List<Card> actualCards = Examples.create16Cards();
     assertEquals(expectedCards, actualCards);
+  }
+
+  @Test
+  public void testCreateCardsFromConfigurationFilePathWithInvalidFilePath() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> CardListFactory.createFromConfigurationFilePath("invalid-file-path")
+    );
+  }
+
+  @Test
+  public void testCreateCardsFromConfigurationFilePathWithEmptyFile() throws IOException {
+    assertEquals(
+        List.of(),
+        CardListFactory.createFromConfigurationFilePath(
+            "configuration-files" + File.separator + "empty-file.txt")
+    );
+  }
+
+  @Test
+  public void testCreateCardsFromConfigurationFilePathWithInvalidFile() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> CardListFactory.createFromConfigurationFilePath(
+            "configuration-files" + File.separator + "invalid-cards-configuration.txt")
+    );
   }
 }
