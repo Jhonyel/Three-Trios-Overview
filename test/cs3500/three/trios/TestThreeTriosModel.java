@@ -1,4 +1,4 @@
-package cs3500.three.trios.model;
+package cs3500.three.trios;
 
 import static cs3500.three.trios.model.PlayerColor.BLUE;
 import static cs3500.three.trios.model.PlayerColor.RED;
@@ -11,6 +11,9 @@ import static org.junit.Assert.assertTrue;
 
 import cs3500.three.trios.Examples;
 import cs3500.three.trios.TestUtils;
+import cs3500.three.trios.model.Cell;
+import cs3500.three.trios.model.ThreeTriosModel;
+import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.model.card.PlayerCard;
@@ -187,7 +190,7 @@ public class TestThreeTriosModel {
   }
 
   @Test
-  public void testConstructionWithWrongNumberOfCards() {
+  public void testConstructionWithoutEnoughCards() {
     assertThrows(
         IllegalArgumentException.class,
         () -> new ThreeTriosModelImpl(grid5x7With15CardCells, listOf10Cards, true)
@@ -298,7 +301,7 @@ public class TestThreeTriosModel {
 
   @Test
   public void testModifyingHandDoesNotAffectModel() {
-    List<PlayerCard> originalHand = model5x7With15CardCells.getHand(RED);
+    List<PlayerCard> originalHand = new ArrayList<>(model5x7With15CardCells.getHand(RED));
     model5x7With15CardCells.getHand(RED).clear();
     assertEquals(originalHand, model5x7With15CardCells.getHand(RED));
   }
