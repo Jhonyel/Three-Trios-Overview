@@ -2,6 +2,8 @@ package cs3500.three.trios;
 
 import static cs3500.three.trios.model.PlayerColor.BLUE;
 import static cs3500.three.trios.model.PlayerColor.RED;
+import static cs3500.three.trios.model.card.AttackValue.FOUR;
+import static cs3500.three.trios.model.card.AttackValue.NINE;
 import static cs3500.three.trios.model.card.AttackValue.ONE;
 import static cs3500.three.trios.model.card.AttackValue.TWO;
 import static org.junit.Assert.assertEquals;
@@ -395,6 +397,93 @@ public class TestThreeTriosModel {
     // ___
 
     // the top left card should belong to red after battle
+    assertEquals(RED, model3x3.getPlayerAt(0, 2));
+    //assertEquals(RED, model3x3.getPlayerAt(0, 0));
+  }
+
+  @Test
+  public void testSimpleBattleDoesNotFlipOwnCard() {
+    // red's top middle card's west attack value of 4 should beat
+    // red's top left card's east attack value of 2, but should not flip the card
+    Card redTopMiddleCard = new CardImpl("red's top middle card", ONE, ONE, TWO, FOUR);
+    Card redTopLeftCard = new CardImpl("red's top left card", ONE, ONE, TWO, FOUR);
+
+
+    // the second card in red's hand will be the top middle card
+    listOf10Cards.set(1, redTopMiddleCard);
+
+    // the first card in red's hand will be the top left card
+    listOf10Cards.set(0, redTopLeftCard);
+
+    ThreeTriosModel model3x3 = new ThreeTriosModelImpl(grid3x3With9CardCells, listOf10Cards, false);
+
+    model3x3.playCardAt(0, 0, 0);
+    // R__
+    // ___
+    // ___
+
+    model3x3.playCardAt(0, 2, 0);
+    // R_B
+    // ___
+    // ___
+
+    model3x3.playCardAt(0, 1, 0);
+    // RRB
+    // ___
+    // ___
+
+    // the top left card should belong to red after battle
+    assertEquals(RED, model3x3.getPlayerAt(0, 0));
+  }
+
+  @Test
+  public void testSimpleBattleFlipsTwoDirectionsAtOnce() {
+    // red's top middle card's west and east attack value of 4 should beat
+    // blue's top left and right card's attack values of 2
+    Card redTopMiddleCard = new CardImpl("red's top middle card", ONE, ONE, FOUR, FOUR);
+    Card blueTopLeftCard = new CardImpl("blue's top left card", ONE, ONE, TWO, TWO);
+    Card blueTopRightCard = new CardImpl("blue's top right card", ONE, ONE, TWO, TWO);
+
+    // the second card in red's hand will be the top middle card
+    listOf10Cards.set(2, redTopMiddleCard);
+
+    // the first card in red's hand will be the top left card
+    listOf10Cards.set(6, blueTopLeftCard);
+    listOf10Cards.set(5, blueTopRightCard);
+
+    ThreeTriosModel model3x3 = new ThreeTriosModelImpl(grid3x3With9CardCells, listOf10Cards, false);
+
+    model3x3.playCardAt(1, 0, 0);
+    // ___
+    // R__
+    // ___
+
+    model3x3.playCardAt(0, 2, 0);
+    // __B
+    // R__
+    // ___
+
+    model3x3.playCardAt(2, 0, 0);
+    // __B
+    // R__
+    // R__
+
+    model3x3.playCardAt(0, 0, 0);
+    // B_B
+    // R__
+    // R__
+
+    model3x3.playCardAt(0, 1, 0);
+    // BRB
+    // R__
+    // R__
+    // after battle:
+    // RRR
+    // R__
+    // R__
+
+    // the top left and right cards should belong to red after battle
+    assertEquals(RED, model3x3.getPlayerAt(0, 0));
     assertEquals(RED, model3x3.getPlayerAt(0, 2));
   }
 
