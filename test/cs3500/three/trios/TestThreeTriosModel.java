@@ -6,18 +6,20 @@ import static cs3500.three.trios.model.card.AttackValue.ONE;
 import static cs3500.three.trios.model.card.AttackValue.TWO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
-import cs3500.three.trios.Examples;
-import cs3500.three.trios.TestUtils;
 import cs3500.three.trios.model.Cell;
+import cs3500.three.trios.model.GridFactory;
 import cs3500.three.trios.model.ThreeTriosModel;
 import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.util.Utils;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,84 +29,24 @@ import org.junit.Test;
 
 /**
  * A class for testing the behavior of our model.
+ *
+ * <p>Some tests include the statement: assertNonNull(model...). This is because some tests use
+ * helper test methods so there are no assert statements in the test method bodies themselves, but
+ * the java style checker enforces that all test methods include an assert statement even if they
+ * are using helper methods.
  */
 public class TestThreeTriosModel {
 
-  /**
-   * <h3>Grid:</h3>
-   * <p>CCXXXXC
-   * <p>CXCXXXC
-   * <p>CXXCXXC
-   * <p>CXXXCXC
-   * <p>CXXXXCC
-   */
   private Cell[][] grid5x7With15CardCells;
 
   private Cell[][] grid3x3With9CardCells;
 
-  /**
-   * <h3>Cards:</h3>
-   * <p>BlazingPhoenix 9 7 A 5
-   * <p>FrozenDragon 6 A 4 8
-   * <p>ThunderLion 3 9 5 A
-   * <p>ShadowWolf A 2 7 6
-   * <p>MysticGolem 8 4 A 3
-   * <p>CrimsonSerpent 7 6 9 A
-   * <p>EtherealKnight 5 A 3 7
-   * <p>LunarBear A 9 8 2
-   * <p>RadiantTiger 4 7 6 A
-   * <p>PhantomRaven 2 5 A 8
-   * <p>GoldenHawk A 6 3 9
-   * <p>SavageBeast 9 8 A 4
-   * <p>CursedGiant 7 5 4 A
-   * <p>FeralFox A 3 9 6
-   * <p>VenomousSpider 6 A 7 3
-   * <p>IronTurtle A 8 5 9
-   */
   private List<Card> listOf16Cards;
 
-  /**
-   * <h3>Cards:</h3>
-   * <p>BlazingTiger A 7 3 5
-   * <p>FrozenWolf 9 1 8 6
-   * <p>SilentEagle 5 4 A 7
-   * <p>SwiftLion 6 3 9 2
-   * <p>MightyRhino 4 8 7 1
-   * <p>GoldenFalcon A 5 2 9
-   * <p>ShadowBear 2 A 6 4
-   * <p>CunningFox 8 7 4 3
-   * <p>FierceCobra 9 6 3 1
-   * <p>GentleDove 3 2 9 5
-   */
   private List<Card> listOf10Cards;
 
   private Cell[][] jaggedGrid;
 
-  /**
-   * <h3>Grid:</h3>
-   * <p>CCXXXXC
-   * <p>CXCXXXC
-   * <p>CXXCXXC
-   * <p>CXXXCXC
-   * <p>CXXXXCC
-   * <h3>Cards:</h3>
-   * <p>BlazingPhoenix 9 7 A 5
-   * <p>FrozenDragon 6 A 4 8
-   * <p>ThunderLion 3 9 5 A
-   * <p>ShadowWolf A 2 7 6
-   * <p>MysticGolem 8 4 A 3
-   * <p>CrimsonSerpent 7 6 9 A
-   * <p>EtherealKnight 5 A 3 7
-   * <p>LunarBear A 9 8 2
-   * <p>RadiantTiger 4 7 6 A
-   * <p>PhantomRaven 2 5 A 8
-   * <p>GoldenHawk A 6 3 9
-   * <p>SavageBeast 9 8 A 4
-   * <p>CursedGiant 7 5 4 A
-   * <p>FeralFox A 3 9 6
-   * <p>VenomousSpider 6 A 7 3
-   * <p>IronTurtle A 8 5 9
-   */
   private ThreeTriosModel model5x7With15CardCells;
 
   private ThreeTriosModel modelRedWon;
@@ -199,6 +141,8 @@ public class TestThreeTriosModel {
 
   @Test
   public void testModifyingGridAfterConstructionDoesNotAffectModel() {
+    assertNotNull(model5x7With15CardCells); // for java style checker; see comment in class javadoc
+
     // we construct model5x7 using grid5x7 in the setup method
     Cell[][] originalGrid = Utils.copyArray2D(grid5x7With15CardCells);
     Cell[][] gridToModify = grid5x7With15CardCells;
@@ -310,6 +254,8 @@ public class TestThreeTriosModel {
 
   @Test
   public void testGetGrid() {
+    assertNotNull(model5x7With15CardCells); // for java style checker; see comment in class javadoc
+
     Cell[][] grid = model5x7With15CardCells.getGrid();
     TestUtils.assert2DArrayEquals(model5x7With15CardCells.getGrid(), grid);
   }
@@ -368,6 +314,26 @@ public class TestThreeTriosModel {
   @Test
   public void testGetWinnerWhenGameIsOver() {
     assertEquals(RED, modelRedWon.getWinner());
+  }
+
+  @Test
+  public void testGetWinnerWhenGameIsTied() throws IOException {
+    Cell[][] disconnectedGrid3x4 = GridFactory.createFromConfigurationFilePath(
+        "configuration-files" + File.separator + "3x4-disconnected-grid.txt");
+
+    ThreeTriosModel model = new ThreeTriosModelImpl(
+        disconnectedGrid3x4, listOf10Cards, false);
+
+    model.playCardAt(0, 0, 0); // red plays
+    model.playCardAt(2, 1, 0); // blue plays
+    model.playCardAt(0, 1, 0); // red plays
+    model.playCardAt(2, 2, 0); // blue plays
+    model.playCardAt(0, 2, 0); // red plays
+    model.playCardAt(2, 3, 0); // blue plays
+    model.playCardAt(0, 3, 0); // red plays
+    assertEquals(0, model.getHand(RED).size());
+    assertEquals(1, model.getHand(BLUE).size());
+    assertNull(model.getWinner());
   }
 
   ////////////////////////////////////////////////////////////////////////////

@@ -4,6 +4,9 @@ import static cs3500.three.trios.util.Requirements.requireNonNullArray;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+/**
+ * A class containing useful helper methods for testing.
+ */
 public class TestUtils {
 
   /**

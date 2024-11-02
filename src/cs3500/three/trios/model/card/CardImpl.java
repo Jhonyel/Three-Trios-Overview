@@ -3,6 +3,7 @@ package cs3500.three.trios.model.card;
 import static cs3500.three.trios.util.Requirements.requireNonNull;
 
 import cs3500.three.trios.model.Direction;
+import java.util.Objects;
 
 /**
  * An implementation of our Card interface.
@@ -106,6 +107,17 @@ public class CardImpl implements Card {
           && otherCard.getWestAttackValue().equals(getWestAttackValue());
     }
     return false;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        name,
+        northAttackValue,
+        southAttackValue,
+        eastAttackValue,
+        westAttackValue
+    );
   }
 
   @Override

@@ -3,6 +3,7 @@ package cs3500.three.trios.model.card;
 import static cs3500.three.trios.util.Requirements.requireNonNull;
 
 import cs3500.three.trios.model.PlayerColor;
+import java.util.Objects;
 
 /**
  * A card that is aware of the color of the player that owns this card.
@@ -64,5 +65,17 @@ public class PlayerCard extends CardImpl {
       return super.equals(otherCard) && playerColor == otherCard.playerColor;
     }
     return false;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        getName(),
+        getNorthAttackValue(),
+        getSouthAttackValue(),
+        getEastAttackValue(),
+        getWestAttackValue(),
+        playerColor
+    );
   }
 }

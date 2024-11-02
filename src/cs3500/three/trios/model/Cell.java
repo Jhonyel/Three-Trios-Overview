@@ -3,6 +3,7 @@ package cs3500.three.trios.model;
 import static cs3500.three.trios.util.Requirements.requireNonNull;
 
 import cs3500.three.trios.model.card.PlayerCard;
+import java.util.Objects;
 
 /**
  * A class representing a cell on a grid. A cell is either a hole or a card cell. A card cell is
@@ -99,6 +100,11 @@ public class Cell {
       return otherCell.isHole == this.isHole;
     }
     return false;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(isHole, card);
   }
 
   @Override

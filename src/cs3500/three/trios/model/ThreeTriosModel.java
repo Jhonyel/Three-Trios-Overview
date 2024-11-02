@@ -97,7 +97,8 @@ public interface ThreeTriosModel {
   boolean isGameOver();
 
   /**
-   * Returns the winner of the game (i.e. the player owning more cards on the grid).
+   * Returns the winner of the game (i.e. the player owning more cards both on the grid and in their
+   * hand). Returns null if both players own the same number of cards.
    *
    * @throws IllegalStateException if the game is not over
    */

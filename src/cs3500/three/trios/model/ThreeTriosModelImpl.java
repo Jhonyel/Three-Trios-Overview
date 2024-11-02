@@ -333,6 +333,9 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     numRedCards += redHand.size();
     numBlueCards += blueHand.size();
 
+    if (numRedCards == numBlueCards) {
+      return null;
+    }
     return numRedCards > numBlueCards ? PlayerColor.RED : PlayerColor.BLUE;
   }
 

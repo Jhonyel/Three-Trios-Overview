@@ -9,6 +9,9 @@ import cs3500.three.trios.model.GridFactory;
 import java.io.IOException;
 import org.junit.Test;
 
+/**
+ * A class for testing the GridFactory class.
+ */
 public class TestGridFactory {
 
   @Test
