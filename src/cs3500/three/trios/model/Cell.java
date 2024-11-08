@@ -90,6 +90,18 @@ public class Cell {
     return card;
   }
 
+  /**
+   * Returns the player occupying this occupied card cell.
+   *
+   * @throws IllegalStateException if this cell is not an occupied card cell.
+   */
+  public PlayerColor getPlayerColor() {
+    if (!isOccupiedCardCell()) {
+      throw new IllegalStateException("Cell is not an occupied card cell");
+    }
+    return card.getPlayerColor();
+  }
+
   @Override
   public boolean equals(Object other) {
     if (other instanceof Cell) {

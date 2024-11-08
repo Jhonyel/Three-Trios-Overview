@@ -103,7 +103,7 @@ public class ThreeTriosTextView implements ThreeTriosView {
       return "_";
     }
     // if we reach this point, `cell` must be an occupied card cell
-    PlayerColor playerColor = cell.getCard().getPlayerColor();
+    PlayerColor playerColor = cell.getPlayerColor();
     char playerColorChar = playerColor.toString().charAt(0);
     return String.valueOf(playerColorChar);
   }
