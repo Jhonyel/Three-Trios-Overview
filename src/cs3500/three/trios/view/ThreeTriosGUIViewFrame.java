@@ -27,15 +27,13 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
 
     List<PlayerCard> redHand = model.getHand(PlayerColor.RED);
     HandPanelImpl redHandPanel = new HandPanelImpl(redHand);
-    redHandPanel.setBackground(Color.RED);
     this.add(redHandPanel, getLeftHandPanelConstraints());
 
-    GridPanelImpl gridPanel = new GridPanelImpl();
+    GridPanelImpl gridPanel = new GridPanelImpl(model);
     this.add(gridPanel, getGridPanelConstraints());
 
     List<PlayerCard> blueHand = model.getHand(PlayerColor.BLUE);
     HandPanelImpl blueHandPanel = new HandPanelImpl(blueHand);
-    blueHandPanel.setBackground(Color.BLUE);
     this.add(blueHandPanel, getRightHandPanelConstraints());
 
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -55,21 +53,21 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
   private GridBagConstraints getLeftHandPanelConstraints() {
     GridBagConstraints gbc = getDefaultConstraints();
     gbc.gridx = 0;
-    gbc.weightx = 0.25;
+    gbc.weightx = 0.20;
     return gbc;
   }
 
   private GridBagConstraints getGridPanelConstraints() {
     GridBagConstraints gbc = getDefaultConstraints();
     gbc.gridx = 1;
-    gbc.weightx = 0.5;
+    gbc.weightx = 0.6;
     return gbc;
   }
 
   private GridBagConstraints getRightHandPanelConstraints() {
     GridBagConstraints gbc = getDefaultConstraints();
     gbc.gridx = 2;
-    gbc.weightx = 0.25;
+    gbc.weightx = 0.20;
     return gbc;
   }
 

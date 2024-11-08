@@ -9,21 +9,23 @@ import static cs3500.three.trios.util.Requirements.requireNonNull;
  * and the last declared enum to be the greatest, thus we declare the enums from least to greatest.
  */
 public enum AttackValue {
-  ONE('1'),
-  TWO('2'),
-  THREE('3'),
-  FOUR('4'),
-  FIVE('5'),
-  SIX('6'),
-  SEVEN('7'),
-  EIGHT('8'),
-  NINE('9'),
-  TEN('A');
+  ONE('1', 1),
+  TWO('2', 2),
+  THREE('3', 3),
+  FOUR('4', 4),
+  FIVE('5', 5),
+  SIX('6', 6),
+  SEVEN('7', 7),
+  EIGHT('8', 8),
+  NINE('9', 9),
+  TEN('A', 10);
 
+  private final int intValue;
   private final char character;
 
-  AttackValue(char character) {
+  AttackValue(char character, int intValue) {
     this.character = character;
+    this.intValue = intValue;
   }
 
   /**
@@ -32,6 +34,13 @@ public enum AttackValue {
   @Override
   public String toString() {
     return String.valueOf(character);
+  }
+
+  /**
+   * Returns the integer value of this attack value in the range [1, 10].
+   */
+  public int toInt() {
+    return intValue;
   }
 
   /**
