@@ -387,6 +387,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
 
   @Override
   public int getNumFlipsAt(int rowIndex, int colIndex, int cardIndex) {
+    requireCardIndexIsValid(cardIndex);
     PlayerColor currentPlayer = getCurrentPlayer();
     List<PlayerCard> hand = getHand(currentPlayer);
     PlayerCard card = hand.get(cardIndex);
@@ -396,6 +397,8 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
 
   @Override
   public int getNumFlipsAt(int rowIndex, int colIndex, PlayerCard card) {
+    requireValidColIndex(colIndex);
+    requireValidRowIndex(rowIndex);
     int numFlips = 0;
 
     for (Direction direction : Direction.values()) {
@@ -406,7 +409,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
       int adjacentColIndex = colIndex + direction.getColOffset();
       PlayerCard adjacentCard = getCardAt(adjacentRowIndex, adjacentColIndex);
       if (card.beats(adjacentCard, direction)) {
-        numFlips++;
+        numFlips = getNumFlipsAt(adjacentRowIndex, adjacentColIndex, adjacentCard) + 1;
       }
     }
     return numFlips;

@@ -8,10 +8,10 @@ public class CornerMoveStrategy implements MoveStrategy {
 
   @Override
   public Queue<Move> getMove(ReadOnlyThreeTriosModel model) {
-
+    return null;
   }
 
   private boolean isCorner(int rowIndex, int colIndex, Cell[][] grid) {
-    
+    return true;
   }
 }

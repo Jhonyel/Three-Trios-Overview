@@ -5,5 +5,6 @@ import java.util.List;
 import java.util.Queue;
 
 public interface MoveStrategy {
+
   Queue<Move> getMove(ReadOnlyThreeTriosModel model);
 }
