@@ -47,6 +47,7 @@ public class CornerMoveStrategy implements MoveStrategy {
 
   @Override
   public Queue<Move> getMove(ReadOnlyThreeTriosModel model) {
+
     Queue<CornerMove> moves = new ArrayDeque<>();
 
     int northRowIndex = 0;
@@ -87,6 +88,7 @@ public class CornerMoveStrategy implements MoveStrategy {
     int vulnerableAttackValue1 = card.getAttackValue(vulnerableDirection1).toInt();
     int vulnerableAttackValue2 = card.getAttackValue(vulnerableDirection2).toInt();
     return (vulnerableAttackValue1 + vulnerableAttackValue2) / 2;
+
   }
 
 }
