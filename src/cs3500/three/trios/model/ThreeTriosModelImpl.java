@@ -34,9 +34,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     requireNonNullArray2D(grid);
     requireRectangularArray2D(grid);
     requireNonNullCollection(redHand);
-    requireUniqueCollection(redHand);
     requireNonNullCollection(blueHand);
-    requireUniqueCollection(blueHand);
 
     this.grid = Utils.copyArray2D(grid);
     this.currentPlayerColor = RED;
@@ -78,7 +76,6 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     requireRectangularArray2D(grid);
     requireCardCellsAreEmpty(grid);
     requireNonNullCollection(cards);
-    requireUniqueCollection(cards);
 
     // copy the cards arg so that shuffling does not affect the cards arg
     cards = new ArrayList<>(cards);
@@ -184,6 +181,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
 
   @Override
   public void playCardAt(int rowIndex, int colIndex, int cardIndex) {
+    requireGameIsNotOver();
     requireCardIndexIsValid(cardIndex);
     PlayerCard card = getCurrentHand().get(cardIndex);
     playCardAt(rowIndex, colIndex, card);
@@ -264,7 +262,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     if (!adjacentCell.isOccupiedCardCell()) {
       return false;
     }
-    PlayerColor adjacentPlayerColor = adjacentCell.getCard().getPlayerColor();
+    PlayerColor adjacentPlayerColor = adjacentCell.getPlayerColor();
     return !adjacentPlayerColor.equals(currentPlayerColor);
   }
 
@@ -315,7 +313,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     if (!cell.isOccupiedCardCell()) {
       throw new IllegalStateException("Cell is not an occupied card cell");
     }
-    return cell.getCard().getPlayerColor();
+    return cell.getPlayerColor();
   }
 
   @Override
@@ -344,7 +342,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
         if (cell.isHole()) {
           continue;
         }
-        PlayerColor playerColor = cell.getCard().getPlayerColor();
+        PlayerColor playerColor = cell.getPlayerColor();
         if (playerColor.equals(RED)) {
           numRedCards++;
         } else {
@@ -421,8 +419,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
         if (!cell.isOccupiedCardCell()) {
           continue;
         }
-        PlayerCard card = cell.getCard();
-        if (card.getPlayerColor() == player) {
+        if (cell.getPlayerColor() == player) {
           score++;
         }
       }

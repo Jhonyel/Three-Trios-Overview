@@ -1,6 +1,14 @@
-should card know what playerColor it belongs to?
-should cell know who it's neighbors are?
-    the cell either has to be mutable or we need to change references in cells when we change cells
+i remember nunez said to not use jbuttons / jpanels and to use paint component instead
+what are the benefits of using the paint component?
+wouldn't jbuttons / jpanels be easier?
 
-confirm that for cell we should have a superclass or interface and then hole, and card cell extend it
-    should we have 
+does the corner strategy consider cards/holes that are adjacent to the cell?
+_*_
+*__
+___
+
+why do you want us to use path2d.double?
+
+what is a good name for the classes for drawing 
+
+if the examples class is in the test package can i use it in src?
