@@ -1,15 +1,18 @@
 package cs3500.three.trios.model;
 
+import static cs3500.three.trios.model.PlayerColor.BLUE;
+import static cs3500.three.trios.model.PlayerColor.RED;
 import static cs3500.three.trios.util.Requirements.requireNonNull;
 import static cs3500.three.trios.util.Requirements.requireNonNullArray2D;
 import static cs3500.three.trios.util.Requirements.requireNonNullCollection;
+import static cs3500.three.trios.util.Requirements.requireRectangularArray2D;
+import static cs3500.three.trios.util.Requirements.requireUniqueCollection;
 
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.util.Utils;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,31 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   private final int gridWidth;
   private final int gridHeight;
 
+  private ThreeTriosModelImpl(
+      Cell[][] grid, List<? extends Card> redHand, List<? extends Card> blueHand
+  ) {
+    requireNonNullArray2D(grid);
+    requireRectangularArray2D(grid);
+    requireNonNullCollection(redHand);
+    requireUniqueCollection(redHand);
+    requireNonNullCollection(blueHand);
+    requireUniqueCollection(blueHand);
+    // require 
+
+    this.grid = Utils.copyArray2D(grid);
+    this.currentPlayerColor = RED;
+    this.redHand = new ArrayList<>();
+    this.blueHand = new ArrayList<>();
+    this.gridWidth = grid[0].length;
+    this.gridHeight = grid.length;
+
+    for (Card card : redHand) {
+      this.redHand.add(new PlayerCard(card, RED));
+    }
+    for (Card card : blueHand) {
+      this.blueHand.add(new PlayerCard(card, BLUE));
+    }
+  }
 
   /**
    * Creates a new ThreeTriosModelImpl representing a game with the specified grid and cards. If
@@ -44,15 +72,14 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
    *                                  equal to the number of card cells in the grid plus one, or has
    *                                  duplicate cards.
    */
-  public ThreeTriosModelImpl(Cell[][] grid, List<Card> cards, boolean shouldShuffle) {
+  public static ThreeTriosModelImpl createNewGame(
+      Cell[][] grid, List<Card> cards, boolean shouldShuffle
+  ) {
     requireNonNullArray2D(grid);
-    requireGridIsRectangular(grid);
+    requireRectangularArray2D(grid);
+    requireCardCellsAreEmpty(grid);
     requireNonNullCollection(cards);
-    requireAllCardsAreUnique(cards);
-    this.grid = Utils.copyArray2D(grid);
-    currentPlayerColor = PlayerColor.RED;
-    gridHeight = grid.length;
-    gridWidth = grid[0].length;
+    requireUniqueCollection(cards);
 
     // copy the cards arg so that shuffling does not affect the cards arg
     cards = new ArrayList<>(cards);
@@ -65,42 +92,44 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     requireNumCardsIsGreaterThanNumCardCells(cards, numCardCells);
 
     int splitIndex = (numCardCells + 1) / 2;
-    redHand = cards.subList(0, splitIndex).stream()
-        .map(card -> new PlayerCard(card, PlayerColor.RED))
+    List<PlayerCard> redHand = cards.subList(0, splitIndex).stream()
+        .map(card -> new PlayerCard(card, RED))
         .collect(Collectors.toList());
 
-    blueHand = cards.subList(splitIndex, numCardCells + 1).stream()
-        .map(card -> new PlayerCard(card, PlayerColor.BLUE))
+    List<PlayerCard> blueHand = cards.subList(splitIndex, numCardCells + 1).stream()
+        .map(card -> new PlayerCard(card, BLUE))
         .collect(Collectors.toList());
+
+    return new ThreeTriosModelImpl(grid, redHand, blueHand);
   }
 
-  /**
-   * Checks that all cards in the given list are unique, else throws an IllegalArgumentException.
-   */
-  private void requireAllCardsAreUnique(List<Card> cards) {
-    // a set cannot contain duplicates.
-    // if a list does not contain duplicates, its size as a list will equal its size as a set.
-    if (cards.size() != new HashSet<>(cards).size()) {
-      throw new IllegalArgumentException("All cards must be unique");
+  public static ThreeTriosModelImpl createGameInProgress(
+      Cell[][] grid, List<Card> redHand, List<Card> blueHand
+  ) {
+    return new ThreeTriosModelImpl(grid, redHand, blueHand);
+  }
+
+  private static void requireCardCellsAreEmpty(Cell[][] grid) {
+    int gridWidth = grid[0].length;
+    int gridHeight = grid.length;
+    for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
+      for (int colIndex = 0; colIndex < gridWidth; colIndex++) {
+        Cell cell = grid[rowIndex][colIndex];
+        if (cell.isOccupiedCardCell()) {
+          throw new IllegalArgumentException("all card cells must be empty");
+        }
+      }
     }
   }
 
-  /**
-   * Checks that the number of cards in the given list is greater than the number of card cells in
-   * the grid, else throws an IllegalArgumentException.
-   */
-  private void requireNumCardsIsGreaterThanNumCardCells(List<Card> cards, int numCardCells) {
+  private static void requireNumCardsIsGreaterThanNumCardCells(List<Card> cards, int numCardCells) {
     if (cards.size() <= numCardCells) {
       throw new IllegalArgumentException(
           "Number of cards must be at least the number of card cells + 1");
     }
   }
 
-  /**
-   * Checks that the number of card cells in the grid is odd, else throws an
-   * IllegalArgumentException.
-   */
-  private void requireNumCardCellsIsOdd(int numCardCells) {
+  private static void requireNumCardCellsIsOdd(int numCardCells) {
     if (numCardCells % 2 == 0) {
       throw new IllegalArgumentException("Number of card cells must be odd");
     }
@@ -109,8 +138,10 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   /**
    * Returns the number of card cells in the given grid.
    */
-  private int getNumCardCells(Cell[][] grid) {
+  private static int getNumCardCells(Cell[][] grid) {
     int numCardCells = 0;
+    int gridHeight = grid.length;
+    int gridWidth = grid[0].length;
     for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
       for (int colIndex = 0; colIndex < gridWidth; colIndex++) {
         Cell cell = grid[rowIndex][colIndex];
@@ -122,22 +153,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     return numCardCells;
   }
 
-  /**
-   * Checks that the grid is rectangular (i.e. is non-empty, and all rows have the same length),
-   * else throws an IllegalArgumentException.
-   */
-  private void requireGridIsRectangular(Cell[][] grid) {
-    int height = grid.length;
-    if (height == 0) {
-      throw new IllegalArgumentException("Grid must have at least one row");
-    }
-    int width = grid[0].length;
-    for (Cell[] row : grid) {
-      if (row.length != width) {
-        throw new IllegalArgumentException("Grid must be rectangular");
-      }
-    }
-  }
+  ////////////////////////////////////////////////////////////////////////////
 
   @Override
   public void playCardAt(int rowIndex, int colIndex, PlayerCard card) {
@@ -148,15 +164,15 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     requireNonNull(card);
     requireCurrentHandContainsCard(card);
 
-    List<PlayerCard> currentHand = currentPlayerColor == PlayerColor.RED ? redHand : blueHand;
+    List<PlayerCard> currentHand = currentPlayerColor == RED ? redHand : blueHand;
     currentHand.remove(card);
     grid[rowIndex][colIndex] = Cell.createOccupiedCardCell(card);
 
     battle(rowIndex, colIndex);
 
-    currentPlayerColor = (currentPlayerColor == PlayerColor.RED)
-        ? PlayerColor.BLUE
-        : PlayerColor.RED;
+    currentPlayerColor = (currentPlayerColor == RED)
+        ? BLUE
+        : RED;
   }
 
   @Override
@@ -248,7 +264,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   @Override
   public List<PlayerCard> getHand(PlayerColor playerColor) {
     requireNonNull(playerColor);
-    return new ArrayList<>(playerColor == PlayerColor.RED ? redHand : blueHand);
+    return new ArrayList<>(playerColor == RED ? redHand : blueHand);
   }
 
   /**
@@ -322,7 +338,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
           continue;
         }
         PlayerColor playerColor = cell.getCard().getPlayerColor();
-        if (playerColor.equals(PlayerColor.RED)) {
+        if (playerColor.equals(RED)) {
           numRedCards++;
         } else {
           numBlueCards++;
@@ -336,13 +352,62 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     if (numRedCards == numBlueCards) {
       return null;
     }
-    return numRedCards > numBlueCards ? PlayerColor.RED : PlayerColor.BLUE;
+    return numRedCards > numBlueCards ? RED : BLUE;
   }
 
   @Override
   public PlayerColor getCurrentPlayer() {
     requireGameIsNotOver();
     return currentPlayerColor;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////
+
+  @Override
+  public int getWidth() {
+    return grid[0].length;
+  }
+
+  @Override
+  public int getHeight() {
+    return grid.length;
+  }
+
+  @Override
+  public boolean isMoveLegalAt(int rowIndex, int colIndex) {
+    return getCellAt(rowIndex, colIndex).isEmptyCardCell();
+  }
+
+  @Override
+  public int getNumFlipsAt(int rowIndex, int colIndex, int cardIndex) {
+    int numFlips = 0;
+
+    PlayerColor currentPlayer = getCurrentPlayer();
+    List<PlayerCard> hand = getHand(currentPlayer);
+    PlayerCard card = hand.get(cardIndex);
+
+    for (Direction direction : Direction.values()) {
+      if (!isAdjacentCellEnemy(rowIndex, colIndex, direction)) {
+        continue;
+      }
+      int adjacentRowIndex = rowIndex + direction.getRowOffset();
+      int adjacentColIndex = colIndex + direction.getColOffset();
+      PlayerCard adjacentCard = getCardAt(adjacentRowIndex, adjacentColIndex);
+      if (card.beats(adjacentCard, direction)) {
+        numFlips++;
+      }
+    }
+    return numFlips;
+  }
+
+  @Override
+  public int getNumFlipsAt(int rowIndex, int colIndex, PlayerCard card) {
+    return 0;
+  }
+
+  @Override
+  public int getScore(PlayerColor player) {
+    return 0;
   }
 
   ////////////////////////////////////////////////////////////////////////////

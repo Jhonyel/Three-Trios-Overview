@@ -15,7 +15,7 @@ public class PlayerCard extends CardImpl {
   /**
    * Creates a new PlayerCard with the given card and player color.
    *
-   * @param card the card containing the attack values and name of this card.
+   * @param card        the card containing the attack values and name of this card.
    * @param playerColor the color of the player who owns this card.
    */
   public PlayerCard(Card card, PlayerColor playerColor) {
@@ -32,12 +32,12 @@ public class PlayerCard extends CardImpl {
   /**
    * Creates a player card with the given name, attack values, and player color.
    *
-   * @param name the name of the card
+   * @param name             the name of the card
    * @param northAttackValue the attack value in the north direction
    * @param southAttackValue the attack value in the south direction
-   * @param eastAttackValue the attack value in the east direction
-   * @param westAttackValue the attack value in the west direction
-   * @param playerColor the color of the player who owns this card
+   * @param eastAttackValue  the attack value in the east direction
+   * @param westAttackValue  the attack value in the west direction
+   * @param playerColor      the color of the player who owns this card
    */
   public PlayerCard(
       String name,
