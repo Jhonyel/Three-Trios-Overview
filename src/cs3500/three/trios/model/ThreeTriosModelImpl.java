@@ -37,7 +37,6 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     requireUniqueCollection(redHand);
     requireNonNullCollection(blueHand);
     requireUniqueCollection(blueHand);
-    // require 
 
     this.grid = Utils.copyArray2D(grid);
     this.currentPlayerColor = RED;
@@ -103,6 +102,14 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     return new ThreeTriosModelImpl(grid, redHand, blueHand);
   }
 
+  /**
+   * Creates a game in progress given by the grid, red hand, and blue hand.
+   *
+   * @param grid     the grid of the game.
+   * @param redHand  the hand of the red player.
+   * @param blueHand the hand of the blue player.
+   * @return a new ThreeTriosModelImpl representing the game in progress.
+   */
   public static ThreeTriosModelImpl createGameInProgress(
       Cell[][] grid, List<Card> redHand, List<Card> blueHand
   ) {
@@ -380,11 +387,16 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
 
   @Override
   public int getNumFlipsAt(int rowIndex, int colIndex, int cardIndex) {
-    int numFlips = 0;
-
     PlayerColor currentPlayer = getCurrentPlayer();
     List<PlayerCard> hand = getHand(currentPlayer);
     PlayerCard card = hand.get(cardIndex);
+
+    return getNumFlipsAt(rowIndex, colIndex, card);
+  }
+
+  @Override
+  public int getNumFlipsAt(int rowIndex, int colIndex, PlayerCard card) {
+    int numFlips = 0;
 
     for (Direction direction : Direction.values()) {
       if (!isAdjacentCellEnemy(rowIndex, colIndex, direction)) {
@@ -401,13 +413,22 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   }
 
   @Override
-  public int getNumFlipsAt(int rowIndex, int colIndex, PlayerCard card) {
-    return 0;
-  }
-
-  @Override
   public int getScore(PlayerColor player) {
-    return 0;
+    int score = 0;
+    for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
+      for (int colIndex = 0; colIndex < gridWidth; colIndex++) {
+        Cell cell = getCellAt(rowIndex, colIndex);
+        if (!cell.isOccupiedCardCell()) {
+          continue;
+        }
+        PlayerCard card = cell.getCard();
+        if (card.getPlayerColor() == player) {
+          score++;
+        }
+      }
+    }
+    score += getHand(player).size();
+    return score;
   }
 
   ////////////////////////////////////////////////////////////////////////////
