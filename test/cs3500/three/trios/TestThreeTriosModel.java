@@ -81,7 +81,7 @@ public class TestThreeTriosModel {
         {empty, empty}
     };
     List<Card> listOf4Cards = listOf16Cards.subList(0, 4);
-    modelRedWon = new ThreeTriosModelImpl(grid2x2With3CardCells, listOf4Cards, true);
+    modelRedWon = ThreeTriosModelImpl.createNewGame(grid2x2With3CardCells, listOf4Cards, true);
     modelRedWon.playCardAt(0, 1, 0);
     modelRedWon.playCardAt(1, 0, 0);
     modelRedWon.playCardAt(1, 1, 0);
@@ -91,7 +91,7 @@ public class TestThreeTriosModel {
   public void testConstructionWithNullGrid() {
     assertThrows(
         IllegalArgumentException.class,
-        () -> new ThreeTriosModelImpl(null, listOf16Cards, true)
+        () -> ThreeTriosModelImpl.createNewGame(null, listOf16Cards, true)
     );
   }
 
@@ -99,7 +99,7 @@ public class TestThreeTriosModel {
   public void testConstructionWithNullCards() {
     assertThrows(
         IllegalArgumentException.class,
-        () -> new ThreeTriosModelImpl(grid5x7With15CardCells, null, true)
+        () -> ThreeTriosModelImpl.createNewGame(grid5x7With15CardCells, null, true)
     );
   }
 
@@ -109,7 +109,7 @@ public class TestThreeTriosModel {
     listWithNull.add(null);
     assertThrows(
         IllegalArgumentException.class,
-        () -> new ThreeTriosModelImpl(grid5x7With15CardCells, listWithNull, true)
+        () -> ThreeTriosModelImpl.createNewGame(grid5x7With15CardCells, listWithNull, true)
     );
   }
 
@@ -117,7 +117,7 @@ public class TestThreeTriosModel {
   public void testConstructionWithNonRectangularGrid() {
     assertThrows(
         IllegalArgumentException.class,
-        () -> new ThreeTriosModelImpl(jaggedGrid, listOf16Cards, false)
+        () -> ThreeTriosModelImpl.createNewGame(jaggedGrid, listOf16Cards, false)
     );
   }
 
@@ -129,7 +129,7 @@ public class TestThreeTriosModel {
     };
     assertThrows(
         IllegalArgumentException.class,
-        () -> new ThreeTriosModelImpl(evenCardGrid, listOf16Cards, false)
+        () -> ThreeTriosModelImpl.createNewGame(evenCardGrid, listOf16Cards, false)
     );
   }
 
@@ -137,7 +137,7 @@ public class TestThreeTriosModel {
   public void testConstructionWithoutEnoughCards() {
     assertThrows(
         IllegalArgumentException.class,
-        () -> new ThreeTriosModelImpl(grid5x7With15CardCells, listOf10Cards, true)
+        () -> ThreeTriosModelImpl.createNewGame(grid5x7With15CardCells, listOf10Cards, true)
     );
   }
 
@@ -323,7 +323,7 @@ public class TestThreeTriosModel {
     Cell[][] disconnectedGrid3x4 = GridFactory.createFromConfigurationFilePath(
         "configuration-files" + File.separator + "3x4-disconnected-grid.txt");
 
-    ThreeTriosModel model = new ThreeTriosModelImpl(
+    ThreeTriosModel model = ThreeTriosModelImpl.createNewGame(
         disconnectedGrid3x4, listOf10Cards, false);
 
     model.playCardAt(0, 0, 0); // red plays
@@ -375,7 +375,7 @@ public class TestThreeTriosModel {
     // the first card in blue's hand will be the top right card
     listOf10Cards.set(5, blueTopRightCard);
 
-    ThreeTriosModel model3x3 = new ThreeTriosModelImpl(grid3x3With9CardCells, listOf10Cards, false);
+    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(grid3x3With9CardCells, listOf10Cards, false);
 
     model3x3.playCardAt(0, 0, 0);
     // R__
@@ -415,7 +415,7 @@ public class TestThreeTriosModel {
     // the first card in red's hand will be the top left card
     listOf10Cards.set(0, redTopLeftCard);
 
-    ThreeTriosModel model3x3 = new ThreeTriosModelImpl(grid3x3With9CardCells, listOf10Cards, false);
+    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(grid3x3With9CardCells, listOf10Cards, false);
 
     model3x3.playCardAt(0, 0, 0);
     // R__
@@ -451,7 +451,7 @@ public class TestThreeTriosModel {
     listOf10Cards.set(6, blueTopLeftCard);
     listOf10Cards.set(5, blueTopRightCard);
 
-    ThreeTriosModel model3x3 = new ThreeTriosModelImpl(grid3x3With9CardCells, listOf10Cards, false);
+    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(grid3x3With9CardCells, listOf10Cards, false);
 
     model3x3.playCardAt(1, 0, 0);
     // ___
@@ -500,7 +500,7 @@ public class TestThreeTriosModel {
     // the first card in blue's hand will be the top right card
     listOf10Cards.set(5, blueTopRightCard);
 
-    ThreeTriosModel model3x3 = new ThreeTriosModelImpl(grid3x3With9CardCells, listOf10Cards, false);
+    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(grid3x3With9CardCells, listOf10Cards, false);
 
     model3x3.playCardAt(0, 0, 0);
     // R__
@@ -534,7 +534,7 @@ public class TestThreeTriosModel {
     // the first card in blue's hand will be the top right card
     listOf10Cards.set(5, blueTopRightCard);
 
-    ThreeTriosModel model3x3 = new ThreeTriosModelImpl(grid3x3With9CardCells, listOf10Cards, false);
+    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(grid3x3With9CardCells, listOf10Cards, false);
 
     model3x3.playCardAt(0, 0, 0);
     // R__
@@ -573,7 +573,7 @@ public class TestThreeTriosModel {
     // the second card in blue's hand will be the top middle card
     listOf10Cards.set(6, blueTopMiddleCard);
 
-    ThreeTriosModel model3x3 = new ThreeTriosModelImpl(grid3x3With9CardCells, listOf10Cards, false);
+    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(grid3x3With9CardCells, listOf10Cards, false);
     model3x3.playCardAt(0, 0, 0);
     model3x3.playCardAt(0, 2, 0);
     model3x3.playCardAt(1, 0, 0);
@@ -616,7 +616,7 @@ public class TestThreeTriosModel {
     // the third card in blue's hand will be the top middle card
     listOf10Cards.set(7, blueTopMiddleCard);
 
-    ThreeTriosModel model3x3 = new ThreeTriosModelImpl(grid3x3With9CardCells, listOf10Cards, false);
+    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(grid3x3With9CardCells, listOf10Cards, false);
     model3x3.playCardAt(0, 0, 0);
     model3x3.playCardAt(0, 2, 0);
     model3x3.playCardAt(1, 0, 0);

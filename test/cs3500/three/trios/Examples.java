@@ -101,7 +101,7 @@ public class Examples {
   public static ThreeTriosModel create5x7ModelWith15CardCells() throws IOException {
     Cell[][] grid = create5x7GridWith15CardCells();
     List<Card> cards = create16Cards();
-    return new ThreeTriosModelImpl(grid, cards, false);
+    return ThreeTriosModelImpl.createNewGame(grid, cards, false);
   }
 
   /**
@@ -112,7 +112,7 @@ public class Examples {
   public static ThreeTriosModel create3x5ModelWith9CardCells() throws IOException {
     Cell[][] grid = create3x5GridWith9CardCells();
     List<Card> cards = create10Cards();
-    return new ThreeTriosModelImpl(grid, cards, false);
+    return ThreeTriosModelImpl.createNewGame(grid, cards, false);
   }
 
   /**
@@ -123,7 +123,7 @@ public class Examples {
   public static ThreeTriosModel create5x3ModelWith9CardCells() throws IOException {
     Cell[][] grid = create5x3GridWith9CardCells();
     List<Card> cards = create10Cards();
-    return new ThreeTriosModelImpl(grid, cards, false);
+    return ThreeTriosModelImpl.createNewGame(grid, cards, false);
   }
 
   /**
@@ -134,7 +134,7 @@ public class Examples {
   public static ThreeTriosModel create3x3ModelWith9CardCells() throws IOException {
     Cell[][] grid = create3x3GridWith9CardCells();
     List<Card> cards = create10Cards();
-    return new ThreeTriosModelImpl(grid, cards, false);
+    return ThreeTriosModelImpl.createNewGame(grid, cards, false);
   }
 
   /**
@@ -145,6 +145,6 @@ public class Examples {
   public static ThreeTriosModel create4x4ModelWith9CardCells() throws IOException {
     Cell[][] grid = create4x4GridWith9CardCells();
     List<Card> cards = create10Cards();
-    return new ThreeTriosModelImpl(grid, cards, false);
+    return ThreeTriosModelImpl.createNewGame(grid, cards, false);
   }
 }

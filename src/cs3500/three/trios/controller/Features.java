@@ -1,30 +1,8 @@
-package cs3500.three.trios.view;
+package cs3500.three.trios.controller;
 
-import cs3500.three.trios.controller.Features;
 import cs3500.three.trios.model.PlayerColor;
 
-/**
- * Interface that represents the actions that the GUI view will have.
- */
-public interface ThreeTriosGUIView {
-
-  /**
-   * Refresh the view to reflect any changes in the game state.
-   */
-  void refresh();
-
-  /**
-   * Transmit an error message to the view, in case the command could not be processed correctly.
-   *
-   * @param error the error message
-   */
-  void showErrorMessage(String error);
-
-  /**
-   * Make the view visible to start the game session.
-   */
-  void makeVisible();
-
+public interface Features {
   // Additionally, your view should (temporarily) print a message (using System.out) containing
   // the index of the card that was clicked on as well as which player owns that hand.
   void onCardClicked(PlayerColor player, int cardIndex);
@@ -35,5 +13,5 @@ public interface ThreeTriosGUIView {
   // physical mouse coordinates of the mouse event!
   void onCellClicked(int rowIndex, int colIndex);
 
-  void addFeatures(Features features);
+  void quit();
 }
