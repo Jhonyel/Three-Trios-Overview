@@ -26,11 +26,6 @@ public class TestMaxNumFlipsStrategy {
   private Cell[][] grid3x3With9CardCells;
   private Cell[][] grid3x3InProgress;
   private List<Card> handOfFiveWeakestCards;
-  private Card card1111;
-  private Cell redCell1111;
-  private Cell blueCell1111;
-  private Cell emptyCell;
-  private Cell holeCell;
   private ThreeTriosModel modelRedWon;
   private MoveStrategy moveStrategy;
   private Card northWestWinner1AA1;
@@ -45,12 +40,12 @@ public class TestMaxNumFlipsStrategy {
             new CardImpl("4", ONE, ONE, ONE, ONE)
     );
 
-    emptyCell = Cell.createEmptyCardCell();
-    holeCell = Cell.createHoleCell();
+    Cell emptyCell = Cell.createEmptyCardCell();
+    Cell holeCell = Cell.createHoleCell();
 
-    card1111 = new CardImpl("name 1 1 1 1");
-    redCell1111 = Cell.createOccupiedCardCell(new PlayerCard(card1111, PlayerColor.RED));
-    blueCell1111 = Cell.createOccupiedCardCell(new PlayerCard(card1111, PlayerColor.BLUE));
+    Card card1111 = new CardImpl("name 1 1 1 1");
+    Cell redCell1111 = Cell.createOccupiedCardCell(new PlayerCard(card1111, PlayerColor.RED));
+    Cell blueCell1111 = Cell.createOccupiedCardCell(new PlayerCard(card1111, PlayerColor.BLUE));
 
     grid3x3InProgress = new Cell[][]{
             {emptyCell, blueCell1111, redCell1111},
@@ -87,7 +82,7 @@ public class TestMaxNumFlipsStrategy {
     ThreeTriosModel game = ThreeTriosModelImpl.createGameInProgress(
             grid3x3With9CardCells, redHand, blueHand);
 
-    Move actualMove = moveStrategy.getMove(game).peek();
+    Move actualMove = moveStrategy.getMove(game).get(0);
     Move expectedMove = new Move(0, 0, 0);
     Assert.assertEquals(expectedMove, actualMove);
   }
@@ -113,7 +108,7 @@ public class TestMaxNumFlipsStrategy {
     List<Card> blueHand = new ArrayList<>(handOfFiveWeakestCards);
 
     redHand.set(2, northWestWinner1AA1);
-    redHand.set(2, northWestWinner1AA1);
+    redHand.set(3, northWestWinner1AA1);
 
     ThreeTriosModel game = ThreeTriosModelImpl.createGameInProgress(
             grid3x3InProgress, redHand, blueHand);
