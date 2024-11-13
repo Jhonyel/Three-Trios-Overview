@@ -25,13 +25,13 @@ public class MaxNumFlipsMoveStrategy implements MoveStrategy {
    * lowest card index.
    */
   @Override
-  public List<Move> getMove(ReadOnlyThreeTriosModel model) {
+  public List<Move> getMoves(ReadOnlyThreeTriosModel model) {
     Requirements.requireNonNull(model);
     if (model.isGameOver()) {
       throw new IllegalStateException("the game is over. there are no moves.");
     }
 
-    List<Move> moves = getMoves(model);
+    List<Move> moves = getAllMoves(model);
 
     Comparator<Move> comparingNumFlips =
         comparing(move -> model.getNumFlipsAt(
@@ -47,7 +47,7 @@ public class MaxNumFlipsMoveStrategy implements MoveStrategy {
         .collect(Collectors.toList());
   }
 
-  private static List<Move> getMoves(ReadOnlyThreeTriosModel model) {
+  private static List<Move> getAllMoves(ReadOnlyThreeTriosModel model) {
     List<Move> moves = new ArrayList<>();
     for (int rowIndex = 0; rowIndex < model.getHeight(); rowIndex++) {
       for (int colIndex = 0; colIndex < model.getWidth(); colIndex++) {

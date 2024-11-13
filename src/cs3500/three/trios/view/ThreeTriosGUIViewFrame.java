@@ -7,7 +7,6 @@ import cs3500.three.trios.util.Requirements;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.Objects;
 import javax.swing.JFrame;
 
 /**

@@ -96,14 +96,4 @@ public class PlayerCard extends CardImpl {
         playerColor
     );
   }
-
-  /**
-   * Returns a string in the format: COLOR CARD_NAME NORTH SOUTH EAST WEST, where COLOR is the color
-   * of the player who owns this card, CARD_NAME is the name of the card, and NORTH, SOUTH, EAST,
-   * WEST are the attack values of the card in the respective directions.
-   */
-  @Override
-  public String toString() {
-    return String.format("%s %s", playerColor, super.toString());
-  }
 }
