@@ -1,26 +1,29 @@
 package cs3500.three.trios.view;
 
+import cs3500.three.trios.controller.Features;
+
 /**
- * Interface for the panels that represent the action for hands of the red and blue players.
+ * A visual representation of the hand of a single player in a game of three trios.
  */
 public interface HandPanel {
 
   /**
-   * Allows the user to select a card in their hand.
-   * @param x coordinate for the click in hand
-   * @param y coordinate for the click in hand
+   * Adds the given features interface to this hand panel. This hand panel will thereafter delegate
+   * to the features interface on card clicks and empty space clicks.
+   *
+   * @throws IllegalArgumentException if features is null.
    */
-  void select(int x, int y);
+  void addFeatures(Features features);
 
   /**
-   * Allows the user to select a space on the grid to play a card
-   * @param x coordinate for the click on the grid
-   * @param y coordinate for the click on the grid
+   * Toggles the selection of the card at the given index.
+   *
+   * @throws IndexOutOfBoundsException if the given index is invalid.
    */
-  void move(int x, int y);
+  void toggleSelection(int cardIndex);
 
   /**
-   * Refresh the view to reflect any changes in the game state.
+   * Deselects any card currently selected.
    */
-  void refresh();
+  void clearSelection();
 }

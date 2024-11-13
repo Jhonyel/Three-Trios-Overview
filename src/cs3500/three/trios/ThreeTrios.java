@@ -11,44 +11,52 @@ import static cs3500.three.trios.model.card.AttackValue.TEN;
 import static cs3500.three.trios.model.card.AttackValue.THREE;
 import static cs3500.three.trios.model.card.AttackValue.TWO;
 
+import cs3500.three.trios.controller.ThreeTriosController;
 import cs3500.three.trios.model.Cell;
-import cs3500.three.trios.model.PlayerColor;
 import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
-import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.view.ThreeTriosGUIViewFrame;
 import java.util.List;
 
+/**
+ * The class containing the main method to run a game of three trios.
+ */
 public class ThreeTrios {
 
+  /**
+   * The main method to run a game of three trios.
+   */
   public static void main(String[] args) {
-    Cell X = Cell.createHoleCell();
-    Cell C = Cell.createEmptyCardCell();
-    PlayerCard card = new PlayerCard("", ONE, ONE, ONE, ONE, PlayerColor.RED);
-    Cell R = Cell.createOccupiedCardCell(card);
-
-    Cell[][] grid = {
-        {C, C, X},
-        {C, C, C},
-        {X, R, C}
-    };
-    List<Card> redHand = List.of(
-        new CardImpl("BlazingTiger", TEN, SEVEN, THREE, FIVE),
-        new CardImpl("FrozenWolf", NINE, ONE, EIGHT, SIX),
-        new CardImpl("SilentEagle", FIVE, FOUR, TEN, SEVEN),
-        new CardImpl("SwiftLion", SIX, THREE, NINE, TWO)
-    );
-    List<Card> blueHand = List.of(
-        new CardImpl("MightyRhino", FOUR, EIGHT, SEVEN, ONE),
-        new CardImpl("GoldenFalcon", TEN, FIVE, TWO, NINE),
-        new CardImpl("ShadowBear", TWO, TEN, SIX, FOUR),
-        new CardImpl("CunningFox", EIGHT, SEVEN, FOUR, THREE)
-    );
+    Cell holeCell = Cell.createHoleCell();
+    Cell emptyCell = Cell.createEmptyCardCell();
 
     ThreeTriosModelImpl model = ThreeTriosModelImpl.createGameInProgress(
-        grid, redHand, blueHand);
-    ThreeTriosGUIViewFrame threeTriosGUIViewFrame = new ThreeTriosGUIViewFrame(model);
-    threeTriosGUIViewFrame.makeVisible();
+        new Cell[][]{
+            {emptyCell, emptyCell, holeCell},
+            {emptyCell, emptyCell, emptyCell},
+            {holeCell, emptyCell, emptyCell}
+        },
+        List.of(
+            new CardImpl("BlazingTiger", TEN, SEVEN, THREE, FIVE),
+            new CardImpl("FrozenWolf", NINE, ONE, EIGHT, SIX),
+            new CardImpl("SilentEagle", FIVE, FOUR, TEN, SEVEN),
+            new CardImpl("SwiftLion", SIX, THREE, NINE, TWO)
+        ),
+        List.of(
+            new CardImpl("MightyRhino", FOUR, EIGHT, SEVEN, ONE),
+            new CardImpl("GoldenFalcon", TEN, FIVE, TWO, NINE),
+            new CardImpl("ShadowBear", TWO, TEN, SIX, FOUR),
+            new CardImpl("CunningFox", EIGHT, SEVEN, FOUR, THREE)
+        )
+    );
+    ThreeTriosGUIViewFrame view = new ThreeTriosGUIViewFrame(model);
+    ThreeTriosController controller = new ThreeTriosController(view, model);
+    view.addFeatures(controller);
+    view.makeVisible();
+
+    model.playCardAt(0, 0, 0);
+    // model.playCardAt(0, 1, 0);
+    // model.playCardAt(2, 2, 0);
   }
 }

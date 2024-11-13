@@ -3,46 +3,62 @@ package cs3500.three.trios.view;
 import cs3500.three.trios.controller.Features;
 import cs3500.three.trios.model.PlayerColor;
 import cs3500.three.trios.model.ReadOnlyThreeTriosModel;
-import cs3500.three.trios.model.card.Card;
-import cs3500.three.trios.model.card.PlayerCard;
-import java.awt.Color;
+import cs3500.three.trios.util.Requirements;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.util.List;
+import java.util.Objects;
 import javax.swing.JFrame;
 
+/**
+ * The entire visual representation of a game of three trios. Contains a hand panel for the red
+ * player on the left, a grid panel in the middle, and a hand panel for the blue player on the
+ * right.
+ */
 public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView {
 
-  private final ReadOnlyThreeTriosModel model;
+  private final HandPanelImpl redHandPanel;
+  private final HandPanelImpl blueHandPanel;
+  private final GridPanelImpl gridPanel;
 
+  /**
+   * Creates a new ThreeTriosGUIViewFrame to visualize the given model. Places the frame in the
+   * middle of the screen.
+   *
+   * @throws IllegalArgumentException if the model is null.
+   */
   public ThreeTriosGUIViewFrame(ReadOnlyThreeTriosModel model) {
-    super();
-
-    this.model = model;
+    Requirements.requireNonNull(model);
 
     setLayout(new GridBagLayout());
 
-    List<PlayerCard> redHand = model.getHand(PlayerColor.RED);
-    HandPanelImpl redHandPanel = new HandPanelImpl(redHand);
-    this.add(redHandPanel, getLeftHandPanelConstraints());
+    redHandPanel = new HandPanelImpl(model, PlayerColor.RED);
+    add(redHandPanel, getLeftHandPanelConstraints());
 
-    GridPanelImpl gridPanel = new GridPanelImpl(model);
-    this.add(gridPanel, getGridPanelConstraints());
+    gridPanel = new GridPanelImpl(model);
+    add(gridPanel, getGridPanelConstraints());
 
-    List<PlayerCard> blueHand = model.getHand(PlayerColor.BLUE);
-    HandPanelImpl blueHandPanel = new HandPanelImpl(blueHand);
-    this.add(blueHandPanel, getRightHandPanelConstraints());
+    blueHandPanel = new HandPanelImpl(model, PlayerColor.BLUE);
+    add(blueHandPanel, getRightHandPanelConstraints());
 
-    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-    this.setMinimumSize(new Dimension(800, 600));
-    this.setSize(new Dimension(800, 600));
-    this.setLocationRelativeTo(null);
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
+    setMinimumSize(new Dimension(800, 600));
+    setSize(new Dimension(800, 600));
+    centerOnScreen();
   }
 
-  private GridBagConstraints getDefaultConstraints() {
+  /**
+   * Centers this frame on the screen.
+   */
+  private void centerOnScreen() {
+    setLocationRelativeTo(null);
+  }
+
+  /**
+   * Returns a GridBagConstraints that specifies that a component should fill the available vertical
+   * space.
+   */
+  private GridBagConstraints getFillVerticalSpaceConstraints() {
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.gridy = 0;
     gbc.weighty = 1;
@@ -50,22 +66,34 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
     return gbc;
   }
 
+  /**
+   * Returns a GridBagConstraints that specifies that the left hand panel should fill the available
+   * vertical space and the leftmost 20% of the available horizontal space.
+   */
   private GridBagConstraints getLeftHandPanelConstraints() {
-    GridBagConstraints gbc = getDefaultConstraints();
+    GridBagConstraints gbc = getFillVerticalSpaceConstraints();
     gbc.gridx = 0;
     gbc.weightx = 0.20;
     return gbc;
   }
 
+  /**
+   * Returns a GridBagConstraints that specifies that the grid panel should fill the available
+   * vertical space and the center 60% of the available horizontal space.
+   */
   private GridBagConstraints getGridPanelConstraints() {
-    GridBagConstraints gbc = getDefaultConstraints();
+    GridBagConstraints gbc = getFillVerticalSpaceConstraints();
     gbc.gridx = 1;
     gbc.weightx = 0.6;
     return gbc;
   }
 
+  /**
+   * Returns a GridBagConstraints that specifies that the right hand panel should fill the available
+   * vertical space and the rightmost 20% of the available horizontal space.
+   */
   private GridBagConstraints getRightHandPanelConstraints() {
-    GridBagConstraints gbc = getDefaultConstraints();
+    GridBagConstraints gbc = getFillVerticalSpaceConstraints();
     gbc.gridx = 2;
     gbc.weightx = 0.20;
     return gbc;
@@ -73,12 +101,7 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
 
   @Override
   public void refresh() {
-
-  }
-
-  @Override
-  public void showErrorMessage(String error) {
-
+    repaint();
   }
 
   @Override
@@ -87,17 +110,26 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
   }
 
   @Override
-  public void onCardClicked(PlayerColor player, int cardIndex) {
-
-  }
-
-  @Override
-  public void onCellClicked(int rowIndex, int colIndex) {
-
-  }
-
-  @Override
   public void addFeatures(Features features) {
+    Requirements.requireNonNull(features);
+    redHandPanel.addFeatures(features);
+    blueHandPanel.addFeatures(features);
+    gridPanel.addFeatures(features);
+  }
 
+  @Override
+  public void toggleSelection(PlayerColor player, int cardIndex) {
+    Requirements.requireNonNull(player);
+
+    HandPanel handPanel = player == PlayerColor.RED ? redHandPanel : blueHandPanel;
+    handPanel.toggleSelection(cardIndex);
+    refresh();
+  }
+
+  @Override
+  public void clearSelection() {
+    redHandPanel.clearSelection();
+    blueHandPanel.clearSelection();
+    refresh();
   }
 }

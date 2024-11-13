@@ -1,6 +1,5 @@
 package cs3500.three.trios.util;
 
-import cs3500.three.trios.model.Cell;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -60,6 +59,11 @@ public class Requirements {
     return array2D;
   }
 
+  /**
+   * Returns the given array 2d if it is rectangular. A rectangular array has at least one row, each
+   * row has at least one element, and each row has the same length. If the given array 2d is not
+   * rectangular, this method throws an IllegalArgumentException.
+   */
   public static <T> T[][] requireRectangularArray2D(T[][] array2D) {
     requireNonNullArray2D(array2D);
     int height = array2D.length;
@@ -68,6 +72,9 @@ public class Requirements {
     }
     int width = array2D[0].length;
     for (T[] row : array2D) {
+      if (row.length == 0) {
+        throw new IllegalArgumentException("array2D must have at least one column");
+      }
       if (row.length != width) {
         throw new IllegalArgumentException("array2D must be rectangular");
       }
@@ -75,6 +82,10 @@ public class Requirements {
     return array2D;
   }
 
+  /**
+   * Returns the given collection if all of its elements are unique. Otherwise, throws an
+   * IllegalArgumentException.
+   */
   public static <T, C extends Collection<T>> C requireUniqueCollection(C collection) {
     requireNonNullCollection(collection);
     if (collection.size() != new HashSet<>(collection).size()) {

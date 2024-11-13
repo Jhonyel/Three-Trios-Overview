@@ -1,11 +1,9 @@
 package cs3500.three.trios.model;
 
-import static cs3500.three.trios.TestUtils.assert2DArrayEquals;
 import static org.junit.Assert.assertThrows;
 
 import cs3500.three.trios.Examples;
-import cs3500.three.trios.model.Cell;
-import cs3500.three.trios.model.GridFactory;
+import cs3500.three.trios.TestUtils;
 import java.io.IOException;
 import org.junit.Test;
 
@@ -34,7 +32,7 @@ public class TestGridFactory {
         {empty, hole, hole, hole, hole, empty, empty}
     };
     Cell[][] actualGrid = Examples.create5x7GridWith15CardCells();
-    assert2DArrayEquals(expectedGrid, actualGrid);
+    TestUtils.assertArray2DEquals(expectedGrid, actualGrid);
   }
 
   @Test
@@ -47,7 +45,7 @@ public class TestGridFactory {
         {empty, empty, hole, empty, empty}
     };
     Cell[][] actualGrid = Examples.create3x5GridWith9CardCells();
-    assert2DArrayEquals(expectedGrid, actualGrid);
+    TestUtils.assertArray2DEquals(expectedGrid, actualGrid);
   }
 
   @Test
@@ -62,6 +60,6 @@ public class TestGridFactory {
         {empty, hole, empty}
     };
     Cell[][] actualGrid = Examples.create5x3GridWith9CardCells();
-    assert2DArrayEquals(expectedGrid, actualGrid);
+    TestUtils.assertArray2DEquals(expectedGrid, actualGrid);
   }
 }

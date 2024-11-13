@@ -1,15 +1,8 @@
 package cs3500.three.trios.model;
 
-import static cs3500.three.trios.model.PlayerColor.BLUE;
-import static cs3500.three.trios.model.PlayerColor.RED;
-import static cs3500.three.trios.util.Requirements.requireNonNull;
-import static cs3500.three.trios.util.Requirements.requireNonNullArray2D;
-import static cs3500.three.trios.util.Requirements.requireNonNullCollection;
-import static cs3500.three.trios.util.Requirements.requireRectangularArray2D;
-import static cs3500.three.trios.util.Requirements.requireUniqueCollection;
-
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.PlayerCard;
+import cs3500.three.trios.util.Requirements;
 import cs3500.three.trios.util.Utils;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,23 +24,24 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   private ThreeTriosModelImpl(
       Cell[][] grid, List<? extends Card> redHand, List<? extends Card> blueHand
   ) {
-    requireNonNullArray2D(grid);
-    requireRectangularArray2D(grid);
-    requireNonNullCollection(redHand);
-    requireNonNullCollection(blueHand);
+    Requirements.requireNonNullArray2D(grid);
+    Requirements.requireRectangularArray2D(grid);
+    Requirements.requireNonNullCollection(redHand);
+    Requirements.requireNonNullCollection(blueHand);
+    requireNumCardCellsIsOdd(getNumCardCells(grid));
 
     this.grid = Utils.copyArray2D(grid);
-    this.currentPlayerColor = RED;
+    this.currentPlayerColor = PlayerColor.RED;
     this.redHand = new ArrayList<>();
     this.blueHand = new ArrayList<>();
     this.gridWidth = grid[0].length;
     this.gridHeight = grid.length;
 
     for (Card card : redHand) {
-      this.redHand.add(new PlayerCard(card, RED));
+      this.redHand.add(new PlayerCard(card, PlayerColor.RED));
     }
     for (Card card : blueHand) {
-      this.blueHand.add(new PlayerCard(card, BLUE));
+      this.blueHand.add(new PlayerCard(card, PlayerColor.BLUE));
     }
   }
 
@@ -72,10 +66,10 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   public static ThreeTriosModelImpl createNewGame(
       Cell[][] grid, List<Card> cards, boolean shouldShuffle
   ) {
-    requireNonNullArray2D(grid);
-    requireRectangularArray2D(grid);
+    Requirements.requireNonNullArray2D(grid);
+    Requirements.requireRectangularArray2D(grid);
     requireCardCellsAreEmpty(grid);
-    requireNonNullCollection(cards);
+    Requirements.requireNonNullCollection(cards);
 
     // copy the cards arg so that shuffling does not affect the cards arg
     cards = new ArrayList<>(cards);
@@ -89,18 +83,19 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
 
     int splitIndex = (numCardCells + 1) / 2;
     List<PlayerCard> redHand = cards.subList(0, splitIndex).stream()
-        .map(card -> new PlayerCard(card, RED))
+        .map(card -> new PlayerCard(card, PlayerColor.RED))
         .collect(Collectors.toList());
 
     List<PlayerCard> blueHand = cards.subList(splitIndex, numCardCells + 1).stream()
-        .map(card -> new PlayerCard(card, BLUE))
+        .map(card -> new PlayerCard(card, PlayerColor.BLUE))
         .collect(Collectors.toList());
 
     return new ThreeTriosModelImpl(grid, redHand, blueHand);
   }
 
   /**
-   * Creates a game in progress given by the grid, red hand, and blue hand.
+   * Creates a game in progress given by the grid, red hand, and blue hand. After construction, the
+   * current player is red.
    *
    * @param grid     the grid of the game.
    * @param redHand  the hand of the red player.
@@ -165,18 +160,18 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     requireValidRowIndex(rowIndex);
     requireValidColIndex(colIndex);
     requireCellIsEmptyCardCell(rowIndex, colIndex);
-    requireNonNull(card);
+    Requirements.requireNonNull(card);
     requireCurrentHandContainsCard(card);
 
-    List<PlayerCard> currentHand = currentPlayerColor == RED ? redHand : blueHand;
+    List<PlayerCard> currentHand = currentPlayerColor == PlayerColor.RED ? redHand : blueHand;
     currentHand.remove(card);
     grid[rowIndex][colIndex] = Cell.createOccupiedCardCell(card);
 
     battle(rowIndex, colIndex);
 
-    currentPlayerColor = (currentPlayerColor == RED)
-        ? BLUE
-        : RED;
+    currentPlayerColor = (currentPlayerColor == PlayerColor.RED)
+        ? PlayerColor.BLUE
+        : PlayerColor.RED;
   }
 
   @Override
@@ -263,13 +258,13 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
       return false;
     }
     PlayerColor adjacentPlayerColor = adjacentCell.getPlayerColor();
-    return !adjacentPlayerColor.equals(currentPlayerColor);
+    return adjacentPlayerColor != currentPlayerColor;
   }
 
   @Override
   public List<PlayerCard> getHand(PlayerColor playerColor) {
-    requireNonNull(playerColor);
-    return new ArrayList<>(playerColor == RED ? redHand : blueHand);
+    Requirements.requireNonNull(playerColor);
+    return new ArrayList<>(playerColor == PlayerColor.RED ? redHand : blueHand);
   }
 
   /**
@@ -343,7 +338,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
           continue;
         }
         PlayerColor playerColor = cell.getPlayerColor();
-        if (playerColor.equals(RED)) {
+        if (playerColor == PlayerColor.RED) {
           numRedCards++;
         } else {
           numBlueCards++;
@@ -357,7 +352,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     if (numRedCards == numBlueCards) {
       return null;
     }
-    return numRedCards > numBlueCards ? RED : BLUE;
+    return numRedCards > numBlueCards ? PlayerColor.RED : PlayerColor.BLUE;
   }
 
   @Override

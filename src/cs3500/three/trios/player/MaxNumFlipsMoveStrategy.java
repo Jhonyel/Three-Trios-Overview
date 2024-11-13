@@ -7,7 +7,16 @@ import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * A move strategy which chooses the move with the maximum number of flips.
+ */
 public class MaxNumFlipsMoveStrategy implements MoveStrategy {
+
+  /**
+   *
+   * @param model
+   * @return
+   */
   @Override
   public Queue<Move> getMove(ReadOnlyThreeTriosModel model) {
     int maxNumFlips = -1;
