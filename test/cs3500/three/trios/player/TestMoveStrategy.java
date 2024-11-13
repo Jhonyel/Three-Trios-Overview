@@ -33,4 +33,27 @@ public abstract class TestMoveStrategy {
     );
     assertThrows(IllegalStateException.class, () -> strategy.getMoves(model));
   }
+
+  @Test
+  public void testGetMovesThrowsWithNullModel() {
+    MoveStrategy strategy = createMoveStrategy();
+    assertThrows(IllegalArgumentException.class, () -> strategy.getMoves(null));
+  }
+
+  @Test
+  public void testGetMovesThrowsWithNoCards() {
+    MoveStrategy strategy = createMoveStrategy();
+    Cell redCell = Cell.createOccupiedCardCell(new PlayerCard("name 1 1 1 1", PlayerColor.RED));
+    Cell emptyCell = Cell.createEmptyCardCell();
+    ReadOnlyThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+            new Cell[][]{
+                    {redCell, redCell, redCell},
+                    {redCell, emptyCell, redCell},
+                    {redCell, redCell, redCell}
+            },
+            List.of(),
+            List.of()
+    );
+    assertThrows(IllegalStateException.class, () -> strategy.getMoves(model));
+  }
 }
