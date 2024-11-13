@@ -14,7 +14,6 @@ import static cs3500.three.trios.model.card.AttackValue.TWO;
 import cs3500.three.trios.controller.ThreeTriosController;
 import cs3500.three.trios.model.Cell;
 import cs3500.three.trios.model.ThreeTriosModelImpl;
-import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.view.ThreeTriosGUIViewFrame;
 import java.util.List;

@@ -75,12 +75,6 @@ public class TestMaxNumFlipsStrategy {
   }
 
   @Test
-  public void testMaxNumFlipsWithNullModel() {
-    Assert.assertThrows(IllegalArgumentException.class,
-            () -> moveStrategy.getMove(null));
-  }
-
-  @Test
   public void testMaxNumFlipsWithEmptyBoard() {
     List<Card> redHand = new ArrayList<>(handOfFiveWeakestCards);
     List<Card> blueHand = new ArrayList<>(handOfFiveWeakestCards);

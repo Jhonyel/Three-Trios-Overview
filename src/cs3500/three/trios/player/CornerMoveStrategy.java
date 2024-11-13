@@ -71,7 +71,7 @@ public class CornerMoveStrategy implements MoveStrategy {
    * card index.
    */
   @Override
-  public List<Move> getMove(ReadOnlyThreeTriosModel model) {
+  public List<Move> getMoves(ReadOnlyThreeTriosModel model) {
     Requirements.requireNonNull(model);
     if (model.isGameOver()) {
       throw new IllegalStateException("the game is over. there are no moves.");
