@@ -402,7 +402,8 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
       int adjacentColIndex = colIndex + direction.getColOffset();
       PlayerCard adjacentCard = getCardAt(adjacentRowIndex, adjacentColIndex);
       if (card.beats(adjacentCard, direction)) {
-        numFlips = getNumFlipsAt(adjacentRowIndex, adjacentColIndex, adjacentCard) + 1;
+        int otherNumFlips = getNumFlipsAt(adjacentRowIndex, adjacentColIndex, adjacentCard);
+        numFlips += otherNumFlips + 1;
       }
     }
     return numFlips;

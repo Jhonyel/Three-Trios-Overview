@@ -19,6 +19,9 @@ public class MaxNumFlipsMoveStrategy implements MoveStrategy {
    */
   @Override
   public Queue<Move> getMove(ReadOnlyThreeTriosModel model) {
+    if (model.isGameOver()) {
+      throw new IllegalStateException("Game is already over");
+    }
     int maxNumFlips = -1;
     Queue<Move> moves = new ArrayDeque<>();
     for (int rowIndex = 0; rowIndex < model.getHeight(); rowIndex++) {

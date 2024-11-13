@@ -631,4 +631,23 @@ public class TestThreeTriosModel {
     assertEquals(3, model.getNumFlipsAt(0, 3, 0));
     assertEquals(0, model.getNumFlipsAt(2, 0, 0));
   }
+
+  @Test
+  public void testGetNumFlippedCardsMultipleDirections() {
+    Cell blueCell1111 = Cell.createOccupiedCardCell(
+            new PlayerCard("name 1 1 1 1", PlayerColor.BLUE));
+
+    ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+            new Cell[][]{
+                    {emptyCell, blueCell1111, blueCell1111, emptyCell},
+                    {emptyCell, emptyCell, blueCell1111, emptyCell},
+                    {emptyCell, emptyCell, emptyCell, holeCell}
+            },
+            List.of(cardAAAA),
+            List.of()
+    );
+
+    assertEquals(2, model.getNumFlipsAt(1, 1, 0));
+    assertEquals(0, model.getNumFlipsAt(2, 0, 0));
+  }
 }
