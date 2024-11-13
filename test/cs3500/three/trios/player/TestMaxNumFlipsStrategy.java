@@ -7,7 +7,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 import cs3500.three.trios.Examples;
 import cs3500.three.trios.model.Cell;
@@ -71,7 +70,7 @@ public class TestMaxNumFlipsStrategy {
   @Test
   public void testMaxNumFlipsWhenGameIsOver() {
     Assert.assertThrows(IllegalStateException.class,
-            () -> moveStrategy.getMove(modelRedWon));
+            () -> moveStrategy.getMoves(modelRedWon));
   }
 
   @Test
@@ -82,7 +81,7 @@ public class TestMaxNumFlipsStrategy {
     ThreeTriosModel game = ThreeTriosModelImpl.createGameInProgress(
             grid3x3With9CardCells, redHand, blueHand);
 
-    Move actualMove = moveStrategy.getMove(game).get(0);
+    Move actualMove = moveStrategy.getMoves(game).get(0);
     Move expectedMove = new Move(0, 0, 0);
     Assert.assertEquals(expectedMove, actualMove);
   }
@@ -97,7 +96,7 @@ public class TestMaxNumFlipsStrategy {
     ThreeTriosModel game = ThreeTriosModelImpl.createGameInProgress(
             grid3x3InProgress, redHand, blueHand);
 
-    Move actualMove = moveStrategy.getMove(game).get(0);
+    Move actualMove = moveStrategy.getMoves(game).get(0);
     Move expectedMove = new Move(0, 0, 2);
     Assert.assertEquals(expectedMove, actualMove);
   }
@@ -113,7 +112,7 @@ public class TestMaxNumFlipsStrategy {
     ThreeTriosModel game = ThreeTriosModelImpl.createGameInProgress(
             grid3x3InProgress, redHand, blueHand);
 
-    Move actualMove = moveStrategy.getMove(game).get(0);
+    Move actualMove = moveStrategy.getMoves(game).get(0);
     Move expectedMove = new Move(0, 0, 2);
     Assert.assertEquals(expectedMove, actualMove);
   }
