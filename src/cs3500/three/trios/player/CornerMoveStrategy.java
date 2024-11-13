@@ -62,7 +62,21 @@ public class CornerMoveStrategy implements MoveStrategy {
   }
 
   /**
-   * Returns a move in the given model for its current player in the corner of the grid, if there
+   * Returns a list of moves in the given model for its current player in the corners of the grid,
+   * if there exists an empty corner. If there is no empty corner, we return a list of the northwest
+   * most move with a card index of 0. If there is at least one empty corner, we choose the moves
+   * ordered by the greatest average vulnerable attack value (read class javadoc for more details).
+   * If there are multiple moves with the same average vulnerable attack value, we break ties first
+   * by choosing the north most moves, then by choosing the west most moves, then by choosing the
+   * move with the lowest card index.
+   */
+  @Override
+  public List<Move> getMoves(ReadOnlyThreeTriosModel model) {
+    return getMoves(model, model.getCurrentPlayer());
+  }
+
+  /**
+   * Returns a move in the given model for the given player in the corner of the grid, if there
    * exists an empty corner. If there is no empty corner, we return the northwest most move with a
    * card index of 0. If there is at least one empty corner, we choose the move with the greatest
    * average vulnerable attack value (read class javadoc for more details). If there are multiple
@@ -71,17 +85,20 @@ public class CornerMoveStrategy implements MoveStrategy {
    * card index.
    */
   @Override
-  public List<Move> getMoves(ReadOnlyThreeTriosModel model) {
+  public List<Move> getMoves(ReadOnlyThreeTriosModel model, PlayerColor playerColor) {
     Requirements.requireNonNull(model);
     if (model.isGameOver()) {
       throw new IllegalStateException("the game is over. there are no moves.");
+    }
+    if (model.getHand(playerColor).isEmpty()) {
+      throw new IllegalStateException("the player has no cards. there are no moves.");
     }
     if (!existsLegalCornerMove(model)) {
       return getNorthWestMostMove(model);
     }
 
     Comparator<CornerMove> compareAverageVulnerableAttackValues =
-        comparing(move -> getAverageVulnerableAttackValue(move, model));
+        comparing(move -> getAverageVulnerableAttackValue(move, model, playerColor));
 
     Comparator<CornerMove> comparator =
         compareAverageVulnerableAttackValues.reversed()
@@ -89,7 +106,7 @@ public class CornerMoveStrategy implements MoveStrategy {
             .thenComparing(Move::getColIndex)
             .thenComparing(Move::getCardIndex);
 
-    List<CornerMove> moves = getCornerMoves(model);
+    List<CornerMove> moves = getCornerMoves(model, playerColor);
     return moves.stream()
         .filter(move -> model.isMoveLegalAt(move.getRowIndex(), move.getColIndex()))
         .sorted(comparator)
@@ -127,11 +144,13 @@ public class CornerMoveStrategy implements MoveStrategy {
   }
 
   /**
-   * Returns a list of all moves in the corners of the grids. Note: not all moves in the returned
-   * list are guaranteed to be legal moves. One should filter the returned list to include only
-   * legal moves.
+   * Returns a list of all moves in the corners of the grids for the given player. Note: not all
+   * moves in the returned list are guaranteed to be legal moves. One should filter the returned
+   * list to include only legal moves.
    */
-  private static List<CornerMove> getCornerMoves(ReadOnlyThreeTriosModel model) {
+  private static List<CornerMove> getCornerMoves(
+      ReadOnlyThreeTriosModel model, PlayerColor playerColor
+  ) {
     List<CornerMove> moves = new ArrayList<>();
 
     int northRowIndex = 0;
@@ -139,8 +158,7 @@ public class CornerMoveStrategy implements MoveStrategy {
     int westColIndex = 0;
     int eastColIndex = model.getWidth() - 1;
 
-    PlayerColor currentPlayer = model.getCurrentPlayer();
-    List<PlayerCard> hand = model.getHand(currentPlayer);
+    List<PlayerCard> hand = model.getHand(playerColor);
     for (int cardIndex = 0; cardIndex < hand.size(); cardIndex++) {
       moves.add(new CornerMove(northRowIndex, westColIndex, cardIndex, Corner.NORTH_WEST));
       moves.add(new CornerMove(northRowIndex, eastColIndex, cardIndex, Corner.NORTH_EAST));
@@ -153,13 +171,14 @@ public class CornerMoveStrategy implements MoveStrategy {
   /**
    * Returns the average vulnerable attack value of the given move in the given model.
    */
-  private int getAverageVulnerableAttackValue(CornerMove move, ReadOnlyThreeTriosModel model) {
+  private int getAverageVulnerableAttackValue(
+      CornerMove move, ReadOnlyThreeTriosModel model, PlayerColor playerColor
+  ) {
     Corner corner = move.corner;
     Direction vulnerableDirectionA = corner.vulnerableDirectionA;
     Direction vulnerableDirectionB = corner.vulnerableDirectionB;
 
-    PlayerColor currentPlayer = model.getCurrentPlayer();
-    List<PlayerCard> hand = model.getHand(currentPlayer);
+    List<PlayerCard> hand = model.getHand(playerColor);
     Card card = hand.get(move.getCardIndex());
 
     int vulnerableAttackValueA = card.getAttackValue(vulnerableDirectionA).toInt();
