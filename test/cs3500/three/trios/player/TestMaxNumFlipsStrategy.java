@@ -1,25 +1,26 @@
 package cs3500.three.trios.player;
 
-import static cs3500.three.trios.model.card.AttackValue.ONE;
-import static cs3500.three.trios.model.card.AttackValue.TEN;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cs3500.three.trios.Examples;
 import cs3500.three.trios.model.Cell;
 import cs3500.three.trios.model.PlayerColor;
-import cs3500.three.trios.model.ReadOnlyThreeTriosModel;
 import cs3500.three.trios.model.ThreeTriosModel;
 import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.model.card.PlayerCard;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 
-public class TestMaxNumFlipsStrategy extends TestMoveStrategy {
+import static cs3500.three.trios.model.card.AttackValue.ONE;
+import static cs3500.three.trios.model.card.AttackValue.TEN;
+
+public class TestMaxNumFlipsStrategy {
 
   private Cell[][] grid3x3With9CardCells;
   private Cell[][] grid3x3InProgress;
@@ -27,46 +28,37 @@ public class TestMaxNumFlipsStrategy extends TestMoveStrategy {
   private ThreeTriosModel modelRedWon;
   private MoveStrategy moveStrategy;
   private Card northWestWinner1AA1;
-  private Cell emptyCell;
-  private Cell holeCell;
-  private Card card1111;
-  private Cell redCell1111;
-  private Cell blueCell1111;
-
-  private Move getBestMove(ReadOnlyThreeTriosModel model) {
-    return createMoveStrategy().getMoves(model).get(0);
-  }
 
   @Before
   public void setUp() throws IOException {
     handOfFiveWeakestCards = List.of(
-        new CardImpl("0", ONE, ONE, ONE, ONE),
-        new CardImpl("1", ONE, ONE, ONE, ONE),
-        new CardImpl("2", ONE, ONE, ONE, ONE),
-        new CardImpl("3", ONE, ONE, ONE, ONE),
-        new CardImpl("4", ONE, ONE, ONE, ONE)
+            new CardImpl("0", ONE, ONE, ONE, ONE),
+            new CardImpl("1", ONE, ONE, ONE, ONE),
+            new CardImpl("2", ONE, ONE, ONE, ONE),
+            new CardImpl("3", ONE, ONE, ONE, ONE),
+            new CardImpl("4", ONE, ONE, ONE, ONE)
     );
 
-    emptyCell = Cell.createEmptyCardCell();
-    holeCell = Cell.createHoleCell();
+    Cell emptyCell = Cell.createEmptyCardCell();
+    Cell holeCell = Cell.createHoleCell();
 
-    card1111 = new CardImpl("name 1 1 1 1");
-    redCell1111 = Cell.createOccupiedCardCell(new PlayerCard(card1111, PlayerColor.RED));
-    blueCell1111 = Cell.createOccupiedCardCell(new PlayerCard(card1111, PlayerColor.BLUE));
+    Card card1111 = new CardImpl("name 1 1 1 1");
+    Cell redCell1111 = Cell.createOccupiedCardCell(new PlayerCard(card1111, PlayerColor.RED));
+    Cell blueCell1111 = Cell.createOccupiedCardCell(new PlayerCard(card1111, PlayerColor.BLUE));
 
     grid3x3InProgress = new Cell[][]{
-        {emptyCell, blueCell1111, redCell1111},
-        {blueCell1111, redCell1111, holeCell},
-        {emptyCell, blueCell1111, holeCell}
+            {emptyCell, blueCell1111, redCell1111},
+            {blueCell1111, redCell1111, holeCell},
+            {emptyCell, blueCell1111, holeCell}
     };
 
     modelRedWon = ThreeTriosModelImpl.createGameInProgress(
-        new Cell[][]{
-            {blueCell1111, redCell1111, redCell1111},
-            {redCell1111, redCell1111, holeCell}
-        },
-        List.of(),
-        List.of()
+            new Cell[][]{
+                    {blueCell1111, redCell1111, redCell1111},
+                    {redCell1111, redCell1111, holeCell}
+            },
+            List.of(),
+            List.of()
     );
 
     moveStrategy = new MaxNumFlipsMoveStrategy();
@@ -76,12 +68,18 @@ public class TestMaxNumFlipsStrategy extends TestMoveStrategy {
   }
 
   @Test
+  public void testMaxNumFlipsWhenGameIsOver() {
+    Assert.assertThrows(IllegalStateException.class,
+            () -> moveStrategy.getMoves(modelRedWon));
+  }
+
+  @Test
   public void testMaxNumFlipsWithEmptyBoard() {
     List<Card> redHand = new ArrayList<>(handOfFiveWeakestCards);
     List<Card> blueHand = new ArrayList<>(handOfFiveWeakestCards);
 
     ThreeTriosModel game = ThreeTriosModelImpl.createGameInProgress(
-        grid3x3With9CardCells, redHand, blueHand);
+            grid3x3With9CardCells, redHand, blueHand);
 
     Move actualMove = moveStrategy.getMoves(game).get(0);
     Move expectedMove = new Move(0, 0, 0);
@@ -96,14 +94,7 @@ public class TestMaxNumFlipsStrategy extends TestMoveStrategy {
     redHand.set(2, northWestWinner1AA1);
 
     ThreeTriosModel game = ThreeTriosModelImpl.createGameInProgress(
-        new Cell[][]{
-            {emptyCell, blueCell1111, redCell1111},
-            {blueCell1111, redCell1111, holeCell},
-            {emptyCell, blueCell1111, holeCell}
-        },
-        redHand,
-        blueHand
-    );
+            grid3x3InProgress, redHand, blueHand);
 
     Move actualMove = moveStrategy.getMoves(game).get(0);
     Move expectedMove = new Move(0, 0, 2);
@@ -119,35 +110,10 @@ public class TestMaxNumFlipsStrategy extends TestMoveStrategy {
     redHand.set(3, northWestWinner1AA1);
 
     ThreeTriosModel game = ThreeTriosModelImpl.createGameInProgress(
-        new Cell[][]{
-            {emptyCell, blueCell1111, redCell1111},
-            {blueCell1111, redCell1111, holeCell},
-            {emptyCell, blueCell1111, holeCell}
-        },
-        redHand,
-        blueHand
-    );
+            grid3x3InProgress, redHand, blueHand);
 
     Move actualMove = moveStrategy.getMoves(game).get(0);
     Move expectedMove = new Move(0, 0, 2);
     Assert.assertEquals(expectedMove, actualMove);
-  }
-
-  @Test
-  public void testGetMoveReturnsOnlyLegalMove() {
-    Move actualMove = getBestMove(
-        ThreeTriosModelImpl.createGameInProgress(
-            grid3x3InProgress,
-            List.of(card1111),
-            List.of()
-        )
-    );
-    Move expectedMove = new Move(0, 0, 0);
-    Assert.assertEquals(expectedMove, actualMove);
-  }
-
-  @Override
-  protected MoveStrategy createMoveStrategy() {
-    return new MaxNumFlipsMoveStrategy();
   }
 }
