@@ -33,4 +33,10 @@ public abstract class TestMoveStrategy {
     );
     assertThrows(IllegalStateException.class, () -> strategy.getMoves(model));
   }
+
+  @Test
+  public void testGetMovesThrowsWithNullModel() {
+    MoveStrategy strategy = createMoveStrategy();
+    assertThrows(IllegalArgumentException.class, () -> strategy.getMoves(null));
+  }
 }
