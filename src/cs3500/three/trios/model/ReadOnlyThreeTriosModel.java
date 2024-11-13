@@ -4,7 +4,9 @@ import cs3500.three.trios.model.card.PlayerCard;
 import java.util.List;
 
 /**
- * An interface containing the observations for a game of three trios.
+ * An interface containing the observations for a game of three trios. Row indices are 0 based, with
+ * indices increasing from top to bottom. Column indices are also 0 based, with indices increasing
+ * from left to right.
  */
 public interface ReadOnlyThreeTriosModel {
 

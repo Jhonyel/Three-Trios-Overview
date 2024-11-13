@@ -8,36 +8,35 @@ rules).
 # Quick start
 
 ```java
-ThreeTriosModel model = Examples.create5x7ModelWith15CardCells();
+public class QuickStart {
+  public static void main(String[] args) {
+    ThreeTriosModel model = Examples.create5x7ModelWith15CardCells();
 
-// get the color of the current player
-PlayerColor currentPlayer = model.getCurrentPlayer();
+    // get the color of the current player
+    PlayerColor currentPlayer = model.getCurrentPlayer();
 
-// get the hand of the current player
-List<PlayerCard> currentHand = model.getHand(currentPlayer);
+    // get the hand of the current player
+    List<PlayerCard> currentHand = model.getHand(currentPlayer);
 
-// get the grid of the model
-Cell[][] grid = model.getGrid();
+    // get the grid of the model
+    Cell[][] grid = model.getGrid();
 
-// get the cell at row 2, col 3
-Cell cell = model.getCellAt(2, 3);
+    // get the cell at row 2, col 3
+    Cell cell = model.getCellAt(2, 3);
 
-// before calling `getCardAt` or `getPlayer`, check that
-// the cell you are getting from is an occupied card cell
-if(cell.
+    // before calling `getCardAt` or `getPlayer`, check that
+    // the cell you are getting from is an occupied card cell
+    if (cell.isOccupiedCardCell()) {
+      PlayerCard card = model.getCardAt(2, 3);
+      PlayerColor playerColor = model.getPlayerAt(2, 3);
+    }
 
-isOccupiedCardCell()){
-PlayerCard card = model.getCardAt(2, 3);
-PlayerColor playerColor = model.getPlayerAt(2, 3);
+    // before calling `getWinner`, check that the game is over
+    if (model.isGameOver()) {
+      PlayerColor winner = model.getWinner();
+    }
+  }
 }
-
-// before calling `getWinner`, check that the game is over
-    if(model.
-
-isGameOver()){
-PlayerColor winner = model.getWinner();
-}
-
 ```
 
 # Key components
@@ -101,6 +100,7 @@ In part 2, we made the following changes to existing classes
         - `getScore`
           - We implemented this method using the same logic as `getWinner`
     - These methods were missing simply because we had not thought to add them.
+    - 
 - `AttackValue`
     - We added a method `toInt` that returns the integer value of an `AttackValue`. This is useful
       for `CornerMoveStrategy` which needs to know what the strongest card to play is in a
