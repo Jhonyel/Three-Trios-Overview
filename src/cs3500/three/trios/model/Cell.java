@@ -1,8 +1,7 @@
 package cs3500.three.trios.model;
 
-import static cs3500.three.trios.util.Requirements.requireNonNull;
-
 import cs3500.three.trios.model.card.PlayerCard;
+import cs3500.three.trios.util.Requirements;
 import java.util.Objects;
 
 /**
@@ -19,7 +18,7 @@ public class Cell {
    * card cell).
    *
    * @param isHole true if this cell is a hole, else false.
-   * @param card the card occupying this cell if this cell is an occupied card cell, else null.
+   * @param card   the card occupying this cell if this cell is an occupied card cell, else null.
    */
   private Cell(boolean isHole, PlayerCard card) {
     this.isHole = isHole;
@@ -47,7 +46,7 @@ public class Cell {
    * @throws IllegalArgumentException if card is null.
    */
   public static Cell createOccupiedCardCell(PlayerCard card) {
-    return new Cell(false, requireNonNull(card));
+    return new Cell(false, Requirements.requireNonNull(card));
   }
 
   /**
@@ -102,6 +101,10 @@ public class Cell {
     return card.getPlayerColor();
   }
 
+  /**
+   * Returns true if `other` is the same type of cell as this cell. If this cell is an occupied card
+   * cell, the card of `other` must be the same as this cell's card.
+   */
   @Override
   public boolean equals(Object other) {
     if (other instanceof Cell) {
@@ -119,14 +122,20 @@ public class Cell {
     return Objects.hash(isHole, card);
   }
 
+  /**
+   * Returns "Hole" if this cell is a hole, "Empty" if this cell is an empty card cell, and a string
+   * in the format: "Occupied by: CARD_NAME NORTH SOUTH EAST WEST" if this cell is an occupied card
+   * cell, CARD_NAME is the name of the card occupying this cell, and NORTH SOUTH EAST and WEST are
+   * the attack values.
+   */
   @Override
   public String toString() {
     if (isHole) {
-      return "HOLE";
+      return "Hole";
     } else if (isOccupiedCardCell()) {
-      return card.toString();
+      return "Occupied by: " + card.toString();
     } else {
-      return "EMPTY";
+      return "Empty";
     }
   }
 

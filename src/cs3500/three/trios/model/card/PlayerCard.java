@@ -1,8 +1,7 @@
 package cs3500.three.trios.model.card;
 
-import static cs3500.three.trios.util.Requirements.requireNonNull;
-
 import cs3500.three.trios.model.PlayerColor;
+import cs3500.three.trios.util.Requirements;
 import java.util.Objects;
 
 /**
@@ -17,15 +16,16 @@ public class PlayerCard extends CardImpl {
    *
    * @param card        the card containing the attack values and name of this card.
    * @param playerColor the color of the player who owns this card.
+   * @throws IllegalArgumentException if any of the arguments are null.
    */
   public PlayerCard(Card card, PlayerColor playerColor) {
     this(
-        requireNonNull(card).getName(),
-        requireNonNull(card).getNorthAttackValue(),
-        requireNonNull(card).getSouthAttackValue(),
-        requireNonNull(card).getEastAttackValue(),
-        requireNonNull(card).getWestAttackValue(),
-        requireNonNull(playerColor)
+        Requirements.requireNonNull(card).getName(),
+        Requirements.requireNonNull(card).getNorthAttackValue(),
+        Requirements.requireNonNull(card).getSouthAttackValue(),
+        Requirements.requireNonNull(card).getEastAttackValue(),
+        Requirements.requireNonNull(card).getWestAttackValue(),
+        Requirements.requireNonNull(playerColor)
     );
   }
 
@@ -38,6 +38,7 @@ public class PlayerCard extends CardImpl {
    * @param eastAttackValue  the attack value in the east direction
    * @param westAttackValue  the attack value in the west direction
    * @param playerColor      the color of the player who owns this card
+   * @throws IllegalArgumentException if any of the arguments are null.
    */
   public PlayerCard(
       String name,
@@ -48,7 +49,20 @@ public class PlayerCard extends CardImpl {
       PlayerColor playerColor
   ) {
     super(name, northAttackValue, southAttackValue, eastAttackValue, westAttackValue);
-    this.playerColor = requireNonNull(playerColor);
+    this.playerColor = Requirements.requireNonNull(playerColor);
+  }
+
+  /**
+   * Creates a player card from the given card string and player color.
+   *
+   * @throws IllegalArgumentException if any of the arguments are null or if card string has an
+   *                                  invalid format.
+   */
+  public PlayerCard(String cardString, PlayerColor playerColor) {
+    this(
+        new CardImpl(Requirements.requireNonNull(cardString)),
+        Requirements.requireNonNull(playerColor)
+    );
   }
 
   /**
@@ -58,6 +72,10 @@ public class PlayerCard extends CardImpl {
     return playerColor;
   }
 
+  /**
+   * Returns true if `other` has the same name, attack values, and player color as this card, false
+   * otherwise.
+   */
   @Override
   public boolean equals(Object other) {
     if (other instanceof PlayerCard) {
@@ -77,5 +95,15 @@ public class PlayerCard extends CardImpl {
         getWestAttackValue(),
         playerColor
     );
+  }
+
+  /**
+   * Returns a string in the format: COLOR CARD_NAME NORTH SOUTH EAST WEST, where COLOR is the color
+   * of the player who owns this card, CARD_NAME is the name of the card, and NORTH, SOUTH, EAST,
+   * WEST are the attack values of the card in the respective directions.
+   */
+  @Override
+  public String toString() {
+    return String.format("%s %s", playerColor, super.toString());
   }
 }

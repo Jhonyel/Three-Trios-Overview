@@ -1,22 +1,17 @@
 package cs3500.three.trios.view;
 
-import cs3500.three.trios.model.card.PlayerCard;
+import cs3500.three.trios.controller.Features;
 
 /**
- * Interface that represents the actions that the grid has.
+ * A visual representation of a grid in a game of three trios.
  */
 public interface GridPanel {
 
   /**
-   * Sets the cell to contain a specific player card if possible.
-   * @param row the row in the grid
-   * @param col the column in the grid
-   * @param card the card that will be set in this cell
+   * Adds the given features interface to this grid panel. This grid panel will thereafter delegate
+   * to the features interface on cell clicks.
+   *
+   * @throws IllegalArgumentException if features is null.
    */
-  void setCell(int row, int col, PlayerCard card);
-
-  /**
-   * Update the grid to reflect any changes in the game state.
-   */
-  void updateGrid();
+  void addFeatures(Features features);
 }

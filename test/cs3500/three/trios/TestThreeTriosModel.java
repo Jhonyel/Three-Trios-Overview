@@ -1,8 +1,5 @@
 package cs3500.three.trios;
 
-import static cs3500.three.trios.model.PlayerColor.BLUE;
-import static cs3500.three.trios.model.PlayerColor.RED;
-import static cs3500.three.trios.model.card.AttackValue.FOUR;
 import static cs3500.three.trios.model.card.AttackValue.ONE;
 import static cs3500.three.trios.model.card.AttackValue.TWO;
 import static org.junit.Assert.assertEquals;
@@ -13,14 +10,13 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import cs3500.three.trios.model.Cell;
-import cs3500.three.trios.model.GridFactory;
+import cs3500.three.trios.model.PlayerColor;
 import cs3500.three.trios.model.ThreeTriosModel;
 import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.util.Utils;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,48 +36,71 @@ public class TestThreeTriosModel {
 
   private Cell[][] grid5x7With15CardCells;
   private Cell[][] grid3x3With9CardCells;
+  private Cell[][] jaggedGrid;
+
   private List<Card> listOf16Cards;
   private List<Card> listOf10Cards;
-  private Cell[][] jaggedGrid;
+
   private ThreeTriosModel model5x7With15CardCells;
   private ThreeTriosModel modelRedWon;
-  private Cell empty;
+
   private Card card1111;
+  private Card cardAAAA;
   private PlayerCard redCard1111;
+  private PlayerCard redCardAAAA;
   private PlayerCard blueCard1111;
+  private PlayerCard blueCardAAAA;
+
+  private Cell emptyCell;
+  private Cell holeCell;
+
+  private Cell redCell1111;
+  private Cell redCellAAAA;
+  private Cell blueCell1111;
+  private Cell blueCellAAAA;
 
   @Before
   public void setUp() throws IOException {
-    empty = Cell.createEmptyCardCell();
-    Cell hole = Cell.createHoleCell();
-
     grid5x7With15CardCells = Examples.create5x7GridWith15CardCells();
     model5x7With15CardCells = Examples.create5x7ModelWith15CardCells();
+
+    emptyCell = Cell.createEmptyCardCell();
+    holeCell = Cell.createHoleCell();
+
+    jaggedGrid = new Cell[][]{
+        {holeCell, holeCell, emptyCell},
+        {emptyCell, emptyCell},
+        {holeCell}
+    };
+
     listOf16Cards = Examples.create16Cards();
     listOf10Cards = Examples.create10Cards();
 
-    jaggedGrid = new Cell[][]{
-        {hole, hole, empty},
-        {empty, empty},
-        {hole}
-    };
-
     grid3x3With9CardCells = new Cell[][]{
-        {empty, empty, empty},
-        {empty, empty, empty},
-        {empty, empty, empty}
+        {emptyCell, emptyCell, emptyCell},
+        {emptyCell, emptyCell, emptyCell},
+        {emptyCell, emptyCell, emptyCell}
     };
 
-    card1111 = new CardImpl("", ONE, ONE, ONE, ONE);
-    redCard1111 = new PlayerCard(card1111, RED);
-    blueCard1111 = new PlayerCard(card1111, BLUE);
-    Cell redCell = Cell.createOccupiedCardCell(redCard1111);
-    Cell blueCell = Cell.createOccupiedCardCell(blueCard1111);
+    card1111 = new CardImpl("name 1 1 1 1");
+    cardAAAA = new CardImpl("name A A A A");
+
+    redCard1111 = new PlayerCard(card1111, PlayerColor.RED);
+    redCardAAAA = new PlayerCard(cardAAAA, PlayerColor.RED);
+
+    blueCard1111 = new PlayerCard(card1111, PlayerColor.BLUE);
+    blueCardAAAA = new PlayerCard(cardAAAA, PlayerColor.BLUE);
+
+    redCell1111 = Cell.createOccupiedCardCell(redCard1111);
+    redCellAAAA = Cell.createOccupiedCardCell(redCardAAAA);
+
+    blueCell1111 = Cell.createOccupiedCardCell(blueCard1111);
+    blueCellAAAA = Cell.createOccupiedCardCell(blueCardAAAA);
 
     modelRedWon = ThreeTriosModelImpl.createGameInProgress(
         new Cell[][]{
-            {blueCell, redCell},
-            {redCell, redCell}
+            {blueCell1111, redCell1111, redCell1111},
+            {redCell1111, redCell1111, holeCell}
         },
         List.of(),
         List.of()
@@ -126,8 +145,8 @@ public class TestThreeTriosModel {
   @Test
   public void testCreateNewGameWithEvenNumberOfCardCells() {
     Cell[][] evenCardGrid = new Cell[][]{
-        {empty, empty},
-        {empty, empty}
+        {emptyCell, emptyCell},
+        {emptyCell, emptyCell}
     };
     assertThrows(
         IllegalArgumentException.class,
@@ -155,7 +174,7 @@ public class TestThreeTriosModel {
     gridToModify[0][0] = Cell.createHoleCell();
 
     // that switch should not affect the model
-    TestUtils.assert2DArrayEquals(originalGrid, model5x7With15CardCells.getGrid());
+    TestUtils.assertArray2DEquals(originalGrid, model5x7With15CardCells.getGrid());
   }
 
   ////////////////////////////////////////////////////////////////////////////
@@ -178,7 +197,7 @@ public class TestThreeTriosModel {
 
   @Test
   public void testPlayCardToEmptyCardCell() {
-    List<PlayerCard> hand = model5x7With15CardCells.getHand(RED);
+    List<PlayerCard> hand = model5x7With15CardCells.getHand(PlayerColor.RED);
     PlayerCard card = hand.get(0);
     Cell expectedCell = Cell.createOccupiedCardCell(card);
 
@@ -227,8 +246,8 @@ public class TestThreeTriosModel {
   public void testGetHand() {
     List<Card> listOfFirst8Cards = listOf16Cards.subList(0, 8);
     List<Card> listOfLast8Cards = listOf16Cards.subList(8, 16);
-    assertEquals(listOfFirst8Cards, model5x7With15CardCells.getHand(RED));
-    assertEquals(listOfLast8Cards, model5x7With15CardCells.getHand(BLUE));
+    assertEquals(listOfFirst8Cards, model5x7With15CardCells.getHand(PlayerColor.RED));
+    assertEquals(listOfLast8Cards, model5x7With15CardCells.getHand(PlayerColor.BLUE));
   }
 
   @Test
@@ -244,14 +263,15 @@ public class TestThreeTriosModel {
     List<Card> expectedHand = listOf16Cards.subList(0, 8);
     model5x7With15CardCells.playCardAt(0, 1, 0);
     expectedHand.remove(0);
-    assertEquals(expectedHand, model5x7With15CardCells.getHand(RED));
+    assertEquals(expectedHand, model5x7With15CardCells.getHand(PlayerColor.RED));
   }
 
   @Test
   public void testModifyingHandDoesNotAffectModel() {
-    List<PlayerCard> originalHand = new ArrayList<>(model5x7With15CardCells.getHand(RED));
-    model5x7With15CardCells.getHand(RED).clear();
-    assertEquals(originalHand, model5x7With15CardCells.getHand(RED));
+    List<PlayerCard> originalHand = new ArrayList<>(
+        model5x7With15CardCells.getHand(PlayerColor.RED));
+    model5x7With15CardCells.getHand(PlayerColor.RED).clear();
+    assertEquals(originalHand, model5x7With15CardCells.getHand(PlayerColor.RED));
   }
 
   ////////////////////////////////////////////////////////////////////////////
@@ -261,13 +281,13 @@ public class TestThreeTriosModel {
     assertNotNull(model5x7With15CardCells); // for java style checker; see comment in class javadoc
 
     Cell[][] grid = model5x7With15CardCells.getGrid();
-    TestUtils.assert2DArrayEquals(model5x7With15CardCells.getGrid(), grid);
+    TestUtils.assertArray2DEquals(model5x7With15CardCells.getGrid(), grid);
   }
 
   @Test
   public void testPlayCardThenGetGrid() {
     Cell[][] grid = model5x7With15CardCells.getGrid();
-    TestUtils.assert2DArrayEquals(model5x7With15CardCells.getGrid(), grid);
+    TestUtils.assertArray2DEquals(model5x7With15CardCells.getGrid(), grid);
     model5x7With15CardCells.playCardAt(4, 6, 0);
     Assert.assertNotEquals(model5x7With15CardCells.getGrid(), grid);
   }
@@ -317,41 +337,37 @@ public class TestThreeTriosModel {
 
   @Test
   public void testGetWinnerWhenGameIsOver() {
-    assertEquals(RED, modelRedWon.getWinner());
+    assertEquals(PlayerColor.RED, modelRedWon.getWinner());
   }
 
   @Test
-  public void testGetWinnerWhenGameIsTied() throws IOException {
-    Cell[][] disconnectedGrid3x4 = GridFactory.createFromConfigurationFilePath(
-        "configuration-files" + File.separator + "3x4-disconnected-grid.txt");
+  public void testGetWinnerWhenGameIsTied() {
 
-    ThreeTriosModel model = ThreeTriosModelImpl.createNewGame(
-        disconnectedGrid3x4, listOf10Cards, false);
+    ThreeTriosModelImpl modelTied = ThreeTriosModelImpl.createGameInProgress(
+        new Cell[][]{
+            {redCell1111, redCell1111, redCell1111},
+            {holeCell, holeCell, holeCell},
+            {holeCell, blueCell1111, blueCell1111}
+        },
+        List.of(),
+        List.of(card1111)
+    );
 
-    model.playCardAt(0, 0, 0); // red plays
-    model.playCardAt(2, 1, 0); // blue plays
-    model.playCardAt(0, 1, 0); // red plays
-    model.playCardAt(2, 2, 0); // blue plays
-    model.playCardAt(0, 2, 0); // red plays
-    model.playCardAt(2, 3, 0); // blue plays
-    model.playCardAt(0, 3, 0); // red plays
-    assertEquals(0, model.getHand(RED).size());
-    assertEquals(1, model.getHand(BLUE).size());
-    assertNull(model.getWinner());
+    assertNull(modelTied.getWinner());
   }
 
   ////////////////////////////////////////////////////////////////////////////
 
   @Test
   public void testGetCurrentPlayer() {
-    assertEquals(RED, model5x7With15CardCells.getCurrentPlayer());
+    assertEquals(PlayerColor.RED, model5x7With15CardCells.getCurrentPlayer());
   }
 
   @Test
   public void testPlayCardThenGetCurrentPlayer() {
-    assertEquals(RED, model5x7With15CardCells.getCurrentPlayer());
+    assertEquals(PlayerColor.RED, model5x7With15CardCells.getCurrentPlayer());
     model5x7With15CardCells.playCardAt(4, 6, 0);
-    assertEquals(BLUE, model5x7With15CardCells.getCurrentPlayer());
+    assertEquals(PlayerColor.BLUE, model5x7With15CardCells.getCurrentPlayer());
   }
 
   @Test
@@ -366,288 +382,146 @@ public class TestThreeTriosModel {
 
   @Test
   public void testSimpleBattlePlacedCardWins() {
-    // red's top middle card's east attack value of 2 should beat
-    // blue's top right card's west attack value of 1
-    Card blueTopRightCard = new CardImpl("blue's top right card", ONE, ONE, ONE, ONE);
-    Card redTopMiddleCard = new CardImpl("red's top middle card", ONE, ONE, TWO, ONE);
+    // red's top middle card's west attack value of A should beat
+    // blue's top left card's east attack value of 1 and flip the card
 
-    // the second card in red's hand will be the top middle card
-    listOf10Cards.set(1, redTopMiddleCard);
-
-    // the first card in blue's hand will be the top right card
-    listOf10Cards.set(5, blueTopRightCard);
-
-    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(
-        grid3x3With9CardCells, listOf10Cards, false);
-
-    model3x3.playCardAt(0, 0, 0);
-    // R__
-    // ___
-    // ___
-
-    model3x3.playCardAt(0, 2, 0);
-    // R_B
-    // ___
-    // ___
-
-    model3x3.playCardAt(0, 1, 0);
-    // RRB
-    // ___
-    // ___
-    // after battle:
-    // RRR
-    // ___
-    // ___
-
-    // the top left card should belong to red after battle
-    assertEquals(RED, model3x3.getPlayerAt(0, 2));
-    assertEquals(RED, model3x3.getPlayerAt(0, 0));
+    ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+        new Cell[][]{
+            {blueCell1111, emptyCell, emptyCell},
+            {emptyCell, emptyCell, emptyCell},
+            {emptyCell, emptyCell, emptyCell},
+        },
+        List.of(cardAAAA),
+        List.of()
+    );
+    model.playCardAt(0, 1, 0);
+    assertEquals(PlayerColor.RED, model.getPlayerAt(0, 0));
   }
 
   @Test
   public void testSimpleBattleDoesNotFlipOwnCard() {
-    // red's top middle card's west attack value of 4 should beat
-    // red's top left card's east attack value of 2, but should not flip the card
-    Card redTopMiddleCard = new CardImpl("red's top middle card", ONE, ONE, TWO, FOUR);
-    Card redTopLeftCard = new CardImpl("red's top left card", ONE, ONE, TWO, FOUR);
+    // red's top middle card's west attack value of A should beat
+    // red's top left card's east attack value of 1, but should not flip the card
 
-    // the second card in red's hand will be the top middle card
-    listOf10Cards.set(1, redTopMiddleCard);
-
-    // the first card in red's hand will be the top left card
-    listOf10Cards.set(0, redTopLeftCard);
-
-    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(
-        grid3x3With9CardCells, listOf10Cards, false);
-
-    model3x3.playCardAt(0, 0, 0);
-    // R__
-    // ___
-    // ___
-
-    model3x3.playCardAt(0, 2, 0);
-    // R_B
-    // ___
-    // ___
-
-    model3x3.playCardAt(0, 1, 0);
-    // RRB
-    // ___
-    // ___
-
-    // the top left card should belong to red after battle
-    assertEquals(RED, model3x3.getPlayerAt(0, 0));
+    ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+        new Cell[][]{
+            {redCell1111, emptyCell, emptyCell},
+            {emptyCell, emptyCell, emptyCell},
+            {emptyCell, emptyCell, emptyCell}
+        },
+        List.of(cardAAAA),
+        List.of()
+    );
+    model.playCardAt(0, 1, 0);
+    assertEquals(PlayerColor.RED, model.getPlayerAt(0, 0));
   }
 
   @Test
   public void testSimpleBattleFlipsTwoDirectionsAtOnce() {
-    // red's top middle card's west and east attack value of 4 should beat
-    // blue's top left and right card's attack values of 2
-    Card redTopMiddleCard = new CardImpl("red's top middle card", ONE, ONE, FOUR, FOUR);
-    Card blueTopLeftCard = new CardImpl("blue's top left card", ONE, ONE, TWO, TWO);
-    Card blueTopRightCard = new CardImpl("blue's top right card", ONE, ONE, TWO, TWO);
+    // red's top middle card's west and east attack value of A should beat
+    // blue's top left and right card's attack values of 1
 
-    // the second card in red's hand will be the top middle card
-    listOf10Cards.set(2, redTopMiddleCard);
+    ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+        new Cell[][]{
+            {blueCell1111, emptyCell, blueCell1111},
+            {emptyCell, emptyCell, emptyCell},
+            {emptyCell, emptyCell, emptyCell}
+        },
+        List.of(cardAAAA),
+        List.of()
+    );
+    model.playCardAt(0, 1, 0);
+    assertEquals(PlayerColor.RED, model.getPlayerAt(0, 0));
+    assertEquals(PlayerColor.RED, model.getPlayerAt(0, 2));
 
-    // the first card in red's hand will be the top left card
-    listOf10Cards.set(6, blueTopLeftCard);
-    listOf10Cards.set(5, blueTopRightCard);
-
-    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(
-        grid3x3With9CardCells, listOf10Cards, false);
-
-    model3x3.playCardAt(1, 0, 0);
-    // ___
-    // R__
-    // ___
-
-    model3x3.playCardAt(0, 2, 0);
-    // __B
-    // R__
-    // ___
-
-    model3x3.playCardAt(2, 0, 0);
-    // __B
-    // R__
-    // R__
-
-    model3x3.playCardAt(0, 0, 0);
-    // B_B
-    // R__
-    // R__
-
-    model3x3.playCardAt(0, 1, 0);
-    // BRB
-    // R__
-    // R__
-    // after battle:
-    // RRR
-    // R__
-    // R__
-
-    // the top left and right cards should belong to red after battle
-    assertEquals(RED, model3x3.getPlayerAt(0, 0));
-    assertEquals(RED, model3x3.getPlayerAt(0, 2));
   }
 
   @Test
   public void testSimpleBattlePlacedCardLoses() {
-    // red's top middle card's east attack value of 1 should lose to
-    // blue's top left card's west attack value of 2
-    Card blueTopRightCard = new CardImpl("blue's top right card", ONE, ONE, ONE, TWO);
-    Card redTopMiddleCard = new CardImpl("red's top middle card", ONE, ONE, ONE, ONE);
+    // red's top middle card's west attack value of 1 should lose to
+    // blue's top left card's west attack value of 2. neither card should flip
 
-    // the second card in red's hand will be the top middle card
-    listOf10Cards.set(1, redTopMiddleCard);
+    ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+        new Cell[][]{
+            {blueCellAAAA, emptyCell, emptyCell},
+            {emptyCell, emptyCell, emptyCell},
+            {emptyCell, emptyCell, emptyCell}
+        },
+        List.of(card1111),
+        List.of()
+    );
 
-    // the first card in blue's hand will be the top right card
-    listOf10Cards.set(5, blueTopRightCard);
-
-    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(
-        grid3x3With9CardCells, listOf10Cards, false);
-
-    model3x3.playCardAt(0, 0, 0);
-    // R__
-    // ___
-    // ___
-
-    model3x3.playCardAt(0, 2, 0);
-    // R_B
-    // ___
-    // ___
-
-    model3x3.playCardAt(0, 1, 0);
-    // RRB
-    // ___
-    // ___
-
-    // the top left card should still belong to blue after battle
-    assertEquals(BLUE, model3x3.getPlayerAt(0, 2));
+    model.playCardAt(0, 1, 0);
+    assertEquals(PlayerColor.BLUE, model.getPlayerAt(0, 0));
+    assertEquals(PlayerColor.RED, model.getPlayerAt(0, 1));
   }
 
   @Test
   public void testSimpleBattlePlacedCardTies() {
     // red's top middle card's east attack value of 1 should tie
-    // blue's top left card's west attack value of 1
-    Card blueTopRightCard = new CardImpl("blue's top right card", ONE, ONE, ONE, ONE);
-    Card redTopMiddleCard = new CardImpl("red's top middle card", ONE, ONE, ONE, ONE);
+    // blue's top left card's west attack value of 1. neither card should flip
 
-    // the second card in red's hand will be the top middle card
-    listOf10Cards.set(1, redTopMiddleCard);
+    ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+        new Cell[][]{
+            {blueCell1111, emptyCell, emptyCell},
+            {emptyCell, emptyCell, emptyCell},
+            {emptyCell, emptyCell, emptyCell}
+        },
+        List.of(card1111),
+        List.of()
+    );
 
-    // the first card in blue's hand will be the top right card
-    listOf10Cards.set(5, blueTopRightCard);
-
-    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(
-        grid3x3With9CardCells, listOf10Cards, false);
-
-    model3x3.playCardAt(0, 0, 0);
-    // R__
-    // ___
-    // ___
-
-    model3x3.playCardAt(0, 2, 0);
-    // R_B
-    // ___
-    // ___
-
-    model3x3.playCardAt(0, 1, 0);
-    // RRB
-    // ___
-    // ___
-
-    // the top left card should still belong to blue after battle
-    assertEquals(BLUE, model3x3.getPlayerAt(0, 2));
+    model.playCardAt(0, 1, 0);
+    assertEquals(PlayerColor.BLUE, model.getPlayerAt(0, 0));
+    assertEquals(PlayerColor.RED, model.getPlayerAt(0, 1));
   }
 
   @Test
   public void testBattleWithOneComboPhase() {
-    // blue's top middle card's west attack value of 2 should flip
-    // red's top left card's west attack value of 1
-    // blue's flipped top left card's south attack value of 2 should then flip
-    // red's middle left card's north attack value of 1
-    Card blueTopMiddleCard = new CardImpl("blue's top middle card", ONE, ONE, ONE, TWO);
-    Card redTopLeftCard = new CardImpl("red's top left card", ONE, TWO, ONE, ONE);
-    Card redMiddleLeftCard = new CardImpl("red's middle left card", ONE, ONE, ONE, ONE);
+    // red's top right card's west attack value of A should beat
+    // blue's top middle card's east attack value of 1 and flip the card
+    // red's new top middle card's west attack value of A should beat
+    // blue's top left card's east attack value of 1 and flip the card
 
-    // the first and second cards in red's hand will be the top left and middle left cards
-    // respectively
-    listOf10Cards.set(0, redTopLeftCard);
-    listOf10Cards.set(1, redMiddleLeftCard);
+    Cell blueCell111A = Cell.createOccupiedCardCell(
+        new PlayerCard("name 1 1 1 A", PlayerColor.BLUE));
 
-    // the second card in blue's hand will be the top middle card
-    listOf10Cards.set(6, blueTopMiddleCard);
+    ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+        new Cell[][]{
+            {blueCell111A, blueCell111A, emptyCell},
+            {emptyCell, emptyCell, emptyCell},
+            {emptyCell, emptyCell, emptyCell}
+        },
+        List.of(cardAAAA),
+        List.of()
+    );
 
-    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(
-        grid3x3With9CardCells, listOf10Cards, false);
-    model3x3.playCardAt(0, 0, 0);
-    model3x3.playCardAt(0, 2, 0);
-    model3x3.playCardAt(1, 0, 0);
-    // R_B
-    // R__
-    // ___
-
-    model3x3.playCardAt(0, 1, 0);
-    // RBB
-    // R__
-    // ___
-    // after battle:
-    // BBB
-    // B__
-    // ___
-
-    assertEquals(BLUE, model3x3.getPlayerAt(0, 0));
-    assertEquals(BLUE, model3x3.getPlayerAt(1, 0));
+    model.playCardAt(0, 2, 0);
+    assertEquals(PlayerColor.RED, model.getPlayerAt(0, 0));
+    assertEquals(PlayerColor.RED, model.getPlayerAt(0, 1));
+    assertEquals(PlayerColor.RED, model.getPlayerAt(0, 2));
   }
 
   @Test
   public void testBattleWithTwoComboPhases() {
-    // blue's top middle card's west attack value of 2 should flip
-    // red's top left card's west attack value of 1
-    // blue's flipped top left card's south attack value of 2 should then flip
-    // red's middle left card's north attack value of 1
-    // blue's flipped middle left card's south attack value of 2 should then flip
-    // red's bottom left card's north attack value of 1
-    Card blueTopMiddleCard = new CardImpl("blue's top middle card", ONE, ONE, ONE, TWO);
+    Cell blueCell111A = Cell.createOccupiedCardCell(
+        new PlayerCard("name 1 1 1 A", PlayerColor.BLUE));
 
-    // the first, second and third cards in red's hand will all be a card with south attack value
-    // two and other attack values one
-    Card redTopLeftCard = new CardImpl("red's top left card", ONE, TWO, ONE, ONE);
-    Card redMiddleLeftCard = new CardImpl("red's middle left card", ONE, TWO, ONE, ONE);
-    Card redBottomLeftCard = new CardImpl("red's bottom left card", ONE, TWO, ONE, ONE);
-    listOf10Cards.set(0, redTopLeftCard);
-    listOf10Cards.set(1, redMiddleLeftCard);
-    listOf10Cards.set(2, redBottomLeftCard);
+    ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+        new Cell[][]{
+            {blueCell111A, blueCell111A, blueCell111A, emptyCell},
+            {emptyCell, emptyCell, emptyCell, emptyCell},
+            {emptyCell, emptyCell, emptyCell, holeCell}
+        },
+        List.of(cardAAAA),
+        List.of()
+    );
 
-    // the third card in blue's hand will be the top middle card
-    listOf10Cards.set(7, blueTopMiddleCard);
-
-    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(
-        grid3x3With9CardCells, listOf10Cards, false);
-    model3x3.playCardAt(0, 0, 0);
-    model3x3.playCardAt(0, 2, 0);
-    model3x3.playCardAt(1, 0, 0);
-    model3x3.playCardAt(1, 2, 0);
-    model3x3.playCardAt(2, 0, 0);
-    // R_B
-    // R_B
-    // R__
-
-    model3x3.playCardAt(0, 1, 0);
-    // RBB
-    // R_B
-    // R__
-    // after battle:
-    // BBB
-    // B_B
-    // B__
-    assertEquals(BLUE, model3x3.getPlayerAt(0, 0));
-    assertEquals(BLUE, model3x3.getPlayerAt(0, 1));
-    assertEquals(BLUE, model3x3.getPlayerAt(0, 2));
-    assertEquals(BLUE, model3x3.getPlayerAt(1, 0));
-    assertEquals(BLUE, model3x3.getPlayerAt(1, 2));
-    assertEquals(BLUE, model3x3.getPlayerAt(2, 0));
+    model.playCardAt(0, 3, 0);
+    assertEquals(PlayerColor.RED, model.getPlayerAt(0, 0));
+    assertEquals(PlayerColor.RED, model.getPlayerAt(0, 1));
+    assertEquals(PlayerColor.RED, model.getPlayerAt(0, 2));
+    assertEquals(PlayerColor.RED, model.getPlayerAt(0, 3));
   }
 
   ////////////////////////////////////////////////////////////////////////////
@@ -668,111 +542,93 @@ public class TestThreeTriosModel {
 
   @Test
   public void testIsMoveLegalInvalidIndex() {
-    Assert.assertThrows(IndexOutOfBoundsException.class,
-            () -> model5x7With15CardCells.isMoveLegalAt(5,7));
+    Assert.assertThrows(
+        IndexOutOfBoundsException.class,
+        () -> model5x7With15CardCells.isMoveLegalAt(5, 7)
+    );
   }
 
   @Test
   public void testIsMoveLegal() {
-    Assert.assertTrue(model5x7With15CardCells.isMoveLegalAt(0,0));
-    Assert.assertFalse(model5x7With15CardCells.isMoveLegalAt(0,2));
+    Assert.assertTrue(model5x7With15CardCells.isMoveLegalAt(0, 0));
+    Assert.assertFalse(model5x7With15CardCells.isMoveLegalAt(0, 2));
   }
 
   @Test
-  public void testGetScore() {
-    Assert.assertThrows(IllegalArgumentException.class,
-            () -> modelRedWon.getScore(null));
+  public void testGetScoreWithNullPlayer() {
+    Assert.assertThrows(
+        IllegalArgumentException.class,
+        () -> model5x7With15CardCells.getScore(null)
+    );
   }
 
   @Test
-  public void testSetScore() {
-    // red's top middle card's east attack value of 2 should beat
-    // blue's top right card's west attack value of 1
-    Card blueTopRightCard = new CardImpl("blue's top right card", ONE, ONE, ONE, ONE);
-    Card redTopMiddleCard = new CardImpl("red's top middle card", ONE, ONE, TWO, ONE);
+  public void testGetScoreWithCells() {
+    ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+        new Cell[][]{
+            {redCell1111, blueCellAAAA, emptyCell},
+        },
+        List.of(),
+        List.of()
+    );
+    assertEquals(1, model.getScore(PlayerColor.RED));
+    assertEquals(1, model.getScore(PlayerColor.BLUE));
+  }
 
-    // the second card in red's hand will be the top middle card
-    listOf10Cards.set(1, redTopMiddleCard);
+  @Test
+  public void testGetScoreWithHands() {
+    ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+        new Cell[][]{
+            {emptyCell},
+        },
+        List.of(cardAAAA),
+        List.of(cardAAAA)
+    );
+    assertEquals(1, model.getScore(PlayerColor.RED));
+    assertEquals(1, model.getScore(PlayerColor.BLUE));
+  }
 
-    // the first card in blue's hand will be the top right card
-    listOf10Cards.set(5, blueTopRightCard);
-
-    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(grid3x3With9CardCells, listOf10Cards, false);
-
-    Assert.assertEquals(5, model3x3.getScore(RED));
-    Assert.assertEquals(5, model3x3.getScore(BLUE));
-
-    model3x3.playCardAt(0, 0, 0);
-    // R__
-    // ___
-    // ___
-
-    model3x3.playCardAt(0, 2, 0);
-    // R_B
-    // ___
-    // ___
-
-    model3x3.playCardAt(0, 1, 0);
-    // RRB
-    // ___
-    // ___
-    // after battle:
-    // RRR
-    // ___
-    // ___
-    Assert.assertEquals(6, model3x3.getScore(RED));
-    Assert.assertEquals(4, model3x3.getScore(BLUE));
+  @Test
+  public void testGetScoreWithCellsAndHands() {
+    ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+        new Cell[][]{
+            {redCell1111, blueCellAAAA, emptyCell},
+        },
+        List.of(cardAAAA),
+        List.of(cardAAAA)
+    );
+    assertEquals(2, model.getScore(PlayerColor.RED));
+    assertEquals(2, model.getScore(PlayerColor.BLUE));
   }
 
   @Test
   public void testGetNumFlippedInvalidIndex() {
-    Assert.assertThrows(IndexOutOfBoundsException.class,
-            () -> model5x7With15CardCells.getNumFlipsAt(5,7,0));
-    Assert.assertThrows(IndexOutOfBoundsException.class,
-            () -> model5x7With15CardCells.getNumFlipsAt(4,6,17));
+    Assert.assertThrows(
+        IndexOutOfBoundsException.class,
+        () -> model5x7With15CardCells.getNumFlipsAt(5, 7, 0)
+    );
+    Assert.assertThrows(
+        IndexOutOfBoundsException.class,
+        () -> model5x7With15CardCells.getNumFlipsAt(4, 6, 17)
+    );
   }
 
   @Test
   public void testGetNumFlippedCardsMultiple() {
-    // blue's top middle card's west attack value of 2 should flip
-    // red's top left card's west attack value of 1
-    // blue's flipped top left card's south attack value of 2 should then flip
-    // red's middle left card's north attack value of 1
-    // blue's flipped middle left card's south attack value of 2 should then flip
-    // red's bottom left card's north attack value of 1
-    Card blueTopMiddleCard = new CardImpl("blue's top middle card", ONE, ONE, ONE, TWO);
+    Cell blueCell111A = Cell.createOccupiedCardCell(
+        new PlayerCard("name 1 1 1 A", PlayerColor.BLUE));
 
-    // the first, second and third cards in red's hand will all be a card with south attack value
-    // two and other attack values one
-    Card redTopLeftCard = new CardImpl("red's top left card", ONE, TWO, ONE, ONE);
-    Card redMiddleLeftCard = new CardImpl("red's middle left card", ONE, TWO, ONE, ONE);
-    Card redBottomLeftCard = new CardImpl("red's bottom left card", ONE, TWO, ONE, ONE);
-    listOf10Cards.set(0, redTopLeftCard);
-    listOf10Cards.set(1, redMiddleLeftCard);
-    listOf10Cards.set(2, redBottomLeftCard);
+    ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+        new Cell[][]{
+            {blueCell111A, blueCell111A, blueCell111A, emptyCell},
+            {emptyCell, emptyCell, emptyCell, emptyCell},
+            {emptyCell, emptyCell, emptyCell, holeCell}
+        },
+        List.of(cardAAAA),
+        List.of()
+    );
 
-    // the third card in blue's hand will be the top middle card
-    listOf10Cards.set(7, blueTopMiddleCard);
-
-    ThreeTriosModel model3x3 = ThreeTriosModelImpl.createNewGame(grid3x3With9CardCells, listOf10Cards, false);
-    model3x3.playCardAt(0, 0, 0);
-    model3x3.playCardAt(0, 2, 0);
-    model3x3.playCardAt(1, 0, 0);
-    model3x3.playCardAt(1, 2, 0);
-    Assert.assertEquals(0, model3x3.getNumFlipsAt(2,0,0));
-    model3x3.playCardAt(2, 0, 0);
-    // R_B
-    // R_B
-    // R__
-
-    Assert.assertEquals(3, model3x3.getNumFlipsAt(0,1,0));
-    model3x3.playCardAt(0, 1, 0);
-    // RBB
-    // R_B
-    // R__
-    // after battle:
-    // BBB
-    // B_B
-    // B__
+    assertEquals(3, model.getNumFlipsAt(0, 3, 0));
+    assertEquals(0, model.getNumFlipsAt(2, 0, 0));
   }
 }

@@ -4,8 +4,6 @@ import static cs3500.three.trios.model.Direction.EAST;
 import static cs3500.three.trios.model.Direction.NORTH;
 import static cs3500.three.trios.model.Direction.SOUTH;
 import static cs3500.three.trios.model.Direction.WEST;
-import static cs3500.three.trios.model.PlayerColor.BLUE;
-import static cs3500.three.trios.model.PlayerColor.RED;
 import static cs3500.three.trios.model.card.AttackValue.FOUR;
 import static cs3500.three.trios.model.card.AttackValue.ONE;
 import static cs3500.three.trios.model.card.AttackValue.THREE;
@@ -17,6 +15,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import cs3500.three.trios.model.Direction;
+import cs3500.three.trios.model.PlayerColor;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,7 +49,7 @@ public abstract class TestCard {
 
   /**
    * Creates and returns a card with the given name and attack values. Implementation is delegated
-   * to extending  classes. Extending classes should return an instance of the class being tested.
+   * to extending classes. Extending classes should return an instance of the class being tested.
    */
   protected abstract Card createCard(
       String name,
@@ -183,7 +182,41 @@ public abstract class TestCard {
       );
       assertNotEquals(
           new CardImpl("name", ONE, ONE, ONE, ONE),
-          new CardImpl("name", TWO, ONE, ONE, ONE));
+          new CardImpl("name", TWO, ONE, ONE, ONE)
+      );
+
+    }
+
+    @Test
+    public void testToString() {
+      assertEquals(
+          "name 1 1 1 1",
+          new CardImpl("name", ONE, ONE, ONE, ONE).toString()
+      );
+    }
+
+    @Test
+    public void testConstructionFromString() {
+      assertEquals(
+          new CardImpl("name", ONE, ONE, ONE, ONE),
+          new CardImpl("name 1 1 1 1")
+      );
+      assertThrows(
+          IllegalArgumentException.class,
+          () -> new CardImpl("name 1 1 1")
+      );
+      assertThrows(
+          IllegalArgumentException.class,
+          () -> new CardImpl("name b 1 1 1")
+      );
+      assertThrows(
+          IllegalArgumentException.class,
+          () -> new CardImpl("name 11 1 1 1")
+      );
+      assertThrows(
+          IllegalArgumentException.class,
+          () -> new CardImpl(null)
+      );
     }
   }
 
@@ -201,7 +234,7 @@ public abstract class TestCard {
           exampleEastAttackValue,
           exampleWestAttackValue
       );
-      return new PlayerCard(card, RED);
+      return new PlayerCard(card, PlayerColor.RED);
     }
 
     @Override
@@ -218,16 +251,14 @@ public abstract class TestCard {
           southAttackValue,
           eastAttackValue,
           westAttackValue,
-          RED
+          PlayerColor.RED
       );
     }
 
     @Test
     public void testConstructionWithNullArguments() {
-      assertThrows(
-          IllegalArgumentException.class,
-          () -> new PlayerCard(null, RED)
-      );
+      // note: java does not allow the first argument to be null since there are two constructors
+      // whose second argument is a player color, so we don't have to / can't test for that.
       assertThrows(
           IllegalArgumentException.class,
           () -> new PlayerCard(exampleCard, null)
@@ -235,18 +266,42 @@ public abstract class TestCard {
     }
 
     @Test
+    public void testConstructionWithCardString() {
+      assertEquals(
+          new PlayerCard(exampleCard, PlayerColor.RED),
+          new PlayerCard(exampleCard.toString(), PlayerColor.RED)
+      );
+      assertThrows(
+          IllegalArgumentException.class,
+          () -> new PlayerCard(exampleCard.toString(), null)
+      );
+      assertThrows(
+          IllegalArgumentException.class,
+          () -> new PlayerCard("name 1 1 1", PlayerColor.RED)
+      );
+      assertThrows(
+          IllegalArgumentException.class,
+          () -> new PlayerCard("name b 1 1 1", PlayerColor.RED)
+      );
+      assertThrows(
+          IllegalArgumentException.class,
+          () -> new PlayerCard("name 11 1 1 1", PlayerColor.RED)
+      );
+    }
+
+    @Test
     public void testEquals() {
       assertEquals(
-          new PlayerCard(exampleCard, RED),
-          new PlayerCard(exampleCard, RED)
+          new PlayerCard(exampleCard, PlayerColor.RED),
+          new PlayerCard(exampleCard, PlayerColor.RED)
       );
       assertNotEquals(
-          new PlayerCard(exampleCard, RED),
-          new PlayerCard(exampleCard, BLUE)
+          new PlayerCard(exampleCard, PlayerColor.RED),
+          new PlayerCard(exampleCard, PlayerColor.BLUE)
       );
       assertNotEquals(
-          new PlayerCard("name", ONE, ONE, ONE, ONE, RED),
-          new PlayerCard("name", TWO, ONE, ONE, ONE, RED)
+          new PlayerCard("name", ONE, ONE, ONE, ONE, PlayerColor.RED),
+          new PlayerCard("name", TWO, ONE, ONE, ONE, PlayerColor.RED)
       );
     }
   }

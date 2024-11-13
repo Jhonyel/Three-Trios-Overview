@@ -1,6 +1,6 @@
 package cs3500.three.trios.model.card;
 
-import static cs3500.three.trios.util.Requirements.requireNonNull;
+import cs3500.three.trios.util.Requirements;
 
 /**
  * An enum class representing the 10 different possible attack values of a card. The order in which
@@ -79,7 +79,7 @@ public enum AttackValue {
    * have exactly one character, and it must be a hexadecimal digit 1-A.
    */
   public static AttackValue fromHexadecimalDigit(String digitString) {
-    requireNonNull(digitString);
+    Requirements.requireNonNull(digitString);
     if (digitString.length() != 1) {
       throw new IllegalArgumentException("Invalid hexadecimal digit: " + digitString);
     }

@@ -14,26 +14,28 @@ public interface ThreeTriosGUIView {
   void refresh();
 
   /**
-   * Transmit an error message to the view, in case the command could not be processed correctly.
-   *
-   * @param error the error message
-   */
-  void showErrorMessage(String error);
-
-  /**
    * Make the view visible to start the game session.
    */
   void makeVisible();
 
-  // Additionally, your view should (temporarily) print a message (using System.out) containing
-  // the index of the card that was clicked on as well as which player owns that hand.
-  void onCardClicked(PlayerColor player, int cardIndex);
-
-  // a user should be able to click on a cell in the grid and the view should (temporarily) print
-  // a message (using System.out) containing the coordinates of the cell that was clicked on, in
-  // whatever coordinate system you used in your model. Note: this is not the same thing as the
-  // physical mouse coordinates of the mouse event!
-  void onCellClicked(int rowIndex, int colIndex);
-
+  /**
+   * Adds the given features to the components in this view. Components will delegate to the
+   * features for all events.
+   *
+   * @throws IllegalArgumentException if features is null.
+   */
   void addFeatures(Features features);
+
+  /**
+   * Toggles the selection of the card at the given index in the given player's hand.
+   *
+   * @throws IndexOutOfBoundsException if the given index is invalid.
+   * @throws IllegalArgumentException  if the given player is null.
+   */
+  void toggleSelection(PlayerColor player, int cardIndex);
+
+  /**
+   * Deselects any card currently selected.
+   */
+  void clearSelection();
 }

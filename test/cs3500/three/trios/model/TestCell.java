@@ -63,7 +63,7 @@ public class TestCell {
   }
 
   @Test
-  public void testCallGetCardOnHoleCardCellThrows() {
+  public void testCallGetCardOnHoleThrows() {
     assertThrows(IllegalStateException.class, () -> holeCell.getCard());
   }
 

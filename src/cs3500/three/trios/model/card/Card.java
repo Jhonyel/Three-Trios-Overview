@@ -60,4 +60,5 @@ public interface Card {
    * attack value of the specified other card in the opposite direction.
    */
   boolean beats(Card otherCard, Direction direction);
+
 }

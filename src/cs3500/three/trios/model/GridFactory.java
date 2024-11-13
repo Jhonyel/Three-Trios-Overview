@@ -1,9 +1,6 @@
 package cs3500.three.trios.model;
 
-import static cs3500.three.trios.util.Requirements.requireFileIsNotEmpty;
-import static cs3500.three.trios.util.Requirements.requireNonNull;
-import static cs3500.three.trios.util.Requirements.requireValidFilePath;
-
+import cs3500.three.trios.util.Requirements;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,9 +31,9 @@ public class GridFactory {
    */
   public static Cell[][] createFromConfigurationFilePath(String configurationFilePath)
       throws IOException {
-    requireNonNull(configurationFilePath);
-    requireValidFilePath(configurationFilePath);
-    requireFileIsNotEmpty(configurationFilePath);
+    Requirements.requireNonNull(configurationFilePath);
+    Requirements.requireValidFilePath(configurationFilePath);
+    Requirements.requireFileIsNotEmpty(configurationFilePath);
 
     Path path = Paths.get(configurationFilePath);
     List<String> lines = Files.readAllLines(path);
@@ -83,7 +80,7 @@ public class GridFactory {
    * Throws an IllegalArgumentException if not.
    */
   private static void requireLineHasTwoIntegers(String line) {
-    requireNonNull(line);
+    Requirements.requireNonNull(line);
     if (!line.matches("\\d+ \\d+")) {
       throw new IllegalArgumentException("Invalid grid line: " + line);
     }
