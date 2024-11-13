@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * A move strategy which chooses the move with the maximum number of flips. If there are multiple
- * moves with the same number of flips, we break ties first by choosing the north most moves, then
- * by choosing the west most moves, then by choosing the move with the lowest card index.
+ * A move strategy which chooses moves based off their number of flips. If there are multiple moves
+ * with the same number of flips, we break ties first by choosing the north most moves, then by
+ * choosing the west most moves, then by choosing the move with the lowest card index.
  */
 public class MaxNumFlipsMoveStrategy implements MoveStrategy {
 
@@ -27,11 +27,21 @@ public class MaxNumFlipsMoveStrategy implements MoveStrategy {
   @Override
   public List<Move> getMoves(ReadOnlyThreeTriosModel model) {
     Requirements.requireNonNull(model);
+    return getMoves(model, model.getCurrentPlayer());
+  }
+
+  @Override
+  public List<Move> getMoves(ReadOnlyThreeTriosModel model, PlayerColor playerColor) {
+    Requirements.requireNonNull(model);
+    Requirements.requireNonNull(playerColor);
     if (model.isGameOver()) {
       throw new IllegalStateException("the game is over. there are no moves.");
     }
+    if (model.getHand(playerColor).isEmpty()) {
+      throw new IllegalStateException("the player has no cards. there are no moves.");
+    }
 
-    List<Move> moves = getAllMoves(model);
+    List<Move> moves = getAllMoves(model, playerColor);
 
     Comparator<Move> comparingNumFlips =
         comparing(move -> model.getNumFlipsAt(
@@ -47,12 +57,11 @@ public class MaxNumFlipsMoveStrategy implements MoveStrategy {
         .collect(Collectors.toList());
   }
 
-  private static List<Move> getAllMoves(ReadOnlyThreeTriosModel model) {
+  private static List<Move> getAllMoves(ReadOnlyThreeTriosModel model, PlayerColor playerColor) {
     List<Move> moves = new ArrayList<>();
     for (int rowIndex = 0; rowIndex < model.getHeight(); rowIndex++) {
       for (int colIndex = 0; colIndex < model.getWidth(); colIndex++) {
-        PlayerColor currentPlayer = model.getCurrentPlayer();
-        List<PlayerCard> currentHand = model.getHand(currentPlayer);
+        List<PlayerCard> currentHand = model.getHand(playerColor);
         for (int cardIndex = 0; cardIndex < currentHand.size(); cardIndex++) {
           moves.add(new Move(rowIndex, colIndex, cardIndex));
         }
