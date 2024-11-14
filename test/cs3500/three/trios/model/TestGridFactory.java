@@ -5,10 +5,15 @@ import static org.junit.Assert.assertThrows;
 import cs3500.three.trios.Examples;
 import cs3500.three.trios.TestUtils;
 import java.io.IOException;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * A class for testing the GridFactory class.
+ * A class for testing the GridFactory class. Some tests include the statement: assertNotNull(...).
+ * This is because we use helper test methods that use assert methods rather than using assert
+ * statements in the test bodies themselves. However, the style checker requires that all test
+ * bodies include at least one assert statement, including those that use helper test methods. Thus,
+ * we assertNotNull to comply with the style checker.
  */
 public class TestGridFactory {
 
@@ -33,6 +38,8 @@ public class TestGridFactory {
     };
     Cell[][] actualGrid = Examples.create5x7GridWith15CardCells();
     TestUtils.assertArray2DEquals(expectedGrid, actualGrid);
+
+    Assert.assertNotNull(actualGrid); // for style checker. see class javadoc
   }
 
   @Test
@@ -46,6 +53,8 @@ public class TestGridFactory {
     };
     Cell[][] actualGrid = Examples.create3x5GridWith9CardCells();
     TestUtils.assertArray2DEquals(expectedGrid, actualGrid);
+
+    Assert.assertNotNull(actualGrid); // for style checker. see class javadoc
   }
 
   @Test
@@ -61,5 +70,7 @@ public class TestGridFactory {
     };
     Cell[][] actualGrid = Examples.create5x3GridWith9CardCells();
     TestUtils.assertArray2DEquals(expectedGrid, actualGrid);
+
+    Assert.assertNotNull(actualGrid); // for style checker. see class javadoc
   }
 }

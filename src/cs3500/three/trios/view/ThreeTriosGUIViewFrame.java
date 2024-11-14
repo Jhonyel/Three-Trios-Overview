@@ -4,6 +4,7 @@ import cs3500.three.trios.controller.Features;
 import cs3500.three.trios.model.PlayerColor;
 import cs3500.three.trios.model.ReadOnlyThreeTriosModel;
 import cs3500.three.trios.util.Requirements;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -16,9 +17,9 @@ import javax.swing.JFrame;
  */
 public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView {
 
-  private final HandPanelImpl redHandPanel;
-  private final HandPanelImpl blueHandPanel;
-  private final GridPanelImpl gridPanel;
+  private final HandPanel redHandPanel;
+  private final HandPanel blueHandPanel;
+  private final GridPanel gridPanel;
 
   /**
    * Creates a new ThreeTriosGUIViewFrame to visualize the given model. Places the frame in the
@@ -32,13 +33,13 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
     setLayout(new GridBagLayout());
 
     redHandPanel = new HandPanelImpl(model, PlayerColor.RED);
-    add(redHandPanel, getLeftHandPanelConstraints());
+    add((Component) redHandPanel, getLeftHandPanelConstraints());
 
     gridPanel = new GridPanelImpl(model);
-    add(gridPanel, getGridPanelConstraints());
+    add((Component) gridPanel, getGridPanelConstraints());
 
     blueHandPanel = new HandPanelImpl(model, PlayerColor.BLUE);
-    add(blueHandPanel, getRightHandPanelConstraints());
+    add((Component) blueHandPanel, getRightHandPanelConstraints());
 
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setMinimumSize(new Dimension(800, 600));

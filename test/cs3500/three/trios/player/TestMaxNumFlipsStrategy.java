@@ -1,5 +1,6 @@
 package cs3500.three.trios.player;
 
+import cs3500.three.trios.model.ReadOnlyThreeTriosModel;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +21,10 @@ import cs3500.three.trios.model.card.PlayerCard;
 import static cs3500.three.trios.model.card.AttackValue.ONE;
 import static cs3500.three.trios.model.card.AttackValue.TEN;
 
-public class TestMaxNumFlipsStrategy {
+/**
+ * A class to test the max num flips strategy.
+ */
+public class TestMaxNumFlipsStrategy extends TestMoveStrategy {
 
   private Cell[][] grid3x3With9CardCells;
   private Cell[][] grid3x3InProgress;
@@ -28,6 +32,7 @@ public class TestMaxNumFlipsStrategy {
   private ThreeTriosModel modelRedWon;
   private MoveStrategy moveStrategy;
   private Card northWestWinner1AA1;
+  private Card card1111;
 
   @Before
   public void setUp() throws IOException {
@@ -42,7 +47,7 @@ public class TestMaxNumFlipsStrategy {
     Cell emptyCell = Cell.createEmptyCardCell();
     Cell holeCell = Cell.createHoleCell();
 
-    Card card1111 = new CardImpl("name 1 1 1 1");
+    card1111 = new CardImpl("name 1 1 1 1");
     Cell redCell1111 = Cell.createOccupiedCardCell(new PlayerCard(card1111, PlayerColor.RED));
     Cell blueCell1111 = Cell.createOccupiedCardCell(new PlayerCard(card1111, PlayerColor.BLUE));
 
@@ -67,10 +72,13 @@ public class TestMaxNumFlipsStrategy {
     northWestWinner1AA1 = new CardImpl("", ONE, TEN, TEN, ONE);
   }
 
+  private Move getBestMove(ReadOnlyThreeTriosModel model) {
+    return createMoveStrategy().getMoves(model).get(0);
+  }
+
   @Test
   public void testMaxNumFlipsWhenGameIsOver() {
-    Assert.assertThrows(IllegalStateException.class,
-            () -> moveStrategy.getMoves(modelRedWon));
+    Assert.assertThrows(IllegalStateException.class, () -> moveStrategy.getMoves(modelRedWon));
   }
 
   @Test
@@ -115,5 +123,23 @@ public class TestMaxNumFlipsStrategy {
     Move actualMove = moveStrategy.getMoves(game).get(0);
     Move expectedMove = new Move(0, 0, 2);
     Assert.assertEquals(expectedMove, actualMove);
+  }
+
+  @Test
+  public void testGetMoveReturnsOnlyLegalMove() {
+    Move actualMove = getBestMove(
+        ThreeTriosModelImpl.createGameInProgress(
+            grid3x3InProgress,
+            List.of(card1111),
+            List.of()
+        )
+    );
+    Move expectedMove = new Move(0, 0, 0);
+    Assert.assertEquals(expectedMove, actualMove);
+  }
+
+  @Override
+  protected MoveStrategy createMoveStrategy() {
+    return new MaxNumFlipsMoveStrategy();
   }
 }

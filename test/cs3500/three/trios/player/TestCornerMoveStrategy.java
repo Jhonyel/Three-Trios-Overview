@@ -17,6 +17,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * A class to test the corner move strategy.
+ */
 public class TestCornerMoveStrategy extends TestMoveStrategy {
 
   private Cell[][] grid3x3With9CardCells;

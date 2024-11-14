@@ -16,6 +16,7 @@ import org.junit.Test;
  * this class.
  */
 public abstract class TestMoveStrategy {
+
   protected abstract MoveStrategy createMoveStrategy();
 
   @Test
@@ -33,4 +34,28 @@ public abstract class TestMoveStrategy {
     );
     assertThrows(IllegalStateException.class, () -> strategy.getMoves(model));
   }
+
+  @Test
+  public void testGetMoveThrowsWhenModelIsNull() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> createMoveStrategy().getMoves(null, PlayerColor.RED)
+    );
+  }
+
+  @Test
+  public void testGetMoveThrowsWhenPlayerColorIsNull() {
+    ReadOnlyThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+        new Cell[][]{
+            {Cell.createEmptyCardCell()}
+        },
+        List.of(),
+        List.of()
+    );
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> createMoveStrategy().getMoves(model, null)
+    );
+  }
+
 }
