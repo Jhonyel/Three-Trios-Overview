@@ -58,4 +58,20 @@ public abstract class TestMoveStrategy {
     );
   }
 
+  @Test
+  public void testGetMovesThrowsWithNoCards() {
+    MoveStrategy strategy = createMoveStrategy();
+    Cell redCell = Cell.createOccupiedCardCell(new PlayerCard("name 1 1 1 1", PlayerColor.RED));
+    Cell emptyCell = Cell.createEmptyCardCell();
+    ReadOnlyThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+            new Cell[][]{
+                    {redCell, redCell, redCell},
+                    {redCell, emptyCell, redCell},
+                    {redCell, redCell, redCell}
+            },
+            List.of(),
+            List.of()
+    );
+    assertThrows(IllegalStateException.class, () -> strategy.getMoves(model));
+  }
 }
