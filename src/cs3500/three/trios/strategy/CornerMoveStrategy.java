@@ -73,7 +73,7 @@ public class CornerMoveStrategy implements MoveStrategy {
   @Override
   public List<Move> getMoves(ReadOnlyThreeTriosModel model) {
     Requirements.requireNonNull(model);
-    return getMoves(model, model.getCurrentPlayer());
+    return getMoves(model, model.getCurrentPlayerColor());
   }
 
   /**

@@ -79,7 +79,7 @@ public interface ReadOnlyThreeTriosModel {
    *
    * @throws IllegalStateException if the game is over.
    */
-  PlayerColor getCurrentPlayer();
+  PlayerColor getCurrentPlayerColor();
 
   ////////////////////////////////////////////////////////////////////////////
   // ADDED IN HW6

@@ -10,7 +10,6 @@ import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.model.mock.LoggingThreeTriosModel;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -42,7 +41,7 @@ public class TestCornerMoveStrategy extends TestMoveStrategy {
   }
 
   @Before
-  public void setUp() throws IOException {
+  public void setUp()  {
     emptyCell = Cell.createEmptyCardCell();
     holeCell = Cell.createHoleCell();
 

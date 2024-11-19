@@ -29,30 +29,33 @@ public class GridFactory {
    * @throws IllegalArgumentException if the configuration file path is null, the file referred to
    *                                  does not exist, or its contents are not of the right format.
    */
-  public static Cell[][] createFromConfigurationFilePath(String configurationFilePath)
-      throws IOException {
-    Requirements.requireNonNull(configurationFilePath);
-    Requirements.requireValidFilePath(configurationFilePath);
-    Requirements.requireFileIsNotEmpty(configurationFilePath);
+  public static Cell[][] createFromConfigurationFilePath(String configurationFilePath) {
+    try {
+      Requirements.requireNonNull(configurationFilePath);
+      Requirements.requireValidFilePath(configurationFilePath);
+      Requirements.requireFileIsNotEmpty(configurationFilePath);
 
-    Path path = Paths.get(configurationFilePath);
-    List<String> lines = Files.readAllLines(path);
+      Path path = Paths.get(configurationFilePath);
+      List<String> lines = Files.readAllLines(path);
 
-    String firstLine = lines.get(0);
-    requireLineHasTwoIntegers(firstLine);
+      String firstLine = lines.get(0);
+      requireLineHasTwoIntegers(firstLine);
 
-    int numRows = Integer.parseInt(firstLine.split(" ")[0]);
-    int numCols = Integer.parseInt(firstLine.split(" ")[1]);
-    requireNumLinesEqualsNumRowsPlusOne(lines, numRows);
+      int numRows = Integer.parseInt(firstLine.split(" ")[0]);
+      int numCols = Integer.parseInt(firstLine.split(" ")[1]);
+      requireNumLinesEqualsNumRowsPlusOne(lines, numRows);
 
-    Cell[][] grid = new Cell[numRows][numCols];
-    for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
-      String line = lines.get(rowIndex + 1);
-      requireLineLengthEqualsNumCols(line, numCols);
-      Cell[] row = getRowFromString(line);
-      grid[rowIndex] = row;
+      Cell[][] grid = new Cell[numRows][numCols];
+      for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
+        String line = lines.get(rowIndex + 1);
+        requireLineLengthEqualsNumCols(line, numCols);
+        Cell[] row = getRowFromString(line);
+        grid[rowIndex] = row;
+      }
+      return grid;
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
-    return grid;
   }
 
   /**

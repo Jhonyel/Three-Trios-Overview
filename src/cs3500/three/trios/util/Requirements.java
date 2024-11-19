@@ -111,14 +111,19 @@ public class Requirements {
    * Checks that the file at the given file path is not empty. Otherwise, throws an
    * IllegalArgumentException.
    */
-  public static String requireFileIsNotEmpty(String filePath) throws IOException {
-    requireValidFilePath(filePath);
-    Path path = Paths.get(filePath);
-    List<String> lines = Files.readAllLines(path);
-    if (lines.isEmpty()) {
-      throw new IllegalArgumentException("Configuration file is empty");
+  public static String requireFileIsNotEmpty(String filePath) {
+    try {
+      requireValidFilePath(filePath);
+      Path path = Paths.get(filePath);
+      List<String> lines = Files.readAllLines(path);
+      if (lines.isEmpty()) {
+        throw new IllegalArgumentException("Configuration file is empty");
+      }
+      return filePath;
+      
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
-    return filePath;
   }
 
 

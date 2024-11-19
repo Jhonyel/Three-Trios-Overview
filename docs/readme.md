@@ -13,7 +13,7 @@ public class QuickStart {
     ThreeTriosModel model = Examples.create5x7ModelWith15CardCells();
 
     // get the color of the current player
-    PlayerColor currentPlayer = model.getCurrentPlayer();
+    PlayerColor currentPlayer = model.getCurrentPlayerColor();
 
     // get the hand of the current player
     List<PlayerCard> currentHand = model.getHand(currentPlayer);

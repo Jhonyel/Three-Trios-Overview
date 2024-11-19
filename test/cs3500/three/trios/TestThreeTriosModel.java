@@ -15,7 +15,6 @@ import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.util.Utils;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -52,7 +51,7 @@ public class TestThreeTriosModel {
   private Cell blueCellAAAA;
 
   @Before
-  public void setUp() throws IOException {
+  public void setUp()  {
     grid5x7With15CardCells = Examples.create5x7GridWith15CardCells();
     model5x7With15CardCells = Examples.create5x7ModelWith15CardCells();
 
@@ -343,22 +342,22 @@ public class TestThreeTriosModel {
   ////////////////////////////////////////////////////////////////////////////
 
   @Test
-  public void testGetCurrentPlayer() {
-    assertEquals(PlayerColor.RED, model5x7With15CardCells.getCurrentPlayer());
+  public void testGetCurrentPlayerColor() {
+    assertEquals(PlayerColor.RED, model5x7With15CardCells.getCurrentPlayerColor());
   }
 
   @Test
-  public void testPlayCardThenGetCurrentPlayer() {
-    assertEquals(PlayerColor.RED, model5x7With15CardCells.getCurrentPlayer());
+  public void testPlayCardThenGetCurrentPlayerColor() {
+    assertEquals(PlayerColor.RED, model5x7With15CardCells.getCurrentPlayerColor());
     model5x7With15CardCells.playCardAt(4, 6, 0);
-    assertEquals(PlayerColor.BLUE, model5x7With15CardCells.getCurrentPlayer());
+    assertEquals(PlayerColor.BLUE, model5x7With15CardCells.getCurrentPlayerColor());
   }
 
   @Test
-  public void testGetCurrentPlayerWhenGameIsOver() {
+  public void testGetCurrentPlayerColorWhenGameIsOver() {
     assertThrows(
         IllegalStateException.class,
-        () -> modelRedWon.getCurrentPlayer()
+        () -> modelRedWon.getCurrentPlayerColor()
     );
   }
 

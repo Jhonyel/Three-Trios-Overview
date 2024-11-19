@@ -14,9 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 import cs3500.three.trios.Examples;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,7 +33,7 @@ public class TestCardListFactory {
   }
 
   @Test
-  public void testCreate10CardsFromConfigurationFilePath() throws IOException {
+  public void testCreate10CardsFromConfigurationFilePath()  {
     List<Card> expectedCards = List.of(
         new CardImpl("BlazingTiger", TEN, SEVEN, THREE, FIVE),
         new CardImpl("FrozenWolf", NINE, ONE, EIGHT, SIX),
@@ -53,7 +51,7 @@ public class TestCardListFactory {
   }
 
   @Test
-  public void testCreate16CardsFromConfigurationFilePath() throws IOException {
+  public void testCreate16CardsFromConfigurationFilePath()  {
     List<Card> expectedCards = List.of(
         new CardImpl("BlazingPhoenix", NINE, SEVEN, TEN, FIVE),
         new CardImpl("FrozenDragon", SIX, TEN, FOUR, EIGHT),
@@ -85,7 +83,7 @@ public class TestCardListFactory {
   }
 
   @Test
-  public void testCreateCardsFromConfigurationFilePathWithEmptyFile() throws IOException {
+  public void testCreateCardsFromConfigurationFilePathWithEmptyFile()  {
     assertEquals(
         List.of(),
         CardListFactory.createFromConfigurationFilePath(

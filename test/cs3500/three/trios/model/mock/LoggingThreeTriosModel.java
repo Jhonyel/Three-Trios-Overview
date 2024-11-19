@@ -80,9 +80,9 @@ public class LoggingThreeTriosModel implements ReadOnlyThreeTriosModel {
   }
 
   @Override
-  public PlayerColor getCurrentPlayer() {
-    log("getCurrentPlayer()\n");
-    return model.getCurrentPlayer();
+  public PlayerColor getCurrentPlayerColor() {
+    log("getCurrentPlayerColor()\n");
+    return model.getCurrentPlayerColor();
   }
 
   @Override

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import cs3500.three.trios.Examples;
 import cs3500.three.trios.model.ThreeTriosModel;
-import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,7 +20,7 @@ public class TestThreeTriosTextView {
   private Appendable output;
 
   @Before
-  public void setUp() throws IOException {
+  public void setUp()  {
     this.new5x7ModelWith15CardCells = Examples.create5x7ModelWith15CardCells();
     this.new3x5ModelWith9CardCells = Examples.create3x5ModelWith9CardCells();
     this.new5x3ModelWith9CardCells = Examples.create5x3ModelWith9CardCells();
