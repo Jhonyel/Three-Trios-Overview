@@ -1,4 +1,4 @@
-package cs3500.three.trios.player;
+package cs3500.three.trios.strategy;
 
 import cs3500.three.trios.model.ReadOnlyThreeTriosModel;
 import org.junit.Assert;

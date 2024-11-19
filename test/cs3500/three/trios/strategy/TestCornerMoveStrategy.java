@@ -1,4 +1,4 @@
-package cs3500.three.trios.player;
+package cs3500.three.trios.strategy;
 
 import static cs3500.three.trios.model.card.AttackValue.ONE;
 import static cs3500.three.trios.model.card.AttackValue.TEN;
