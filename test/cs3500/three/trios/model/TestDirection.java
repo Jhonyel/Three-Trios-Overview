@@ -1,6 +1,9 @@
 package cs3500.three.trios.model;
 
-import static cs3500.three.trios.model.Direction.*;
+import static cs3500.three.trios.model.Direction.EAST;
+import static cs3500.three.trios.model.Direction.NORTH;
+import static cs3500.three.trios.model.Direction.SOUTH;
+import static cs3500.three.trios.model.Direction.WEST;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;

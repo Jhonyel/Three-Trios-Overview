@@ -1,4 +1,4 @@
-package cs3500.three.trios.player;
+package cs3500.three.trios.strategy;
 
 import static cs3500.three.trios.model.card.AttackValue.ONE;
 import static cs3500.three.trios.model.card.AttackValue.TEN;
@@ -17,6 +17,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * A class to test the corner move strategy.
+ */
 public class TestCornerMoveStrategy extends TestMoveStrategy {
 
   private Cell[][] grid3x3With9CardCells;

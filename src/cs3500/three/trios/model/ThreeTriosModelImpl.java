@@ -2,6 +2,7 @@ package cs3500.three.trios.model;
 
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.PlayerCard;
+import cs3500.three.trios.player.Player;
 import cs3500.three.trios.util.Requirements;
 import cs3500.three.trios.util.Utils;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * A class for representing a game of Three Trios.
  */
-public class ThreeTriosModelImpl implements ThreeTriosModel {
+public class ThreeTriosModelImpl implements ThreeTriosModel, ModelFeatures {
 
   private final Cell[][] grid;
   private PlayerColor currentPlayerColor;
@@ -20,6 +21,8 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   private final List<PlayerCard> blueHand;
   private final int gridWidth;
   private final int gridHeight;
+
+  // todo - add fields: Map<PlayerColor, Player> players, boolean isStarted
 
   private ThreeTriosModelImpl(
       Cell[][] grid, List<? extends Card> redHand, List<? extends Card> blueHand
@@ -172,6 +175,8 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     currentPlayerColor = (currentPlayerColor == PlayerColor.RED)
         ? PlayerColor.BLUE
         : PlayerColor.RED;
+
+    // notify new player it is their turn
   }
 
   @Override
@@ -478,5 +483,21 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
    */
   private boolean isColIndexValid(int colIndex) {
     return colIndex >= 0 && colIndex < gridWidth;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////
+  // ADDED IN HW 7
+  ////////////////////////////////////////////////////////////////////////////
+
+  @Override
+  public void startGame() {
+    // todo - implement
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public void addPlayer(Player player) {
+    // todo - implement
+    throw new UnsupportedOperationException();
   }
 }

@@ -1,4 +1,4 @@
-package cs3500.three.trios.player;
+package cs3500.three.trios.strategy;
 
 import static cs3500.three.trios.model.Direction.EAST;
 import static cs3500.three.trios.model.Direction.NORTH;

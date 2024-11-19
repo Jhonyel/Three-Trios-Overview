@@ -1,4 +1,4 @@
-package cs3500.three.trios.player;
+package cs3500.three.trios.strategy;
 
 import static org.junit.Assert.assertThrows;
 
@@ -16,6 +16,7 @@ import org.junit.Test;
  * this class.
  */
 public abstract class TestMoveStrategy {
+
   protected abstract MoveStrategy createMoveStrategy();
 
   @Test
@@ -35,9 +36,26 @@ public abstract class TestMoveStrategy {
   }
 
   @Test
-  public void testGetMovesThrowsWithNullModel() {
-    MoveStrategy strategy = createMoveStrategy();
-    assertThrows(IllegalArgumentException.class, () -> strategy.getMoves(null));
+  public void testGetMoveThrowsWhenModelIsNull() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> createMoveStrategy().getMoves(null, PlayerColor.RED)
+    );
+  }
+
+  @Test
+  public void testGetMoveThrowsWhenPlayerColorIsNull() {
+    ReadOnlyThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
+        new Cell[][]{
+            {Cell.createEmptyCardCell()}
+        },
+        List.of(),
+        List.of()
+    );
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> createMoveStrategy().getMoves(model, null)
+    );
   }
 
   @Test

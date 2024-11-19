@@ -1,7 +1,5 @@
 package cs3500.three.trios;
 
-import static cs3500.three.trios.model.card.AttackValue.ONE;
-import static cs3500.three.trios.model.card.AttackValue.TWO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -35,7 +33,6 @@ import org.junit.Test;
 public class TestThreeTriosModel {
 
   private Cell[][] grid5x7With15CardCells;
-  private Cell[][] grid3x3With9CardCells;
   private Cell[][] jaggedGrid;
 
   private List<Card> listOf16Cards;
@@ -46,16 +43,11 @@ public class TestThreeTriosModel {
 
   private Card card1111;
   private Card cardAAAA;
-  private PlayerCard redCard1111;
-  private PlayerCard redCardAAAA;
-  private PlayerCard blueCard1111;
-  private PlayerCard blueCardAAAA;
 
   private Cell emptyCell;
   private Cell holeCell;
 
   private Cell redCell1111;
-  private Cell redCellAAAA;
   private Cell blueCell1111;
   private Cell blueCellAAAA;
 
@@ -76,23 +68,15 @@ public class TestThreeTriosModel {
     listOf16Cards = Examples.create16Cards();
     listOf10Cards = Examples.create10Cards();
 
-    grid3x3With9CardCells = new Cell[][]{
-        {emptyCell, emptyCell, emptyCell},
-        {emptyCell, emptyCell, emptyCell},
-        {emptyCell, emptyCell, emptyCell}
-    };
-
     card1111 = new CardImpl("name 1 1 1 1");
     cardAAAA = new CardImpl("name A A A A");
 
-    redCard1111 = new PlayerCard(card1111, PlayerColor.RED);
-    redCardAAAA = new PlayerCard(cardAAAA, PlayerColor.RED);
+    PlayerCard redCard1111 = new PlayerCard(card1111, PlayerColor.RED);
 
-    blueCard1111 = new PlayerCard(card1111, PlayerColor.BLUE);
-    blueCardAAAA = new PlayerCard(cardAAAA, PlayerColor.BLUE);
+    PlayerCard blueCard1111 = new PlayerCard(card1111, PlayerColor.BLUE);
+    PlayerCard blueCardAAAA = new PlayerCard(cardAAAA, PlayerColor.BLUE);
 
     redCell1111 = Cell.createOccupiedCardCell(redCard1111);
-    redCellAAAA = Cell.createOccupiedCardCell(redCardAAAA);
 
     blueCell1111 = Cell.createOccupiedCardCell(blueCard1111);
     blueCellAAAA = Cell.createOccupiedCardCell(blueCardAAAA);

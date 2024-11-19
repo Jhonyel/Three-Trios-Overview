@@ -13,6 +13,8 @@ public class ThreeTriosController implements Features {
   private final ThreeTriosGUIView view;
   private final ThreeTriosModel model;
 
+  // todo - add field: private final Player player
+
   /**
    * Creates a new controller with the given non-null view and model.
    *
@@ -25,10 +27,22 @@ public class ThreeTriosController implements Features {
   }
 
   @Override
-  public void onHandCardClicked(PlayerColor player, int cardIndex) {
-    System.out.printf("Card clicked in %s's hand at index %d\n", player, cardIndex);
-    if (player == model.getCurrentPlayer()) {
-      view.toggleSelection(player, cardIndex);
+  public void onHandCardClicked(PlayerColor playerColor, int cardIndex) {
+    System.out.printf("Card clicked in %s's hand at index %d\n", playerColor, cardIndex);
+
+    // if playerColor != player.getPlayerColor()
+    // - displayMessage("Please select a card in the {player.getPlayerColor()} hand");
+    // - view.clearSelection();
+    // - return
+
+    // if playerColor != model.getCurrentPlayer()
+    // - displayMessage("It is not {player.getPlayerColor()}'s turn");
+    // - return
+
+    // view.toggleSelection(player, cardIndex);
+
+    if (playerColor == model.getCurrentPlayer()) {
+      view.toggleSelection(playerColor, cardIndex);
     } else {
       view.clearSelection();
     }
@@ -43,6 +57,9 @@ public class ThreeTriosController implements Features {
   public void onCellClicked(int rowIndex, int colIndex) {
     System.out.printf("Cell clicked at row %d, column %d\n", rowIndex, colIndex);
     view.clearSelection();
+
+    // if model.getCurrentPlayer() == player.getPlayerColor()
+    // - player.playCardAt(rowIndex, colIndex, view.getSelectedCardIndex());
   }
 
 }

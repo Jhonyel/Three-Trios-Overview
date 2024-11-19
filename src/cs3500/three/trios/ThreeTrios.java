@@ -13,6 +13,7 @@ import static cs3500.three.trios.model.card.AttackValue.TWO;
 
 import cs3500.three.trios.controller.ThreeTriosController;
 import cs3500.three.trios.model.Cell;
+import cs3500.three.trios.model.ThreeTriosModel;
 import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.view.ThreeTriosGUIViewFrame;
@@ -30,7 +31,7 @@ public class ThreeTrios {
     Cell holeCell = Cell.createHoleCell();
     Cell emptyCell = Cell.createEmptyCardCell();
 
-    ThreeTriosModelImpl model = ThreeTriosModelImpl.createGameInProgress(
+    ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
         new Cell[][]{
             {emptyCell, emptyCell, holeCell},
             {emptyCell, emptyCell, emptyCell},
@@ -55,7 +56,5 @@ public class ThreeTrios {
     view.makeVisible();
 
     model.playCardAt(0, 0, 0);
-    // model.playCardAt(0, 1, 0);
-    // model.playCardAt(2, 2, 0);
   }
 }
