@@ -42,5 +42,4 @@ public interface ThreeTriosModel extends ReadOnlyThreeTriosModel {
    */
   void playCardAt(int rowIndex, int colIndex, int cardIndex);
 
-
 }

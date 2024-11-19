@@ -133,4 +133,15 @@ public interface ReadOnlyThreeTriosModel {
    * @throws IllegalArgumentException if player is null.
    */
   int getScore(PlayerColor player);
+
+  /**
+   * Returns a copy of this model. Mutating this model (if possible) will not affect the copy.
+   */
+  default ThreeTriosModel getCopy() {
+    return ThreeTriosModelImpl.createGameInProgress(
+        getGrid(),
+        getHand(PlayerColor.RED),
+        getHand(PlayerColor.BLUE)
+    );
+  }
 }

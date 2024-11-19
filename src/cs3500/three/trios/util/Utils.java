@@ -1,5 +1,8 @@
 package cs3500.three.trios.util;
 
+import cs3500.three.trios.model.PlayerColor;
+import cs3500.three.trios.model.ReadOnlyThreeTriosModel;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,5 +36,22 @@ public class Utils {
     return list.stream()
         .map(Object::toString)
         .collect(Collectors.joining(delimiter));
+  }
+
+  /**
+   * Returns true if the two supplied models have the same grids and hands, false otherwise.
+   *
+   * @throws IllegalArgumentException if either model is null.
+   */
+  public static boolean areModelsEqual(
+      ReadOnlyThreeTriosModel modelA,
+      ReadOnlyThreeTriosModel modelB
+  ) {
+    Requirements.requireNonNull(modelA);
+    Requirements.requireNonNull(modelB);
+
+    return Arrays.deepEquals(modelA.getGrid(), modelB.getGrid())
+        && modelA.getHand(PlayerColor.RED).equals(modelB.getHand(PlayerColor.RED))
+        && modelA.getHand(PlayerColor.BLUE).equals(modelB.getHand(PlayerColor.BLUE));
   }
 }
