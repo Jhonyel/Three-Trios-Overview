@@ -4,6 +4,7 @@ import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.player.Player;
 import cs3500.three.trios.util.LatchBoolean;
 import cs3500.three.trios.util.Requirements;
+import cs3500.three.trios.util.Utils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,14 +22,17 @@ public class ObservableThreeTriosModelImpl implements ObservableThreeTriosModel 
 
   /**
    * Creates a new ObservableThreeTriosModelImpl with the given model. Upon construction, no players
-   * are registered as observers of this model.
+   * are registered as observers of this model. Invoking `playCardAt` on the supplied model will
+   * have no effect on this model.
    *
    * @throws IllegalArgumentException if the model is null.
    */
   public ObservableThreeTriosModelImpl(ThreeTriosModel model) {
-    this.model = Requirements.requireNonNull(model);
+    Requirements.requireNonNull(model);
+    this.model = model.getCopy();
     this.players = new HashMap<>();
     this.isGameStarted = new LatchBoolean();
+
   }
 
   @Override
@@ -186,4 +190,15 @@ public class ObservableThreeTriosModelImpl implements ObservableThreeTriosModel 
     model.playCardAt(rowIndex, colIndex, cardIndex);
     onTurnChanged();
   }
+
+  ////////////////////////////////////////////////////////////////////////////
+
+  @Override
+  public boolean equals(Object other) {
+    if (other instanceof ReadOnlyThreeTriosModel) {
+      return Utils.areModelsEqual(this, (ReadOnlyThreeTriosModel) other);
+    }
+    return false;
+  }
+
 }

@@ -34,7 +34,8 @@ public abstract class Player {
   }
 
   /**
-   * Invoked when the turn changes to this player.
+   * Invoked when the turn changes to this player. This method should only ever be invoked by the
+   * model.
    */
   public abstract void onTurn();
 

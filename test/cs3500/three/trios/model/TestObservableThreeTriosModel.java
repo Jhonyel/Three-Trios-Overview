@@ -1,5 +1,6 @@
 package cs3500.three.trios.model;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 import cs3500.three.trios.Examples;
@@ -14,6 +15,7 @@ public class TestObservableThreeTriosModel {
 
   private ObservableThreeTriosModel notStartedModel3x3;
   private ObservableThreeTriosModel startedModel3x3HumanPlayers;
+  private ThreeTriosModel notObservableModel3x3;
 
   private ObservableThreeTriosModel createNotStartedModel(ThreeTriosModel model) {
     return new ObservableThreeTriosModelImpl(model);
@@ -31,9 +33,9 @@ public class TestObservableThreeTriosModel {
 
   @Before
   public void setUp() {
-    ThreeTriosModel model3x3 = Examples.create3x3ModelWith9CardCells();
-    notStartedModel3x3 = createNotStartedModel(model3x3);
-    startedModel3x3HumanPlayers = createStartedModelWithHumanPlayers(model3x3);
+    notObservableModel3x3 = Examples.create3x3ModelWith9CardCells();
+    notStartedModel3x3 = createNotStartedModel(notObservableModel3x3);
+    startedModel3x3HumanPlayers = createStartedModelWithHumanPlayers(notObservableModel3x3);
   }
 
   @Test
@@ -42,6 +44,13 @@ public class TestObservableThreeTriosModel {
         IllegalArgumentException.class,
         () -> new ObservableThreeTriosModelImpl(null)
     );
+  }
+
+  @Test
+  public void testModifyingSuppliedModelDoesNotAffectConstructedModel() {
+    ThreeTriosModel observableModelCopy = notStartedModel3x3.getCopy();
+    notObservableModel3x3.playCardAt(0, 0, 0);
+    assertEquals(observableModelCopy, notStartedModel3x3);
   }
 
   @Test

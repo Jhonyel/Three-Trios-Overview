@@ -106,7 +106,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
    * @return a new ThreeTriosModelImpl representing the game in progress.
    */
   public static ThreeTriosModelImpl createGameInProgress(
-      Cell[][] grid, List<Card> redHand, List<Card> blueHand
+      Cell[][] grid, List<? extends Card> redHand, List<? extends Card> blueHand
   ) {
     return new ThreeTriosModelImpl(grid, redHand, blueHand);
   }
@@ -485,4 +485,11 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     return colIndex >= 0 && colIndex < gridWidth;
   }
 
+  @Override
+  public boolean equals(Object other) {
+    if (other instanceof ReadOnlyThreeTriosModel) {
+      return Utils.areModelsEqual(this, (ReadOnlyThreeTriosModel) other);
+    }
+    return false;
+  }
 }
