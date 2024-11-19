@@ -21,6 +21,8 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
   private final HandPanel blueHandPanel;
   private final GridPanel gridPanel;
 
+  // todo - add field: int selectedCardIndex
+
   /**
    * Creates a new ThreeTriosGUIViewFrame to visualize the given model. Places the frame in the
    * middle of the screen.

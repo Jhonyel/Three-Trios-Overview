@@ -38,4 +38,6 @@ public interface ThreeTriosGUIView {
    * Deselects any card currently selected.
    */
   void clearSelection();
+
+  // todo - implement void getSelectedCardIndex()
 }
