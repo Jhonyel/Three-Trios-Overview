@@ -35,13 +35,13 @@ public class ThreeTriosController implements Features {
     // - view.clearSelection();
     // - return
 
-    // if playerColor != model.getCurrentPlayer()
+    // if playerColor != model.getCurrentPlayerColor()
     // - displayMessage("It is not {player.getPlayerColor()}'s turn");
     // - return
 
     // view.toggleSelection(player, cardIndex);
 
-    if (playerColor == model.getCurrentPlayer()) {
+    if (playerColor == model.getCurrentPlayerColor()) {
       view.toggleSelection(playerColor, cardIndex);
     } else {
       view.clearSelection();
@@ -58,7 +58,7 @@ public class ThreeTriosController implements Features {
     System.out.printf("Cell clicked at row %d, column %d\n", rowIndex, colIndex);
     view.clearSelection();
 
-    // if model.getCurrentPlayer() == player.getPlayerColor()
+    // if model.getCurrentPlayerColor() == player.getPlayerColor()
     // - player.playCardAt(rowIndex, colIndex, view.getSelectedCardIndex());
   }
 

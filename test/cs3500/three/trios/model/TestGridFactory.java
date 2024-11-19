@@ -4,7 +4,6 @@ import static org.junit.Assert.assertThrows;
 
 import cs3500.three.trios.Examples;
 import cs3500.three.trios.TestUtils;
-import java.io.IOException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -26,7 +25,7 @@ public class TestGridFactory {
   }
 
   @Test
-  public void testCreate5x7GridWith15CardCells() throws IOException {
+  public void testCreate5x7GridWith15CardCells()  {
     Cell empty = Cell.createEmptyCardCell();
     Cell hole = Cell.createHoleCell();
     Cell[][] expectedGrid = {
@@ -43,7 +42,7 @@ public class TestGridFactory {
   }
 
   @Test
-  public void testCreate3x5GridWith9CardCells() throws IOException {
+  public void testCreate3x5GridWith9CardCells()  {
     Cell empty = Cell.createEmptyCardCell();
     Cell hole = Cell.createHoleCell();
     Cell[][] expectedGrid = {
@@ -58,7 +57,7 @@ public class TestGridFactory {
   }
 
   @Test
-  public void testCreate5x3GridWith9CardCells() throws IOException {
+  public void testCreate5x3GridWith9CardCells()  {
     Cell empty = Cell.createEmptyCardCell();
     Cell hole = Cell.createHoleCell();
     Cell[][] expectedGrid = {

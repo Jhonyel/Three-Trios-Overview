@@ -51,7 +51,7 @@ will be dealt to the blue player. The rest of the cards will be discarded.
 
 The following methods are used in the view so that players can visualize the state of the game.
 
-- `getCurrentPlayer()` returns the color of the current player. The view will show the players whose
+- `getCurrentPlayerColor()` returns the color of the current player. The view will show the players whose
   turns it is using this method, if the game is not over.
 - `getHand(PlayerColor playerColor)` returns a copy of the hand of the player with the specified
   player color. The view will show the current player their hand using this method, if the game is

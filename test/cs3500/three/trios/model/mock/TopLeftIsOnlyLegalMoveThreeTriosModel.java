@@ -58,8 +58,8 @@ public class TopLeftIsOnlyLegalMoveThreeTriosModel implements ReadOnlyThreeTrios
   }
 
   @Override
-  public PlayerColor getCurrentPlayer() {
-    return model.getCurrentPlayer();
+  public PlayerColor getCurrentPlayerColor() {
+    return model.getCurrentPlayerColor();
   }
 
   @Override

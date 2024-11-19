@@ -54,7 +54,7 @@ public class ThreeTriosTextView implements ThreeTriosView {
       stringBuilder.append(String.format("Winner: %s\n", winner == null ? "Tie" : winner));
 
     } else {
-      PlayerColor currentPlayer = model.getCurrentPlayer();
+      PlayerColor currentPlayer = model.getCurrentPlayerColor();
       stringBuilder.append(String.format("Player: %s\n", currentPlayer));
     }
     Cell[][] grid = model.getGrid();
@@ -69,7 +69,7 @@ public class ThreeTriosTextView implements ThreeTriosView {
     }
     if (!model.isGameOver()) {
       stringBuilder.append("\n");
-      PlayerColor currentPlayer = model.getCurrentPlayer();
+      PlayerColor currentPlayer = model.getCurrentPlayerColor();
       List<PlayerCard> hand = model.getHand(currentPlayer);
       stringBuilder.append("Hand:\n");
       stringBuilder.append(Utils.joinToString(hand, "\n"));

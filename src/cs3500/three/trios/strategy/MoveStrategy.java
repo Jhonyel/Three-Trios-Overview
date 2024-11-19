@@ -29,4 +29,12 @@ public interface MoveStrategy {
    * @throws IllegalArgumentException if the given model or player is null.
    */
   List<Move> getMoves(ReadOnlyThreeTriosModel model, PlayerColor playerColor);
+
+  /**
+   * Returns the best move for the current player in the given game state.
+   */
+  default Move getBestMove(ReadOnlyThreeTriosModel model) {
+    List<Move> moves = getMoves(model);
+    return moves.get(0);
+  }
 }

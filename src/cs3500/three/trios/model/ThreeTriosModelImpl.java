@@ -2,7 +2,6 @@ package cs3500.three.trios.model;
 
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.PlayerCard;
-import cs3500.three.trios.player.Player;
 import cs3500.three.trios.util.Requirements;
 import cs3500.three.trios.util.Utils;
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * A class for representing a game of Three Trios.
  */
-public class ThreeTriosModelImpl implements ThreeTriosModel, ModelFeatures {
+public class ThreeTriosModelImpl implements ThreeTriosModel {
 
   private final Cell[][] grid;
   private PlayerColor currentPlayerColor;
@@ -22,10 +21,11 @@ public class ThreeTriosModelImpl implements ThreeTriosModel, ModelFeatures {
   private final int gridWidth;
   private final int gridHeight;
 
-  // todo - add fields: Map<PlayerColor, Player> players, boolean isStarted
 
   private ThreeTriosModelImpl(
-      Cell[][] grid, List<? extends Card> redHand, List<? extends Card> blueHand
+      Cell[][] grid,
+      List<? extends Card> redHand,
+      List<? extends Card> blueHand
   ) {
     Requirements.requireNonNullArray2D(grid);
     Requirements.requireRectangularArray2D(grid);
@@ -276,7 +276,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel, ModelFeatures {
    * Returns the hand of the current player.
    */
   private List<PlayerCard> getCurrentHand() {
-    // note: we use currentPlayerColor instead of getCurrentPlayer() because getCurrentPlayer()
+    // note: we use currentPlayerColor instead of getCurrentPlayerColor() because getCurrentPlayerColor()
     // only works if the game is not over. we want to call getCurrentHand() even if the game is
     // over because we still have to do battle after the last card is played.
     return getHand(currentPlayerColor);
@@ -361,7 +361,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel, ModelFeatures {
   }
 
   @Override
-  public PlayerColor getCurrentPlayer() {
+  public PlayerColor getCurrentPlayerColor() {
     requireGameIsNotOver();
     return currentPlayerColor;
   }
@@ -386,7 +386,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel, ModelFeatures {
   @Override
   public int getNumFlipsAt(int rowIndex, int colIndex, int cardIndex) {
     requireCardIndexIsValid(cardIndex);
-    PlayerColor currentPlayer = getCurrentPlayer();
+    PlayerColor currentPlayer = getCurrentPlayerColor();
     List<PlayerCard> hand = getHand(currentPlayer);
     PlayerCard card = hand.get(cardIndex);
 
@@ -485,19 +485,4 @@ public class ThreeTriosModelImpl implements ThreeTriosModel, ModelFeatures {
     return colIndex >= 0 && colIndex < gridWidth;
   }
 
-  ////////////////////////////////////////////////////////////////////////////
-  // ADDED IN HW 7
-  ////////////////////////////////////////////////////////////////////////////
-
-  @Override
-  public void startGame() {
-    // todo - implement
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public void addPlayer(Player player) {
-    // todo - implement
-    throw new UnsupportedOperationException();
-  }
 }

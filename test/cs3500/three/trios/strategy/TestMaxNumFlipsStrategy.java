@@ -1,25 +1,22 @@
 package cs3500.three.trios.strategy;
 
-import cs3500.three.trios.model.ReadOnlyThreeTriosModel;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import static cs3500.three.trios.model.card.AttackValue.ONE;
+import static cs3500.three.trios.model.card.AttackValue.TEN;
 
 import cs3500.three.trios.Examples;
 import cs3500.three.trios.model.Cell;
 import cs3500.three.trios.model.PlayerColor;
+import cs3500.three.trios.model.ReadOnlyThreeTriosModel;
 import cs3500.three.trios.model.ThreeTriosModel;
 import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.model.card.PlayerCard;
-
-import static cs3500.three.trios.model.card.AttackValue.ONE;
-import static cs3500.three.trios.model.card.AttackValue.TEN;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * A class to test the max num flips strategy.
@@ -35,7 +32,7 @@ public class TestMaxNumFlipsStrategy extends TestMoveStrategy {
   private Card card1111;
 
   @Before
-  public void setUp() throws IOException {
+  public void setUp()  {
     handOfFiveWeakestCards = List.of(
             new CardImpl("0", ONE, ONE, ONE, ONE),
             new CardImpl("1", ONE, ONE, ONE, ONE),

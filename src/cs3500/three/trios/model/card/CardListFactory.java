@@ -25,20 +25,23 @@ public class CardListFactory {
    * @return The newly constructed list of cards.
    * @throws IllegalArgumentException if the configuration file path is null, the file referred to
    *                                  does not exist, or its contents are not of the right format.
-   * @throws IOException              if an I/O error occurs while reading the file.
+   * @throws RuntimeException         if an I/O error occurs while reading the file.
    */
-  public static List<Card> createFromConfigurationFilePath(String configurationFilePath)
-      throws IOException {
+  public static List<Card> createFromConfigurationFilePath(String configurationFilePath) {
 
-    Requirements.requireNonNull(configurationFilePath);
-    Requirements.requireValidFilePath(configurationFilePath);
-    Path path = Paths.get(configurationFilePath);
-    List<String> lines = Files.readAllLines(path);
-    List<Card> cards = new ArrayList<>();
-    for (String line : lines) {
-      Card card = new CardImpl(line);
-      cards.add(card);
+    try {
+      Requirements.requireNonNull(configurationFilePath);
+      Requirements.requireValidFilePath(configurationFilePath);
+      Path path = Paths.get(configurationFilePath);
+      List<String> lines = Files.readAllLines(path);
+      List<Card> cards = new ArrayList<>();
+      for (String line : lines) {
+        Card card = new CardImpl(line);
+        cards.add(card);
+      }
+      return cards;
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
-    return cards;
   }
 }
