@@ -12,6 +12,7 @@ import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.model.card.PlayerCard;
+import cs3500.three.trios.model.mock.LoggingThreeTriosModel;
 import cs3500.three.trios.model.mock.TopLeftIsOnlyLegalMoveThreeTriosModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class TestMaxNumFlipsStrategy extends TestMoveStrategy {
   private Cell holeCell;
   private Cell redCell1111;
   private Cell blueCell1111;
+  //private LoggingThreeTriosModel loggingModel;
 
   @Before
   public void setUp() {
