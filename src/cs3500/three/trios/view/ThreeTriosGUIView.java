@@ -50,4 +50,9 @@ public interface ThreeTriosGUIView {
    * @throws IllegalStateException if no card is selected
    */
   int getSelectedCardIndex();
+
+  /**
+   * Returns true if a card in this view is selected, false otherwise.
+   */
+  boolean hasSelectedCard();
 }

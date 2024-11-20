@@ -30,5 +30,6 @@ public class HumanPlayer extends Player {
    */
   @Override
   public void onTurn() {
+    System.out.printf("%s human player playing\n", playerColor);
   }
 }

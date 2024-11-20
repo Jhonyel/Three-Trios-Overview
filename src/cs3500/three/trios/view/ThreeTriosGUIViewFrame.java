@@ -163,4 +163,15 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
     HandPanel handPanel = playerColor == PlayerColor.RED ? redHandPanel : blueHandPanel;
     return handPanel.getSelectedCardIndex();
   }
+
+  @Override
+  public boolean hasSelectedCard() {
+    try {
+      getSelectedCardIndex();
+      return true;
+
+    } catch (IllegalStateException ignored) {
+      return false;
+    }
+  }
 }

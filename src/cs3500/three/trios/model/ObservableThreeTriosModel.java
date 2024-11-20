@@ -32,6 +32,8 @@ public interface ObservableThreeTriosModel extends ThreeTriosModel {
    */
   void registerPlayer(Player player);
 
+  void registerObserver(ThreeTriosModelObserver observer);
+
   /**
    * Returns true if the game has started, false otherwise.
    */

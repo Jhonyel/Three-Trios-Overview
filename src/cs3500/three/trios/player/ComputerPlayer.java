@@ -37,6 +37,7 @@ public class ComputerPlayer extends Player {
    */
   @Override
   public void onTurn() {
+    System.out.printf("%s computer player playing\n", playerColor);
     Move bestMove = strategy.getBestMove(model);
     model.playCardAt(bestMove.getRowIndex(), bestMove.getColIndex(), bestMove.getCardIndex());
   }

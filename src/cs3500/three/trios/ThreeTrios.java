@@ -19,8 +19,10 @@ import cs3500.three.trios.model.PlayerColor;
 import cs3500.three.trios.model.ThreeTriosModel;
 import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.CardImpl;
+import cs3500.three.trios.player.ComputerPlayer;
 import cs3500.three.trios.player.HumanPlayer;
 import cs3500.three.trios.player.Player;
+import cs3500.three.trios.strategy.MaxNumFlipsMoveStrategy;
 import cs3500.three.trios.view.ThreeTriosGUIViewFrame;
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class ThreeTrios {
     ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
         new Cell[][]{
             {emptyCell, emptyCell, holeCell},
-            {emptyCell, emptyCell, emptyCell},
+            {emptyCell, holeCell, holeCell},
             {holeCell, emptyCell, emptyCell}
         },
         List.of(
@@ -56,21 +58,23 @@ public class ThreeTrios {
         )
     );
     ObservableThreeTriosModel observableModel = new ObservableThreeTriosModelImpl(model);
-    ThreeTriosGUIViewFrame redView = new ThreeTriosGUIViewFrame(model, PlayerColor.RED);
-    ThreeTriosGUIViewFrame blueView = new ThreeTriosGUIViewFrame(model, PlayerColor.BLUE);
+    ThreeTriosGUIViewFrame redView = new ThreeTriosGUIViewFrame(observableModel, PlayerColor.RED);
+    ThreeTriosGUIViewFrame blueView = new ThreeTriosGUIViewFrame(observableModel, PlayerColor.BLUE);
     Player redPlayer = new HumanPlayer(observableModel, PlayerColor.RED);
-    Player bluePlayer = new HumanPlayer(observableModel, PlayerColor.BLUE);
+    Player bluePlayer = new ComputerPlayer(
+        observableModel, PlayerColor.BLUE, new MaxNumFlipsMoveStrategy()
+    );
     ThreeTriosController redController = new ThreeTriosController(
         redView, observableModel, redPlayer
     );
     ThreeTriosController blueController = new ThreeTriosController(
         blueView, observableModel, bluePlayer
     );
-    redView.addFeatures(redController);
-    blueView.addFeatures(blueController);
+    // redView.addFeatures(redController);
+    // blueView.addFeatures(blueController);
+    observableModel.startGame();
     redView.makeVisible();
     blueView.makeVisible();
-    observableModel.startGame();
 
     //model.playCardAt(0, 0, 0);
   }
