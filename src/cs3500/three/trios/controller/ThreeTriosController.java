@@ -59,8 +59,8 @@ public class ThreeTriosController implements Features {
     System.out.printf("Cell clicked at row %d, column %d\n", rowIndex, colIndex);
     view.clearSelection();
 
-    // if model.getCurrentPlayerColor() == player.getPlayerColor()
-    // - player.playCardAt(rowIndex, colIndex, view.getSelectedCardIndex());
+    if (model.getCurrentPlayerColor() == player.getPlayerColor()) {
+      model.playCardAt(rowIndex, colIndex, view.getSelectCardIndex());
+    }
   }
-
 }
