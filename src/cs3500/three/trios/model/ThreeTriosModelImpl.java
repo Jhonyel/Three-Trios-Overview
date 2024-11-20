@@ -2,7 +2,6 @@ package cs3500.three.trios.model;
 
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.PlayerCard;
-import cs3500.three.trios.util.LatchBoolean;
 import cs3500.three.trios.util.Requirements;
 import cs3500.three.trios.util.Utils;
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   private final List<PlayerCard> blueHand;
   private final int gridWidth;
   private final int gridHeight;
-  private final LatchBoolean isGameOver;
 
 
   private ThreeTriosModelImpl(
@@ -41,7 +39,6 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     this.blueHand = new ArrayList<>();
     this.gridWidth = grid[0].length;
     this.gridHeight = grid.length;
-    this.isGameOver = new LatchBoolean();
 
     for (Card card : redHand) {
       this.redHand.add(new PlayerCard(card, PlayerColor.RED));
@@ -178,23 +175,6 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     currentPlayerColor = (currentPlayerColor == PlayerColor.RED)
         ? PlayerColor.BLUE
         : PlayerColor.RED;
-
-    if (isGridFull()) {
-      isGameOver.setTrue();
-    }
-  }
-
-  private boolean isGridFull() {
-    for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
-      for (int colIndex = 0; colIndex < gridWidth; colIndex++) {
-        Cell cell = grid[rowIndex][colIndex];
-        if (cell.isEmptyCardCell()) {
-          return false;
-        }
-      }
-    }
-    return true;
-
   }
 
   @Override
@@ -294,9 +274,6 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
    * Returns the hand of the current player.
    */
   private List<PlayerCard> getCurrentHand() {
-    // note: we use currentPlayerColor instead of getCurrentPlayerColor() because getCurrentPlayerColor()
-    // only works if the game is not over. we want to call getCurrentHand() even if the game is
-    // over because we still have to do battle after the last card is played.
     return getHand(currentPlayerColor);
   }
 
@@ -336,7 +313,15 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
 
   @Override
   public boolean isGameOver() {
-    return isGameOver.isTrue();
+    for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
+      for (int colIndex = 0; colIndex < gridWidth; colIndex++) {
+        Cell cell = grid[rowIndex][colIndex];
+        if (cell.isEmptyCardCell()) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   @Override

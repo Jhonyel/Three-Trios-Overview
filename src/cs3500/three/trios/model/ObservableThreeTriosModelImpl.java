@@ -2,7 +2,7 @@ package cs3500.three.trios.model;
 
 import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.player.Player;
-import cs3500.three.trios.util.LatchBoolean;
+import cs3500.three.trios.util.Latch;
 import cs3500.three.trios.util.Requirements;
 import cs3500.three.trios.util.Utils;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class ObservableThreeTriosModelImpl implements ObservableThreeTriosModel 
 
   private final ThreeTriosModel model;
   private final Map<PlayerColor, Player> players;
-  private final LatchBoolean isGameStarted;
+  private final Latch<Boolean> isGameStarted;
   private final List<ThreeTriosModelObserver> observers;
 
   /**
@@ -33,7 +33,7 @@ public class ObservableThreeTriosModelImpl implements ObservableThreeTriosModel 
     Requirements.requireNonNull(model);
     this.model = model.getCopy();
     this.players = new HashMap<>();
-    this.isGameStarted = new LatchBoolean();
+    this.isGameStarted = new Latch<>(false);
     this.observers = new ArrayList<>();
   }
 
@@ -41,7 +41,7 @@ public class ObservableThreeTriosModelImpl implements ObservableThreeTriosModel 
   public void startGame() {
     requireExistsRedAndBluePlayers();
     requireGameHasNotStarted();
-    isGameStarted.setTrue();
+    isGameStarted.set(true);
     onTurnChanged();
   }
 
@@ -64,7 +64,7 @@ public class ObservableThreeTriosModelImpl implements ObservableThreeTriosModel 
 
   @Override
   public boolean isGameStarted() {
-    return isGameStarted.isTrue();
+    return isGameStarted.get();
   }
 
   /**

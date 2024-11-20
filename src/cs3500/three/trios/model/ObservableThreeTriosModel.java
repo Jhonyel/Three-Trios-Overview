@@ -32,6 +32,11 @@ public interface ObservableThreeTriosModel extends ThreeTriosModel {
    */
   void registerPlayer(Player player);
 
+  /**
+   * Registers the given observer to be notified when the turn changes.
+   *
+   * @throws IllegalArgumentException if the given observer is null
+   */
   void registerObserver(ThreeTriosModelObserver observer);
 
   /**
