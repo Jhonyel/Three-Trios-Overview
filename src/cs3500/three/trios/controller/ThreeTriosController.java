@@ -2,6 +2,7 @@ package cs3500.three.trios.controller;
 
 import cs3500.three.trios.model.PlayerColor;
 import cs3500.three.trios.model.ThreeTriosModel;
+import cs3500.three.trios.player.Player;
 import cs3500.three.trios.util.Requirements;
 import cs3500.three.trios.view.ThreeTriosGUIView;
 
@@ -12,8 +13,7 @@ public class ThreeTriosController implements Features {
 
   private final ThreeTriosGUIView view;
   private final ThreeTriosModel model;
-
-  // todo - add field: private final Player player
+  private final Player player;
 
   /**
    * Creates a new controller with the given non-null view and model.
@@ -21,9 +21,10 @@ public class ThreeTriosController implements Features {
    * @param view the non-null view to visualize the game.
    * @param model the non-null model to represent the game.
    */
-  public ThreeTriosController(ThreeTriosGUIView view, ThreeTriosModel model) {
+  public ThreeTriosController(ThreeTriosGUIView view, ThreeTriosModel model, Player player) {
     this.view = Requirements.requireNonNull(view);
     this.model = Requirements.requireNonNull(model);
+    this.player = Requirements.requireNonNull(player);
   }
 
   @Override

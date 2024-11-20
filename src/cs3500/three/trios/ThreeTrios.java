@@ -13,9 +13,14 @@ import static cs3500.three.trios.model.card.AttackValue.TWO;
 
 import cs3500.three.trios.controller.ThreeTriosController;
 import cs3500.three.trios.model.Cell;
+import cs3500.three.trios.model.ObservableThreeTriosModel;
+import cs3500.three.trios.model.ObservableThreeTriosModelImpl;
+import cs3500.three.trios.model.PlayerColor;
 import cs3500.three.trios.model.ThreeTriosModel;
 import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.CardImpl;
+import cs3500.three.trios.player.HumanPlayer;
+import cs3500.three.trios.player.Player;
 import cs3500.three.trios.view.ThreeTriosGUIViewFrame;
 import java.util.List;
 
@@ -50,11 +55,19 @@ public class ThreeTrios {
             new CardImpl("CunningFox", EIGHT, SEVEN, FOUR, THREE)
         )
     );
-    ThreeTriosGUIViewFrame view = new ThreeTriosGUIViewFrame(model);
-    ThreeTriosController controller = new ThreeTriosController(view, model);
-    view.addFeatures(controller);
-    view.makeVisible();
+    ObservableThreeTriosModel observableModel = new ObservableThreeTriosModelImpl(model);
+    ThreeTriosGUIViewFrame redView = new ThreeTriosGUIViewFrame(model);
+    ThreeTriosGUIViewFrame blueView = new ThreeTriosGUIViewFrame(model);
+    Player redPlayer = new HumanPlayer(observableModel, PlayerColor.RED);
+    Player bluePlayer = new HumanPlayer(observableModel, PlayerColor.BLUE);
+    ThreeTriosController redController = new ThreeTriosController(redView, observableModel, redPlayer);
+    ThreeTriosController blueController = new ThreeTriosController(blueView, observableModel, bluePlayer);
+    redView.addFeatures(redController);
+    blueView.addFeatures(blueController);
+    redView.makeVisible();
+    blueView.makeVisible();
+    observableModel.startGame();
 
-    model.playCardAt(0, 0, 0);
+    //model.playCardAt(0, 0, 0);
   }
 }
