@@ -18,7 +18,7 @@ public class ThreeTriosController implements Features {
   /**
    * Creates a new controller with the given non-null view and model.
    *
-   * @param view the non-null view to visualize the game.
+   * @param view  the non-null view to visualize the game.
    * @param model the non-null model to represent the game.
    */
   public ThreeTriosController(ThreeTriosGUIView view, ThreeTriosModel model, Player player) {
@@ -28,25 +28,18 @@ public class ThreeTriosController implements Features {
   }
 
   @Override
-  public void onHandCardClicked(PlayerColor playerColor, int cardIndex) {
-    System.out.printf("Card clicked in %s's hand at index %d\n", playerColor, cardIndex);
+  public void onHandCardClicked(PlayerColor selectedPlayerColor, int cardIndex) {
+    System.out.printf("Card clicked in %s's hand at index %d\n", selectedPlayerColor, cardIndex);
 
-    // if playerColor != player.getPlayerColor()
-    // - displayMessage("Please select a card in the {player.getPlayerColor()} hand");
-    // - view.clearSelection();
-    // - return
-
-    // if playerColor != model.getCurrentPlayerColor()
-    // - displayMessage("It is not {player.getPlayerColor()}'s turn");
-    // - return
-
-    // view.toggleSelection(player, cardIndex);
-
-    if (playerColor == model.getCurrentPlayerColor()) {
-      view.toggleSelection(playerColor, cardIndex);
-    } else {
+    PlayerColor playerColor = player.getPlayerColor();
+    boolean userClickedWrongHand = selectedPlayerColor != playerColor;
+    if (userClickedWrongHand) {
+      view.displayMessage(String.format("Please select a card in the %s hand", playerColor));
       view.clearSelection();
+      return;
     }
+
+    view.toggleSelection(selectedPlayerColor, cardIndex);
   }
 
   @Override

@@ -14,10 +14,10 @@ public interface Features {
    * turn, the selection of the clicked card is toggled. If it is not currently the given player's
    * turn, any selected card is deselected.
    *
-   * @param player    the player of the card clicked.
-   * @param cardIndex the index of the card clicked.
+   * @param playerColor the player of the card clicked.
+   * @param cardIndex   the index of the card clicked.
    */
-  void onHandCardClicked(PlayerColor player, int cardIndex);
+  void onHandCardClicked(PlayerColor playerColor, int cardIndex);
 
   /**
    * Invoked when the user clicks empty space in a hand panel. Any selected card is deselected.

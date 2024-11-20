@@ -132,7 +132,7 @@ public interface ReadOnlyThreeTriosModel {
    *
    * @throws IllegalArgumentException if player is null.
    */
-  int getScore(PlayerColor player);
+  int getScore(PlayerColor playerColor);
 
   /**
    * Returns a copy of this model. Mutating this model (if possible) will not affect the copy.

@@ -26,4 +26,11 @@ public interface HandPanel {
    * Deselects any card currently selected.
    */
   void clearSelection();
+
+  /**
+   * Returns the index of the selected card.
+   *
+   * @throws IllegalStateException if no card is selected
+   */
+  int getSelectedCardIndex();
 }

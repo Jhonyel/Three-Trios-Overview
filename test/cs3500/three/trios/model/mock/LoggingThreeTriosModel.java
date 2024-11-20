@@ -116,8 +116,8 @@ public class LoggingThreeTriosModel implements ReadOnlyThreeTriosModel {
   }
 
   @Override
-  public int getScore(PlayerColor player) {
-    log(String.format("getScore(%s)\n", player));
-    return model.getScore(player);
+  public int getScore(PlayerColor playerColor) {
+    log(String.format("getScore(%s)\n", playerColor));
+    return model.getScore(playerColor);
   }
 }
