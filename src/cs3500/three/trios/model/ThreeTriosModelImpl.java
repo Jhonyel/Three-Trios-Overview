@@ -2,6 +2,7 @@ package cs3500.three.trios.model;
 
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.PlayerCard;
+import cs3500.three.trios.util.LatchBoolean;
 import cs3500.three.trios.util.Requirements;
 import cs3500.three.trios.util.Utils;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   private final List<PlayerCard> blueHand;
   private final int gridWidth;
   private final int gridHeight;
+  private final LatchBoolean isGameOver;
 
 
   private ThreeTriosModelImpl(
@@ -39,6 +41,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
     this.blueHand = new ArrayList<>();
     this.gridWidth = grid[0].length;
     this.gridHeight = grid.length;
+    this.isGameOver = new LatchBoolean();
 
     for (Card card : redHand) {
       this.redHand.add(new PlayerCard(card, PlayerColor.RED));
@@ -176,7 +179,22 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
         ? PlayerColor.BLUE
         : PlayerColor.RED;
 
-    // notify new player it is their turn
+    if (isGridFull()) {
+      isGameOver.setTrue();
+    }
+  }
+
+  private boolean isGridFull() {
+    for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
+      for (int colIndex = 0; colIndex < gridWidth; colIndex++) {
+        Cell cell = grid[rowIndex][colIndex];
+        if (cell.isEmptyCardCell()) {
+          return false;
+        }
+      }
+    }
+    return true;
+
   }
 
   @Override
@@ -318,15 +336,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
 
   @Override
   public boolean isGameOver() {
-    for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
-      for (int colIndex = 0; colIndex < gridWidth; colIndex++) {
-        Cell cell = grid[rowIndex][colIndex];
-        if (cell.isEmptyCardCell()) {
-          return false;
-        }
-      }
-    }
-    return true;
+    return isGameOver.isTrue();
   }
 
   @Override
@@ -362,7 +372,6 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
 
   @Override
   public PlayerColor getCurrentPlayerColor() {
-    requireGameIsNotOver();
     return currentPlayerColor;
   }
 

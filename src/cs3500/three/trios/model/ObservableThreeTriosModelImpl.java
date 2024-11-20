@@ -5,6 +5,7 @@ import cs3500.three.trios.player.Player;
 import cs3500.three.trios.util.LatchBoolean;
 import cs3500.three.trios.util.Requirements;
 import cs3500.three.trios.util.Utils;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ public class ObservableThreeTriosModelImpl implements ObservableThreeTriosModel 
   private final ThreeTriosModel model;
   private final Map<PlayerColor, Player> players;
   private final LatchBoolean isGameStarted;
+  private final List<ThreeTriosModelObserver> observers;
 
   /**
    * Creates a new ObservableThreeTriosModelImpl with the given model. Upon construction, no players
@@ -32,7 +34,7 @@ public class ObservableThreeTriosModelImpl implements ObservableThreeTriosModel 
     this.model = model.getCopy();
     this.players = new HashMap<>();
     this.isGameStarted = new LatchBoolean();
-
+    this.observers = new ArrayList<>();
   }
 
   @Override
@@ -40,6 +42,7 @@ public class ObservableThreeTriosModelImpl implements ObservableThreeTriosModel 
     requireExistsRedAndBluePlayers();
     requireGameHasNotStarted();
     isGameStarted.setTrue();
+    onTurnChanged();
   }
 
   @Override
@@ -51,6 +54,12 @@ public class ObservableThreeTriosModelImpl implements ObservableThreeTriosModel 
       );
     }
     players.put(player.getPlayerColor(), player);
+  }
+
+  @Override
+  public void registerObserver(ThreeTriosModelObserver observer) {
+    Requirements.requireNonNull(observer);
+    observers.add(observer);
   }
 
   @Override
@@ -66,7 +75,10 @@ public class ObservableThreeTriosModelImpl implements ObservableThreeTriosModel 
     // thus: `currentPlayer` refers to the player whose turn it is after `playCardAt` is invoked.
     PlayerColor currentPlayerColor = model.getCurrentPlayerColor();
     Player currentPlayer = players.get(currentPlayerColor);
-    currentPlayer.onTurn();
+    observers.forEach(observer -> observer.onNewTurn(currentPlayerColor));
+    if (!isGameOver()) {
+      currentPlayer.onTurn();
+    }
   }
 
   ////////////////////////////////////////////////////////////////////////////

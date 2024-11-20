@@ -76,8 +76,6 @@ public interface ReadOnlyThreeTriosModel {
 
   /**
    * Returns the player whose turn it currently is.
-   *
-   * @throws IllegalStateException if the game is over.
    */
   PlayerColor getCurrentPlayerColor();
 

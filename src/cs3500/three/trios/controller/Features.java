@@ -16,6 +16,8 @@ public interface Features {
    *
    * @param playerColor the player of the card clicked.
    * @param cardIndex   the index of the card clicked.
+   * @throws IllegalArgumentException  if the given player is null.
+   * @throws IndexOutOfBoundsException if the given index is invalid.
    */
   void onHandCardClicked(PlayerColor playerColor, int cardIndex);
 
