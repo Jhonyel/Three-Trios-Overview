@@ -10,6 +10,10 @@ import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.model.mock.LoggingThreeTriosModel;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -310,5 +314,15 @@ public class TestCornerMoveStrategy extends TestMoveStrategy {
     Assert.assertTrue(logs.contains("isMoveLegalAt(0, 2)"));
     Assert.assertTrue(logs.contains("isMoveLegalAt(2, 0)"));
     Assert.assertTrue(logs.contains("isMoveLegalAt(2, 2)"));
+
+    String filePath = "strategy-transcript/cornerMoveTranscript.txt";
+
+    // Save the content to a file
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+      writer.write(output.toString());
+      System.out.println("Appendable content saved to " + filePath);
+    } catch (IOException e) {
+      System.err.println("Error writing to file: " + e.getMessage());
+    }
   }
 }

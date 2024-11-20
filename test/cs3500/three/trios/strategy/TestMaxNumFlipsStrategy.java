@@ -14,6 +14,10 @@ import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.model.mock.LoggingThreeTriosModel;
 import cs3500.three.trios.model.mock.TopLeftIsOnlyLegalMoveThreeTriosModel;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -152,6 +156,44 @@ public class TestMaxNumFlipsStrategy extends TestMoveStrategy {
     );
     Move expectedMove = new Move(0, 0, 0);
     Assert.assertEquals(expectedMove, actualMove);
+  }
+
+  @Test
+  public void testStrategyWithLoggingMock() {
+    Appendable log = new StringBuilder();
+
+    List<Card> redHand = new ArrayList<>(handOfFiveWeakestCards);
+    List<Card> blueHand = new ArrayList<>(handOfFiveWeakestCards);
+
+    redHand.set(2, northWestWinner1AA1);
+    redHand.set(3, northWestWinner1AA1);
+
+    LoggingThreeTriosModel model = new LoggingThreeTriosModel(ThreeTriosModelImpl.createGameInProgress(
+            new Cell[][]{
+                    {emptyCell, blueCell1111, redCell1111},
+                    {blueCell1111, redCell1111, holeCell},
+                    {emptyCell, blueCell1111, holeCell}
+            },
+            redHand,
+            blueHand
+    ), log);
+
+    String filePath = "strategy-transcript/maxNumFlipsTranscript.txt";
+
+    moveStrategy.getMoves(model);
+    List<String> logs = List.of(log.toString().split("\n"));
+    Assert.assertTrue(logs.contains("isMoveLegalAt(0, 0)"));
+    Assert.assertTrue(logs.contains("isMoveLegalAt(0, 2)"));
+    Assert.assertTrue(logs.contains("isMoveLegalAt(2, 0)"));
+    Assert.assertTrue(logs.contains("isMoveLegalAt(2, 2)"));
+
+    // Save the content to a file
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+      writer.write(log.toString());
+      System.out.println("Appendable content saved to " + filePath);
+    } catch (IOException e) {
+      System.err.println("Error writing to file: " + e.getMessage());
+    }
   }
 
   @Override
