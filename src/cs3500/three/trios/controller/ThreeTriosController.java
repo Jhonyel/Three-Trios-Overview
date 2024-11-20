@@ -53,7 +53,7 @@ public class ThreeTriosController implements Features {
     view.clearSelection();
 
     if (model.getCurrentPlayerColor() == player.getPlayerColor()) {
-      model.playCardAt(rowIndex, colIndex, view.getSelectCardIndex());
+      model.playCardAt(rowIndex, colIndex, view.getSelectedCardIndex());
     }
   }
 }
