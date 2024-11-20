@@ -32,12 +32,22 @@ public interface ThreeTriosGUIView {
    * @throws IndexOutOfBoundsException if the given index is invalid.
    * @throws IllegalArgumentException  if the given player is null.
    */
-  void toggleSelection(PlayerColor player, int cardIndex);
+  void toggleSelection(PlayerColor playerColor, int cardIndex);
 
   /**
    * Deselects any card currently selected.
    */
   void clearSelection();
 
-  // todo - implement void getSelectedCardIndex()
+  /**
+   * Displays the given message in a popup.
+   */
+  void displayMessage(String message);
+
+  /**
+   * Returns the index of the selected card in this view's player's hand.
+   *
+   * @throws IllegalStateException if no card is selected
+   */
+  int getSelectedCardIndex();
 }

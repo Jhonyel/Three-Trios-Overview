@@ -56,12 +56,16 @@ public class ThreeTrios {
         )
     );
     ObservableThreeTriosModel observableModel = new ObservableThreeTriosModelImpl(model);
-    ThreeTriosGUIViewFrame redView = new ThreeTriosGUIViewFrame(model);
-    ThreeTriosGUIViewFrame blueView = new ThreeTriosGUIViewFrame(model);
+    ThreeTriosGUIViewFrame redView = new ThreeTriosGUIViewFrame(model, PlayerColor.RED);
+    ThreeTriosGUIViewFrame blueView = new ThreeTriosGUIViewFrame(model, PlayerColor.BLUE);
     Player redPlayer = new HumanPlayer(observableModel, PlayerColor.RED);
     Player bluePlayer = new HumanPlayer(observableModel, PlayerColor.BLUE);
-    ThreeTriosController redController = new ThreeTriosController(redView, observableModel, redPlayer);
-    ThreeTriosController blueController = new ThreeTriosController(blueView, observableModel, bluePlayer);
+    ThreeTriosController redController = new ThreeTriosController(
+        redView, observableModel, redPlayer
+    );
+    ThreeTriosController blueController = new ThreeTriosController(
+        blueView, observableModel, bluePlayer
+    );
     redView.addFeatures(redController);
     blueView.addFeatures(blueController);
     redView.makeVisible();

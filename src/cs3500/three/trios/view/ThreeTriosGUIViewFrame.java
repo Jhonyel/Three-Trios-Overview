@@ -8,7 +8,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.Optional;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  * The entire visual representation of a game of three trios. Contains a hand panel for the red
@@ -20,18 +22,26 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
   private final HandPanel redHandPanel;
   private final HandPanel blueHandPanel;
   private final GridPanel gridPanel;
-
-  // todo - add field: int selectedCardIndex
+  private final PlayerColor playerColor;
 
   /**
    * Creates a new ThreeTriosGUIViewFrame to visualize the given model. Places the frame in the
-   * middle of the screen.
+   * middle of the screen. The title of the frame will convey the player color of this frame and the
+   * current player.
    *
-   * @throws IllegalArgumentException if the model is null.
+   * @throws IllegalArgumentException if any argument is null.
    */
-  public ThreeTriosGUIViewFrame(ReadOnlyThreeTriosModel model) {
+  public ThreeTriosGUIViewFrame(ReadOnlyThreeTriosModel model, PlayerColor playerColor) {
     Requirements.requireNonNull(model);
+    Requirements.requireNonNull(playerColor);
+    this.playerColor = playerColor;
 
+    setTitle(String.format(
+            "Player: %s | Current Player: %s",
+            playerColor,
+            model.getCurrentPlayerColor()
+        )
+    );
     setLayout(new GridBagLayout());
 
     redHandPanel = new HandPanelImpl(model, PlayerColor.RED);
@@ -44,8 +54,8 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
     add((Component) blueHandPanel, getRightHandPanelConstraints());
 
     setDefaultCloseOperation(EXIT_ON_CLOSE);
-    setMinimumSize(new Dimension(800, 600));
-    setSize(new Dimension(800, 600));
+    setMinimumSize(new Dimension(400, 300));
+    setSize(new Dimension(400, 300));
     centerOnScreen();
   }
 
@@ -120,10 +130,10 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
   }
 
   @Override
-  public void toggleSelection(PlayerColor player, int cardIndex) {
-    Requirements.requireNonNull(player);
+  public void toggleSelection(PlayerColor playerColor, int cardIndex) {
+    Requirements.requireNonNull(playerColor);
 
-    HandPanel handPanel = player == PlayerColor.RED ? redHandPanel : blueHandPanel;
+    HandPanel handPanel = playerColor == PlayerColor.RED ? redHandPanel : blueHandPanel;
     handPanel.toggleSelection(cardIndex);
     refresh();
   }
@@ -133,5 +143,24 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
     redHandPanel.clearSelection();
     blueHandPanel.clearSelection();
     refresh();
+  }
+
+  @Override
+  public void displayMessage(String message) {
+    String title = String.format("Player: %s", playerColor);
+    int messageType = JOptionPane.INFORMATION_MESSAGE;
+
+    JOptionPane.showMessageDialog(
+        null, // "if the parentComponent [is null], a default Frame is used"
+        message,
+        title,
+        messageType
+    );
+  }
+
+  @Override
+  public int getSelectedCardIndex() {
+    HandPanel handPanel = playerColor == PlayerColor.RED ? redHandPanel : blueHandPanel;
+    return handPanel.getSelectedCardIndex();
   }
 }

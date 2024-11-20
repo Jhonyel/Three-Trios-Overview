@@ -100,6 +100,15 @@ public class HandPanelImpl extends JPanel implements HandPanel {
     selectedCardIndex = -1;
   }
 
+  @Override
+  public int getSelectedCardIndex() {
+    if (selectedCardIndex == -1) {
+      throw new IllegalStateException("No card is selected");
+    }
+
+    return selectedCardIndex;
+  }
+
   /**
    * Returns a transform that converts from the logical coordinate system to the physical coordinate
    * system where the logical width is `LOGICAL_CARD_SIZE` and the logical height is

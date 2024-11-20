@@ -415,7 +415,7 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
   }
 
   @Override
-  public int getScore(PlayerColor player) {
+  public int getScore(PlayerColor playerColor) {
     int score = 0;
     for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++) {
       for (int colIndex = 0; colIndex < gridWidth; colIndex++) {
@@ -423,12 +423,12 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
         if (!cell.isOccupiedCardCell()) {
           continue;
         }
-        if (cell.getPlayerColor() == player) {
+        if (cell.getPlayerColor() == playerColor) {
           score++;
         }
       }
     }
-    score += getHand(player).size();
+    score += getHand(playerColor).size();
     return score;
   }
 
