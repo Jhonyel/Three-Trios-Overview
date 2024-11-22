@@ -1,5 +1,9 @@
-package cs3500.three.trios.model;
+package cs3500.three.trios.model.observable;
 
+import cs3500.three.trios.model.Cell;
+import cs3500.three.trios.model.PlayerColor;
+import cs3500.three.trios.model.ReadOnlyThreeTriosModel;
+import cs3500.three.trios.model.ThreeTriosModel;
 import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.player.Player;
 import cs3500.three.trios.util.Latch;

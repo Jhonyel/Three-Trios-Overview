@@ -1,5 +1,6 @@
-package cs3500.three.trios.model;
+package cs3500.three.trios.model.observable;
 
+import cs3500.three.trios.model.ThreeTriosModel;
 import cs3500.three.trios.player.Player;
 
 /**

@@ -3,7 +3,7 @@ package cs3500.three.trios.strategy;
 import static cs3500.three.trios.model.card.AttackValue.ONE;
 import static cs3500.three.trios.model.card.AttackValue.TEN;
 
-import cs3500.three.trios.Examples;
+import cs3500.three.trios.examples.GridExamples;
 import cs3500.three.trios.model.Cell;
 import cs3500.three.trios.model.PlayerColor;
 import cs3500.three.trios.model.ReadOnlyThreeTriosModel;
@@ -14,7 +14,6 @@ import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.model.mock.LoggingThreeTriosModel;
 import cs3500.three.trios.model.mock.TopLeftIsOnlyLegalMoveThreeTriosModel;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -68,7 +67,7 @@ public class TestMaxNumFlipsStrategy extends TestMoveStrategy {
     );
 
     moveStrategy = new MaxNumFlipsMoveStrategy();
-    grid3x3With9CardCells = Examples.create3x3GridWith9CardCells();
+    grid3x3With9CardCells = GridExamples.create3x3GridWith9CardCells();
 
     northWestWinner1AA1 = new CardImpl("", ONE, TEN, TEN, ONE);
   }
@@ -168,15 +167,16 @@ public class TestMaxNumFlipsStrategy extends TestMoveStrategy {
     redHand.set(2, northWestWinner1AA1);
     redHand.set(3, northWestWinner1AA1);
 
-    LoggingThreeTriosModel model = new LoggingThreeTriosModel(ThreeTriosModelImpl.createGameInProgress(
+    LoggingThreeTriosModel model = new LoggingThreeTriosModel(
+        ThreeTriosModelImpl.createGameInProgress(
             new Cell[][]{
-                    {emptyCell, blueCell1111, redCell1111},
-                    {blueCell1111, redCell1111, holeCell},
-                    {emptyCell, blueCell1111, holeCell}
+                {emptyCell, blueCell1111, redCell1111},
+                {blueCell1111, redCell1111, holeCell},
+                {emptyCell, blueCell1111, holeCell}
             },
             redHand,
             blueHand
-    ), log);
+        ), log);
 
     String filePath = "strategy-transcript/maxNumFlipsTranscript.txt";
 

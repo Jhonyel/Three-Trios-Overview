@@ -7,6 +7,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+import cs3500.three.trios.examples.CardListExamples;
+import cs3500.three.trios.examples.GridExamples;
+import cs3500.three.trios.examples.ThreeTriosModelExamples;
 import cs3500.three.trios.model.Cell;
 import cs3500.three.trios.model.PlayerColor;
 import cs3500.three.trios.model.ThreeTriosModel;
@@ -51,9 +54,9 @@ public class TestThreeTriosModel {
   private Cell blueCellAAAA;
 
   @Before
-  public void setUp()  {
-    grid5x7With15CardCells = Examples.create5x7GridWith15CardCells();
-    model5x7With15CardCells = Examples.create5x7ModelWith15CardCells();
+  public void setUp() {
+    grid5x7With15CardCells = GridExamples.create5x7GridWith15CardCells();
+    model5x7With15CardCells = ThreeTriosModelExamples.create5x7ModelWith15CardCells();
 
     emptyCell = Cell.createEmptyCardCell();
     holeCell = Cell.createHoleCell();
@@ -64,8 +67,8 @@ public class TestThreeTriosModel {
         {holeCell}
     };
 
-    listOf16Cards = Examples.create16Cards();
-    listOf10Cards = Examples.create10Cards();
+    listOf16Cards = CardListExamples.create16Cards();
+    listOf10Cards = CardListExamples.create10Cards();
 
     card1111 = new CardImpl("name 1 1 1 1");
     cardAAAA = new CardImpl("name A A A A");
@@ -618,16 +621,16 @@ public class TestThreeTriosModel {
   @Test
   public void testGetNumFlippedCardsMultipleDirections() {
     Cell blueCell1111 = Cell.createOccupiedCardCell(
-            new PlayerCard("name 1 1 1 1", PlayerColor.BLUE));
+        new PlayerCard("name 1 1 1 1", PlayerColor.BLUE));
 
     ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
-            new Cell[][]{
-                    {emptyCell, blueCell1111, blueCell1111, emptyCell},
-                    {emptyCell, emptyCell, blueCell1111, emptyCell},
-                    {emptyCell, emptyCell, emptyCell, holeCell}
-            },
-            List.of(cardAAAA),
-            List.of()
+        new Cell[][]{
+            {emptyCell, blueCell1111, blueCell1111, emptyCell},
+            {emptyCell, emptyCell, blueCell1111, emptyCell},
+            {emptyCell, emptyCell, emptyCell, holeCell}
+        },
+        List.of(cardAAAA),
+        List.of()
     );
 
     assertEquals(2, model.getNumFlipsAt(1, 1, 0));

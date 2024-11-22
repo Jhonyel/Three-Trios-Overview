@@ -2,7 +2,7 @@ package cs3500.three.trios.view;
 
 import static org.junit.Assert.assertEquals;
 
-import cs3500.three.trios.Examples;
+import cs3500.three.trios.examples.ThreeTriosModelExamples;
 import cs3500.three.trios.model.ThreeTriosModel;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,12 +20,12 @@ public class TestThreeTriosTextView {
   private Appendable output;
 
   @Before
-  public void setUp()  {
-    this.new5x7ModelWith15CardCells = Examples.create5x7ModelWith15CardCells();
-    this.new3x5ModelWith9CardCells = Examples.create3x5ModelWith9CardCells();
-    this.new5x3ModelWith9CardCells = Examples.create5x3ModelWith9CardCells();
-    this.new3x3ModelWith9CardCells = Examples.create3x3ModelWith9CardCells();
-    this.new4x4ModelWith9CardCells = Examples.create4x4ModelWith9CardCells();
+  public void setUp() {
+    this.new5x7ModelWith15CardCells = ThreeTriosModelExamples.create5x7ModelWith15CardCells();
+    this.new3x5ModelWith9CardCells = ThreeTriosModelExamples.create3x5ModelWith9CardCells();
+    this.new5x3ModelWith9CardCells = ThreeTriosModelExamples.create5x3ModelWith9CardCells();
+    this.new3x3ModelWith9CardCells = ThreeTriosModelExamples.create3x3ModelWith9CardCells();
+    this.new4x4ModelWith9CardCells = ThreeTriosModelExamples.create4x4ModelWith9CardCells();
     this.output = new StringBuilder();
   }
 

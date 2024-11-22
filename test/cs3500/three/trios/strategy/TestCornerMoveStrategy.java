@@ -3,14 +3,13 @@ package cs3500.three.trios.strategy;
 import static cs3500.three.trios.model.card.AttackValue.ONE;
 import static cs3500.three.trios.model.card.AttackValue.TEN;
 
-import cs3500.three.trios.Examples;
+import cs3500.three.trios.examples.GridExamples;
 import cs3500.three.trios.model.Cell;
 import cs3500.three.trios.model.ThreeTriosModel;
 import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.Card;
 import cs3500.three.trios.model.card.CardImpl;
 import cs3500.three.trios.model.mock.LoggingThreeTriosModel;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -45,7 +44,7 @@ public class TestCornerMoveStrategy extends TestMoveStrategy {
   }
 
   @Before
-  public void setUp()  {
+  public void setUp() {
     emptyCell = Cell.createEmptyCardCell();
     holeCell = Cell.createHoleCell();
 
@@ -57,7 +56,7 @@ public class TestCornerMoveStrategy extends TestMoveStrategy {
         new CardImpl("name", ONE, ONE, ONE, ONE)
     );
 
-    grid3x3With9CardCells = Examples.create3x3GridWith9CardCells();
+    grid3x3With9CardCells = GridExamples.create3x3GridWith9CardCells();
 
     northWestWinner1AA1 = new CardImpl("name", ONE, TEN, TEN, ONE);
     northEastWinner1A1A = new CardImpl("name", ONE, TEN, ONE, TEN);

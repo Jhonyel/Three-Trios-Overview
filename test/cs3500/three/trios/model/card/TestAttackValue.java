@@ -19,6 +19,7 @@ import org.junit.Test;
  * A class to test the AttackValue enum.
  */
 public class TestAttackValue {
+
   @Test
   public void testToString() {
     assertEquals("1", ONE.toString());

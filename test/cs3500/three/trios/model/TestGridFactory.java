@@ -2,8 +2,8 @@ package cs3500.three.trios.model;
 
 import static org.junit.Assert.assertThrows;
 
-import cs3500.three.trios.Examples;
 import cs3500.three.trios.TestUtils;
+import cs3500.three.trios.examples.GridExamples;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class TestGridFactory {
   }
 
   @Test
-  public void testCreate5x7GridWith15CardCells()  {
+  public void testCreate5x7GridWith15CardCells() {
     Cell empty = Cell.createEmptyCardCell();
     Cell hole = Cell.createHoleCell();
     Cell[][] expectedGrid = {
@@ -35,14 +35,14 @@ public class TestGridFactory {
         {empty, hole, hole, hole, empty, hole, empty},
         {empty, hole, hole, hole, hole, empty, empty}
     };
-    Cell[][] actualGrid = Examples.create5x7GridWith15CardCells();
+    Cell[][] actualGrid = GridExamples.create5x7GridWith15CardCells();
     TestUtils.assertArray2DEquals(expectedGrid, actualGrid);
 
     Assert.assertNotNull(actualGrid); // for style checker. see class javadoc
   }
 
   @Test
-  public void testCreate3x5GridWith9CardCells()  {
+  public void testCreate3x5GridWith9CardCells() {
     Cell empty = Cell.createEmptyCardCell();
     Cell hole = Cell.createHoleCell();
     Cell[][] expectedGrid = {
@@ -50,14 +50,14 @@ public class TestGridFactory {
         {hole, empty, empty, hole, empty},
         {empty, empty, hole, empty, empty}
     };
-    Cell[][] actualGrid = Examples.create3x5GridWith9CardCells();
+    Cell[][] actualGrid = GridExamples.create3x5GridWith9CardCells();
     TestUtils.assertArray2DEquals(expectedGrid, actualGrid);
 
     Assert.assertNotNull(actualGrid); // for style checker. see class javadoc
   }
 
   @Test
-  public void testCreate5x3GridWith9CardCells()  {
+  public void testCreate5x3GridWith9CardCells() {
     Cell empty = Cell.createEmptyCardCell();
     Cell hole = Cell.createHoleCell();
     Cell[][] expectedGrid = {
@@ -67,7 +67,7 @@ public class TestGridFactory {
         {hole, empty, hole},
         {empty, hole, empty}
     };
-    Cell[][] actualGrid = Examples.create5x3GridWith9CardCells();
+    Cell[][] actualGrid = GridExamples.create5x3GridWith9CardCells();
     TestUtils.assertArray2DEquals(expectedGrid, actualGrid);
 
     Assert.assertNotNull(actualGrid); // for style checker. see class javadoc

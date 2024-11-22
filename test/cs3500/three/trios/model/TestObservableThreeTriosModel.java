@@ -3,7 +3,9 @@ package cs3500.three.trios.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
-import cs3500.three.trios.Examples;
+import cs3500.three.trios.examples.ThreeTriosModelExamples;
+import cs3500.three.trios.model.observable.ObservableThreeTriosModel;
+import cs3500.three.trios.model.observable.ObservableThreeTriosModelImpl;
 import cs3500.three.trios.player.HumanPlayer;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +35,7 @@ public class TestObservableThreeTriosModel {
 
   @Before
   public void setUp() {
-    notObservableModel3x3 = Examples.create3x3ModelWith9CardCells();
+    notObservableModel3x3 = ThreeTriosModelExamples.create3x3ModelWith9CardCells();
     notStartedModel3x3 = createNotStartedModel(notObservableModel3x3);
     startedModel3x3HumanPlayers = createStartedModelWithHumanPlayers(notObservableModel3x3);
   }

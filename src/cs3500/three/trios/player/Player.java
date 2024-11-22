@@ -1,8 +1,8 @@
 package cs3500.three.trios.player;
 
-import cs3500.three.trios.model.ObservableThreeTriosModel;
 import cs3500.three.trios.model.PlayerColor;
 import cs3500.three.trios.model.ThreeTriosModel;
+import cs3500.three.trios.model.observable.ObservableThreeTriosModel;
 import cs3500.three.trios.util.Requirements;
 
 /**

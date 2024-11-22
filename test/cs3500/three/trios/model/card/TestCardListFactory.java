@@ -13,7 +13,7 @@ import static cs3500.three.trios.model.card.AttackValue.TWO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
-import cs3500.three.trios.Examples;
+import cs3500.three.trios.examples.CardListExamples;
 import java.io.File;
 import java.util.List;
 import org.junit.Assert;
@@ -33,7 +33,7 @@ public class TestCardListFactory {
   }
 
   @Test
-  public void testCreate10CardsFromConfigurationFilePath()  {
+  public void testCreate10CardsFromConfigurationFilePath() {
     List<Card> expectedCards = List.of(
         new CardImpl("BlazingTiger", TEN, SEVEN, THREE, FIVE),
         new CardImpl("FrozenWolf", NINE, ONE, EIGHT, SIX),
@@ -46,12 +46,12 @@ public class TestCardListFactory {
         new CardImpl("FierceCobra", NINE, SIX, THREE, ONE),
         new CardImpl("GentleDove", THREE, TWO, NINE, FIVE)
     );
-    List<Card> actualCards = Examples.create10Cards();
+    List<Card> actualCards = CardListExamples.create10Cards();
     assertEquals(expectedCards, actualCards);
   }
 
   @Test
-  public void testCreate16CardsFromConfigurationFilePath()  {
+  public void testCreate16CardsFromConfigurationFilePath() {
     List<Card> expectedCards = List.of(
         new CardImpl("BlazingPhoenix", NINE, SEVEN, TEN, FIVE),
         new CardImpl("FrozenDragon", SIX, TEN, FOUR, EIGHT),
@@ -70,7 +70,7 @@ public class TestCardListFactory {
         new CardImpl("VenomousSpider", SIX, TEN, SEVEN, THREE),
         new CardImpl("IronTurtle", TEN, EIGHT, FIVE, NINE)
     );
-    List<Card> actualCards = Examples.create16Cards();
+    List<Card> actualCards = CardListExamples.create16Cards();
     assertEquals(expectedCards, actualCards);
   }
 
@@ -83,7 +83,7 @@ public class TestCardListFactory {
   }
 
   @Test
-  public void testCreateCardsFromConfigurationFilePathWithEmptyFile()  {
+  public void testCreateCardsFromConfigurationFilePathWithEmptyFile() {
     assertEquals(
         List.of(),
         CardListFactory.createFromConfigurationFilePath(

@@ -96,11 +96,11 @@ In part 2, we made the following changes to existing classes
         - `getHeight`
         - `isMoveLegalAt`
         - `getNumFlipsAt`
-          - We implemented this method using the same logic as `battle`
+            - We implemented this method using the same logic as `battle`
         - `getScore`
-          - We implemented this method using the same logic as `getWinner`
+            - We implemented this method using the same logic as `getWinner`
     - These methods were missing simply because we had not thought to add them.
-    - 
+    -
 - `AttackValue`
     - We added a method `toInt` that returns the integer value of an `AttackValue`. This is useful
       for `CornerMoveStrategy` which needs to know what the strongest card to play is in a

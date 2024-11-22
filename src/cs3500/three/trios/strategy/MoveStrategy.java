@@ -15,7 +15,7 @@ public interface MoveStrategy {
    * implementing class. The elements of the list are ordered from best to worst. The best move is
    * at the front of the list (i.e. index 0).
    *
-   * @throws IllegalStateException if the game is over (i.e. there are no more legal moves).
+   * @throws IllegalStateException    if the game is over (i.e. there are no more legal moves).
    * @throws IllegalArgumentException if the given model is null.
    */
   List<Move> getMoves(ReadOnlyThreeTriosModel model);
@@ -25,7 +25,7 @@ public interface MoveStrategy {
    * implementing class. The elements of the list are ordered from best to worst. The best move is
    * at the front of the list (i.e. index 0).
    *
-   * @throws IllegalStateException if the game is over (i.e. there are no more legal moves).
+   * @throws IllegalStateException    if the game is over (i.e. there are no more legal moves).
    * @throws IllegalArgumentException if the given model or player is null.
    */
   List<Move> getMoves(ReadOnlyThreeTriosModel model, PlayerColor playerColor);

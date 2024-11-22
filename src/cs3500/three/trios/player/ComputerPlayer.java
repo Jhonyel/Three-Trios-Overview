@@ -1,10 +1,11 @@
 package cs3500.three.trios.player;
 
-import cs3500.three.trios.model.ObservableThreeTriosModel;
 import cs3500.three.trios.model.PlayerColor;
+import cs3500.three.trios.model.observable.ObservableThreeTriosModel;
 import cs3500.three.trios.strategy.Move;
 import cs3500.three.trios.strategy.MoveStrategy;
 import cs3500.three.trios.util.Requirements;
+import javax.swing.Timer;
 
 /**
  * A computer player that uses a {@link MoveStrategy} to play cards.
@@ -33,12 +34,24 @@ public class ComputerPlayer extends Player {
   }
 
   /**
-   * Uses this computer's strategy to determine the best move, then executes that move on the model.
+   * Uses this computer's strategy to determine the best move, then executes that move on the
+   * model.
    */
   @Override
   public void onTurn() {
     System.out.printf("%s computer player playing\n", playerColor);
     Move bestMove = strategy.getBestMove(model);
-    model.playCardAt(bestMove.getRowIndex(), bestMove.getColIndex(), bestMove.getCardIndex());
+
+    int delayMilliseconds = 100;
+    Timer timer = new Timer(
+        delayMilliseconds,
+        e -> model.playCardAt(
+            bestMove.getRowIndex(),
+            bestMove.getColIndex(),
+            bestMove.getCardIndex()
+        )
+    );
+    timer.setRepeats(false);
+    timer.start();
   }
 }

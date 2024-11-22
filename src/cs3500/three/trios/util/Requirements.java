@@ -120,7 +120,7 @@ public class Requirements {
         throw new IllegalArgumentException("Configuration file is empty");
       }
       return filePath;
-      
+
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

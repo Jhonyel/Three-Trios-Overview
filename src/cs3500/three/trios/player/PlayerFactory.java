@@ -1,7 +1,7 @@
 package cs3500.three.trios.player;
 
-import cs3500.three.trios.model.ObservableThreeTriosModel;
 import cs3500.three.trios.model.PlayerColor;
+import cs3500.three.trios.model.observable.ObservableThreeTriosModel;
 import cs3500.three.trios.strategy.CornerMoveStrategy;
 import cs3500.three.trios.strategy.MaxNumFlipsMoveStrategy;
 import cs3500.three.trios.util.Requirements;
@@ -19,7 +19,7 @@ public class PlayerFactory {
    * @throws IllegalArgumentException if any argument is null or playerTypeString is not a valid
    *                                  value as described above.
    */
-  public Player fromPlayerType(
+  public static Player fromPlayerType(
       String playerTypeString, ObservableThreeTriosModel model, PlayerColor color
   ) {
     Requirements.requireNonNull(playerTypeString);
@@ -34,7 +34,7 @@ public class PlayerFactory {
    *
    * @throws IllegalArgumentException if any argument is null.
    */
-  public Player fromPlayerType(
+  public static Player fromPlayerType(
       PlayerType playerType, ObservableThreeTriosModel model, PlayerColor color
   ) {
     Requirements.requireNonNull(playerType);
@@ -42,9 +42,9 @@ public class PlayerFactory {
     Requirements.requireNonNull(color);
 
     switch (playerType) {
-      case CORNER_MOVE_COMPUTER:
+      case CORNER_MOVE:
         return new ComputerPlayer(model, color, new CornerMoveStrategy());
-      case MAX_NUM_FLIPS_COMPUTER:
+      case MAX_NUM_FLIPS:
         return new ComputerPlayer(model, color, new MaxNumFlipsMoveStrategy());
       case HUMAN:
         return new HumanPlayer(model, color);

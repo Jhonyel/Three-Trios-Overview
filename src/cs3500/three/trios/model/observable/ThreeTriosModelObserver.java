@@ -1,4 +1,6 @@
-package cs3500.three.trios.model;
+package cs3500.three.trios.model.observable;
+
+import cs3500.three.trios.model.PlayerColor;
 
 /**
  * An interface describing an object which observes an observable three trios model. An object must
