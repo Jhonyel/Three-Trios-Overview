@@ -34,7 +34,7 @@ public abstract class AbstractPlayer implements Player {
   }
 
   /**
-   * Returns the player of this color.
+   * Returns the color of this player.
    */
   @Override
   public PlayerColor getPlayerColor() {
