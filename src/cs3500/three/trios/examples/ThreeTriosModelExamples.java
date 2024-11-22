@@ -6,6 +6,9 @@ import cs3500.three.trios.model.ThreeTriosModelImpl;
 import cs3500.three.trios.model.card.Card;
 import java.util.List;
 
+/**
+ * A class containing examples of three trios models.
+ */
 public class ThreeTriosModelExamples {
 
   /**

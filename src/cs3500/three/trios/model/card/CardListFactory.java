@@ -27,7 +27,7 @@ public class CardListFactory {
    *                                  does not exist, or its contents are not of the right format.
    * @throws RuntimeException         if an I/O error occurs while reading the file.
    */
-  public static List<Card> createFromConfigurationFilePath(String configurationFilePath) {
+  public static List<Card> createCardListFromFilePath(String configurationFilePath) {
 
     try {
       Requirements.requireNonNull(configurationFilePath);

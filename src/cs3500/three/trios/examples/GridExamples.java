@@ -14,7 +14,7 @@ public class GridExamples {
    * configuration-files/5x7-grid-configuration.txt.
    */
   public static Cell[][] create5x7GridWith15CardCells() {
-    return GridFactory.createFromConfigurationFilePath(
+    return GridFactory.createGridFromFilePath(
         "configuration-files" + File.separator + "5x7-grid-configuration.txt");
   }
 
@@ -23,7 +23,7 @@ public class GridExamples {
    * configuration-files/3x5-grid-configuration.txt.
    */
   public static Cell[][] create3x5GridWith9CardCells() {
-    return GridFactory.createFromConfigurationFilePath(
+    return GridFactory.createGridFromFilePath(
         "configuration-files" + File.separator + "3x5-grid-configuration.txt");
   }
 
@@ -32,7 +32,7 @@ public class GridExamples {
    * configuration-files/5x3-grid-configuration.txt.
    */
   public static Cell[][] create5x3GridWith9CardCells() {
-    return GridFactory.createFromConfigurationFilePath(
+    return GridFactory.createGridFromFilePath(
         "configuration-files" + File.separator + "5x3-grid-configuration.txt");
   }
 
@@ -41,7 +41,7 @@ public class GridExamples {
    * configuration-files/3x3-grid-with-no-holes-configuration.txt.
    */
   public static Cell[][] create3x3GridWith9CardCells() {
-    return GridFactory.createFromConfigurationFilePath(
+    return GridFactory.createGridFromFilePath(
         "configuration-files" + File.separator + "3x3-grid-with-no-holes-configuration.txt");
   }
 
@@ -50,7 +50,7 @@ public class GridExamples {
    * configuration-files/4x4-disconnected-grid-with-holes.txt.
    */
   public static Cell[][] create4x4GridWith9CardCells() {
-    return GridFactory.createFromConfigurationFilePath(
+    return GridFactory.createGridFromFilePath(
         "configuration-files" + File.separator + "4x4-disconnected-grid-with-holes.txt"
     );
   }

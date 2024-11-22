@@ -28,7 +28,7 @@ public class TestCardListFactory {
   public void testCreateFromConfigurationFilePathWithNullFilePath() {
     Assert.assertThrows(
         IllegalArgumentException.class,
-        () -> CardListFactory.createFromConfigurationFilePath(null)
+        () -> CardListFactory.createCardListFromFilePath(null)
     );
   }
 
@@ -78,7 +78,7 @@ public class TestCardListFactory {
   public void testCreateCardsFromConfigurationFilePathWithInvalidFilePath() {
     assertThrows(
         IllegalArgumentException.class,
-        () -> CardListFactory.createFromConfigurationFilePath("invalid-file-path")
+        () -> CardListFactory.createCardListFromFilePath("invalid-file-path")
     );
   }
 
@@ -86,7 +86,7 @@ public class TestCardListFactory {
   public void testCreateCardsFromConfigurationFilePathWithEmptyFile() {
     assertEquals(
         List.of(),
-        CardListFactory.createFromConfigurationFilePath(
+        CardListFactory.createCardListFromFilePath(
             "configuration-files" + File.separator + "empty-file.txt")
     );
   }
@@ -95,7 +95,7 @@ public class TestCardListFactory {
   public void testCreateCardsFromConfigurationFilePathWithInvalidFile() {
     assertThrows(
         IllegalArgumentException.class,
-        () -> CardListFactory.createFromConfigurationFilePath(
+        () -> CardListFactory.createCardListFromFilePath(
             "configuration-files" + File.separator + "invalid-cards-configuration.txt")
     );
   }

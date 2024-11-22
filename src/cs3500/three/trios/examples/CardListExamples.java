@@ -15,7 +15,7 @@ public class CardListExamples {
    * configuration-files/16-cards-configuration.txt.
    */
   public static List<Card> create16Cards() {
-    return CardListFactory.createFromConfigurationFilePath(
+    return CardListFactory.createCardListFromFilePath(
         "configuration-files" + File.separator + "16-cards-configuration.txt");
   }
 
@@ -24,7 +24,7 @@ public class CardListExamples {
    * configuration-files/10-cards-configuration.txt.
    */
   public static List<Card> create10Cards() {
-    return CardListFactory.createFromConfigurationFilePath(
+    return CardListFactory.createCardListFromFilePath(
         "configuration-files" + File.separator + "10-cards-configuration.txt");
   }
 }

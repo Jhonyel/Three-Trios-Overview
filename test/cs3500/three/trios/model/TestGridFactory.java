@@ -20,7 +20,7 @@ public class TestGridFactory {
   public void testCreateFromConfigurationFilePathWithNullFilePath() {
     assertThrows(
         IllegalArgumentException.class,
-        () -> GridFactory.createFromConfigurationFilePath(null)
+        () -> GridFactory.createGridFromFilePath(null)
     );
   }
 

@@ -29,7 +29,7 @@ public class GridFactory {
    * @throws IllegalArgumentException if the configuration file path is null, the file referred to
    *                                  does not exist, or its contents are not of the right format.
    */
-  public static Cell[][] createFromConfigurationFilePath(String configurationFilePath) {
+  public static Cell[][] createGridFromFilePath(String configurationFilePath) {
     try {
       Requirements.requireNonNull(configurationFilePath);
       Requirements.requireValidFilePath(configurationFilePath);
