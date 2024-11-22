@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * An observable version of our model. This interface allows us to register players of the game.
@@ -217,4 +218,8 @@ public class ObservableThreeTriosModelImpl implements ObservableThreeTriosModel 
     return false;
   }
 
+  @Override
+  public int hashCode() {
+    return Objects.hash(model, players, isGameStarted, observers);
+  }
 }
