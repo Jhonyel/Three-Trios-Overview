@@ -11,6 +11,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Hw5_jar" level="project" />
+    <orderEntry type="library" name="Hw5" level="project" />
     <orderEntry type="module-library" scope="TEST">
       <library name="JUnit4">
         <CLASSES>

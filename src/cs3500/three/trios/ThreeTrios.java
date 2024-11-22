@@ -23,6 +23,7 @@ import cs3500.three.trios.player.ComputerPlayer;
 import cs3500.three.trios.player.HumanPlayer;
 import cs3500.three.trios.player.Player;
 import cs3500.three.trios.strategy.MaxNumFlipsMoveStrategy;
+import cs3500.three.trios.strategy.MoveStrategy;
 import cs3500.three.trios.view.ThreeTriosGUIViewFrame;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class ThreeTrios {
     ThreeTriosModel model = ThreeTriosModelImpl.createGameInProgress(
         new Cell[][]{
             {emptyCell, emptyCell, holeCell},
-            {emptyCell, holeCell, holeCell},
+            {emptyCell, emptyCell, emptyCell},
             {holeCell, emptyCell, emptyCell}
         },
         List.of(
@@ -70,12 +71,8 @@ public class ThreeTrios {
     ThreeTriosController blueController = new ThreeTriosController(
         blueView, observableModel, bluePlayer
     );
-    // redView.addFeatures(redController);
-    // blueView.addFeatures(blueController);
     observableModel.startGame();
     redView.makeVisible();
     blueView.makeVisible();
-
-    //model.playCardAt(0, 0, 0);
   }
 }
