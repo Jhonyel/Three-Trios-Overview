@@ -10,7 +10,7 @@ import javax.swing.Timer;
 /**
  * A computer player that uses a {@link MoveStrategy} to play cards.
  */
-public class ComputerPlayer extends Player {
+public class ComputerPlayer extends AbstractPlayer {
 
   private final MoveStrategy strategy;
 

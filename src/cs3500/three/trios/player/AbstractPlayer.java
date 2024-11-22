@@ -1,13 +1,19 @@
 package cs3500.three.trios.player;
 
 import cs3500.three.trios.model.PlayerColor;
+import cs3500.three.trios.model.ThreeTriosModel;
 import cs3500.three.trios.model.observable.ObservableThreeTriosModel;
+import cs3500.three.trios.util.Requirements;
 
 /**
- * A class representing a human player. Since the human player acts asynchronously, the onTurn
- * method does nothing. Human players will instead make moves by interacting with the GUI.
+ * A class representing a player. A player is aware of which game they belong to as well as what
+ * color they are in said game. When the turn changes to this player, the model will notify this
+ * player and the `onTurn` method will be called.
  */
-public class HumanPlayer extends AbstractPlayer {
+public abstract class AbstractPlayer implements Player {
+
+  protected final PlayerColor playerColor;
+  protected final ThreeTriosModel model;
 
   /**
    * Creates a new Player using the given observable model and player color. The player will
@@ -20,16 +26,18 @@ public class HumanPlayer extends AbstractPlayer {
    *                                  same color as the one specified has already been registered to
    *                                  the model
    */
-  public HumanPlayer(ObservableThreeTriosModel model, PlayerColor playerColor) {
-    super(model, playerColor);
+  public AbstractPlayer(ObservableThreeTriosModel model, PlayerColor playerColor) {
+    this.model = Requirements.requireNonNull(model);
+    this.playerColor = Requirements.requireNonNull(playerColor);
+
+    model.registerPlayer(this);
   }
 
   /**
-   * Invoked when the turn changes to this player. Since the human player interacts with the GUI to
-   * make moves, this method does nothing.
+   * Returns the player of this color.
    */
   @Override
-  public void onTurn() {
-    System.out.printf("%s human player playing\n", playerColor);
+  public PlayerColor getPlayerColor() {
+    return playerColor;
   }
 }

@@ -1,12 +1,14 @@
 package cs3500.three.trios.player;
 
+import org.junit.Test;
+
 /**
- * A class for testing players.
+ * A class to test that players `onTurn` methods are called when the turn changes
  */
 public abstract class TestPlayer {
 
-  /**
-   * Returns an instance of the player class being tested.
-   */
-  protected abstract Player createPlayer();
+  @Test
+  public void testOnTurnCalledOnPlayerTurn() {
+    
+  }
 }
