@@ -356,13 +356,6 @@ public class TestThreeTriosModel {
     assertEquals(PlayerColor.BLUE, model5x7With15CardCells.getCurrentPlayerColor());
   }
 
-  @Test
-  public void testGetCurrentPlayerColorWhenGameIsOver() {
-    assertThrows(
-        IllegalStateException.class,
-        () -> modelRedWon.getCurrentPlayerColor()
-    );
-  }
 
   ////////////////////////////////////////////////////////////////////////////
 

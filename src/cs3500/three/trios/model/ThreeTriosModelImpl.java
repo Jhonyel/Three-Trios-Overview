@@ -5,8 +5,10 @@ import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.util.Requirements;
 import cs3500.three.trios.util.Utils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -485,5 +487,10 @@ public class ThreeTriosModelImpl implements ThreeTriosModel {
       return Utils.areModelsEqual(this, (ReadOnlyThreeTriosModel) other);
     }
     return false;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(Arrays.deepHashCode(grid), redHand, blueHand, currentPlayerColor);
   }
 }

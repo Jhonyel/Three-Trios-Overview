@@ -60,6 +60,7 @@ public abstract class TestPlayer {
    * A class to test the human player.
    */
   public static class TestHumanPlayer extends TestPlayer {
+
     @Override
     protected Player createPlayer(ObservableThreeTriosModel model, PlayerColor playerColor) {
       return new HumanPlayer(model, playerColor);
@@ -70,6 +71,7 @@ public abstract class TestPlayer {
    * A class to test the computer player with a corner move strategy.
    */
   public static class TestCornerMovePlayer extends TestPlayer {
+
     @Override
     protected Player createPlayer(ObservableThreeTriosModel model, PlayerColor playerColor) {
       return new ComputerPlayer(model, playerColor, new CornerMoveStrategy());
@@ -80,6 +82,7 @@ public abstract class TestPlayer {
    * A class to test the computer player with a max num flips strategy.
    */
   public static class TestMaxNumFlipsPlayer extends TestPlayer {
+
     @Override
     protected Player createPlayer(ObservableThreeTriosModel model, PlayerColor playerColor) {
       return new ComputerPlayer(model, playerColor, new MaxNumFlipsMoveStrategy());
