@@ -7,6 +7,7 @@ import cs3500.three.trios.model.ReadOnlyThreeTriosModel;
 import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.util.Requirements;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -22,6 +23,7 @@ import javax.swing.JPanel;
 public class GridPanelImpl extends JPanel implements GridPanel {
 
   private final ReadOnlyThreeTriosModel model;
+  private final ThreeTriosGUIView view;
   private static final int LOGICAL_CELL_SIZE = 100;
   private Features features;
 
@@ -30,8 +32,9 @@ public class GridPanelImpl extends JPanel implements GridPanel {
    *
    * @throws IllegalArgumentException if the model is null.
    */
-  public GridPanelImpl(ReadOnlyThreeTriosModel model) {
+  public GridPanelImpl(ReadOnlyThreeTriosModel model, ThreeTriosGUIView view) {
     this.model = Requirements.requireNonNull(model);
+    this.view = Requirements.requireNonNull(view);
 
     addMouseListener(new MouseAdapter() {
       @Override
@@ -62,22 +65,29 @@ public class GridPanelImpl extends JPanel implements GridPanel {
    * Draws the cell at the given location on the grid.
    */
   private void drawCell(int colIndex, int rowIndex, Graphics2D g2d) {
-    Rectangle bounds = new Rectangle(
-        colIndex * LOGICAL_CELL_SIZE,
-        rowIndex * LOGICAL_CELL_SIZE,
-        LOGICAL_CELL_SIZE,
-        LOGICAL_CELL_SIZE
-    );
+    boolean areNumFlipsHintsEnabled = true;
+
+    int cellX = colIndex * LOGICAL_CELL_SIZE;
+    int cellY = rowIndex * LOGICAL_CELL_SIZE;
+    Rectangle bounds = new Rectangle(cellX, cellY, LOGICAL_CELL_SIZE, LOGICAL_CELL_SIZE);
     Outline outline = new Outline(Color.BLACK, 1);
 
     Cell cell = model.getCellAt(rowIndex, colIndex);
     if (cell.isOccupiedCardCell()) {
       PlayerCard card = cell.getCard();
       Painter.drawCard(g2d, bounds, card, false);
-
-    } else {
-      Color color = getCellColor(cell);
-      Painter.fillAndOutlineRectangle(g2d, bounds, color, outline);
+      return;
+    }
+    Color color = getCellColor(cell);
+    Painter.fillAndOutlineRectangle(g2d, bounds, color, outline);
+    if (areNumFlipsHintsEnabled && !cell.isHole() && view.hasSelectedCard()) {
+      int selectedCardIndex = view.getSelectedCardIndex();
+      int numFlips = model.getNumFlipsAt(rowIndex, colIndex, selectedCardIndex);
+      int padding = 5;
+      int numFlipsTextX = cellX + padding;
+      int numFlipsTextY = cellY + LOGICAL_CELL_SIZE - padding;
+      g2d.setFont(new Font("arial", Font.PLAIN, 20));
+      g2d.drawString(String.valueOf(numFlips), numFlipsTextX, numFlipsTextY);
     }
   }
 

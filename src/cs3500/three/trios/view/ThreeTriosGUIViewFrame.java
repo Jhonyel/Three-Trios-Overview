@@ -46,16 +46,18 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
     redHandPanel = new HandPanelImpl(model, PlayerColor.RED);
     add((Component) redHandPanel, getLeftHandPanelConstraints());
 
-    gridPanel = new GridPanelImpl(model);
+    gridPanel = new GridPanelImpl(model, this);
     add((Component) gridPanel, getGridPanelConstraints());
 
     blueHandPanel = new HandPanelImpl(model, PlayerColor.BLUE);
     add((Component) blueHandPanel, getRightHandPanelConstraints());
 
     setDefaultCloseOperation(EXIT_ON_CLOSE);
-    setMinimumSize(new Dimension(400, 300));
-    setSize(new Dimension(400, 300));
-    centerOnScreen();
+    setMinimumSize(new Dimension(600, 400));
+    setSize(new Dimension(600, 400));
+    if (playerColor == PlayerColor.RED) {
+      centerOnScreen();
+    }
   }
 
   /**

@@ -24,7 +24,7 @@ public class ThreeTrios {
           "args must have two elements: redPlayerType and bluePlayerType");
     }
 
-    ThreeTriosModel model = ThreeTriosModelExamples.create5x7ModelWith15CardCells();
+    ThreeTriosModel model = ThreeTriosModelExamples.create3x3ModelWith9CardCells();
     ObservableThreeTriosModel observableModel = new ObservableThreeTriosModelImpl(model);
     ThreeTriosGUIViewFrame redView = new ThreeTriosGUIViewFrame(observableModel, PlayerColor.RED);
     ThreeTriosGUIViewFrame blueView = new ThreeTriosGUIViewFrame(observableModel, PlayerColor.BLUE);
