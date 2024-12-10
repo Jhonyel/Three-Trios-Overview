@@ -22,9 +22,9 @@ import javax.swing.JPanel;
  */
 public class GridPanelImpl extends JPanel implements GridPanel {
 
-  private final ReadOnlyThreeTriosModel model;
-  private final ThreeTriosGUIView view;
-  private static final int LOGICAL_CELL_SIZE = 100;
+  protected final ReadOnlyThreeTriosModel model;
+  protected final ThreeTriosGUIView view;
+  protected static final int LOGICAL_CELL_SIZE = 100;
   private Features features;
 
   /**
@@ -65,8 +65,6 @@ public class GridPanelImpl extends JPanel implements GridPanel {
    * Draws the cell at the given location on the grid.
    */
   private void drawCell(int colIndex, int rowIndex, Graphics2D g2d) {
-    boolean areNumFlipsHintsEnabled = view.getHintModeEnabled();
-
     int cellX = colIndex * LOGICAL_CELL_SIZE;
     int cellY = rowIndex * LOGICAL_CELL_SIZE;
     Rectangle bounds = new Rectangle(cellX, cellY, LOGICAL_CELL_SIZE, LOGICAL_CELL_SIZE);
@@ -80,15 +78,6 @@ public class GridPanelImpl extends JPanel implements GridPanel {
     }
     Color color = getCellColor(cell);
     Painter.fillAndOutlineRectangle(g2d, bounds, color, outline);
-    if (areNumFlipsHintsEnabled && !cell.isHole() && view.hasSelectedCard()) {
-      int selectedCardIndex = view.getSelectedCardIndex();
-      int numFlips = model.getNumFlipsAt(rowIndex, colIndex, selectedCardIndex);
-      int padding = 5;
-      int numFlipsTextX = cellX + padding;
-      int numFlipsTextY = cellY + LOGICAL_CELL_SIZE - padding;
-      g2d.setFont(new Font("arial", Font.PLAIN, 20));
-      g2d.drawString(String.valueOf(numFlips), numFlipsTextX, numFlipsTextY);
-    }
   }
 
   /**

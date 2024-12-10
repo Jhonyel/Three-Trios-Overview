@@ -10,7 +10,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -34,8 +33,11 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
    *
    * @throws IllegalArgumentException if any argument is null.
    */
-  public ThreeTriosGUIViewFrame(ReadOnlyThreeTriosModel model, PlayerColor playerColor,
-                                boolean hintModeEnabled) {
+  public ThreeTriosGUIViewFrame(
+      ReadOnlyThreeTriosModel model,
+      PlayerColor playerColor,
+      boolean hintModeEnabled
+  ) {
     Requirements.requireNonNull(model);
     Requirements.requireNonNull(playerColor);
     this.playerColor = playerColor;
@@ -52,7 +54,7 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
     redHandPanel = new HandPanelImpl(model, PlayerColor.RED);
     add((Component) redHandPanel, getLeftHandPanelConstraints());
 
-    gridPanel = new GridPanelImpl(model, this);
+    gridPanel = new GrindPanelWithHints(model, this);
     add((Component) gridPanel, getGridPanelConstraints());
 
     blueHandPanel = new HandPanelImpl(model, PlayerColor.BLUE);
@@ -68,7 +70,7 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
     addKeyListener(new KeyAdapter() {
       @Override
       public void keyTyped(KeyEvent e) {
-        if (e.getKeyChar() == 'h') {
+        if (e.getKeyChar() == 'h' || e.getKeyChar() == 'H') {
           toggleHints();
         }
       }
