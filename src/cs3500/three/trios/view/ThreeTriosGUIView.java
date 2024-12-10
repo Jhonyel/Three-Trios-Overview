@@ -57,7 +57,7 @@ public interface ThreeTriosGUIView {
   boolean hasSelectedCard();
 
   /**
-   * Returns true if hints are enabled in this view
+   * Returns true if hints are enabled in this view.
    */
   boolean getHintModeEnabled();
 }
