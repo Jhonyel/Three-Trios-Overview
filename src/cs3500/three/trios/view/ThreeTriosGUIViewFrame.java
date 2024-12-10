@@ -31,10 +31,10 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
    *
    * @throws IllegalArgumentException if any argument is null.
    */
-  public ThreeTriosGUIViewFrame(ReadOnlyThreeTriosModel model, PlayerColor playerColor, boolean hintModeEnabled) {
+  public ThreeTriosGUIViewFrame(ReadOnlyThreeTriosModel model, PlayerColor playerColor,
+                                boolean hintModeEnabled) {
     Requirements.requireNonNull(model);
     Requirements.requireNonNull(playerColor);
-    Requirements.requireNonNull(hintModeEnabled);
     this.playerColor = playerColor;
     this.hintModeEnabled = hintModeEnabled;
 
