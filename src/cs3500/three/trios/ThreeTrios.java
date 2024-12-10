@@ -25,7 +25,7 @@ public class ThreeTrios {
     }
     boolean hints = args[2].equals("HINTS");
 
-    ThreeTriosModel model = ThreeTriosModelExamples.create3x3ModelWith9CardCells();
+    ThreeTriosModel model = ThreeTriosModelExamples.create4x4ModelWith9CardCells();
     ObservableThreeTriosModel observableModel = new ObservableThreeTriosModelImpl(model);
     ThreeTriosGUIViewFrame redView = new ThreeTriosGUIViewFrame(observableModel, PlayerColor.RED,
             hints);
