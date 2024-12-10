@@ -8,6 +8,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -22,7 +25,7 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
   private final HandPanel blueHandPanel;
   private final GridPanel gridPanel;
   private final PlayerColor playerColor;
-  private final boolean hintModeEnabled;
+  private boolean hintModeEnabled;
 
   /**
    * Creates a new ThreeTriosGUIViewFrame to visualize the given model. Places the frame in the
@@ -61,6 +64,20 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
     if (playerColor == PlayerColor.RED) {
       centerOnScreen();
     }
+
+    addKeyListener(new KeyAdapter() {
+      @Override
+      public void keyTyped(KeyEvent e) {
+        if (e.getKeyChar() == 'h') {
+          toggleHints();
+        }
+      }
+    });
+  }
+
+  private void toggleHints() {
+    hintModeEnabled = !hintModeEnabled;
+    refresh();
   }
 
   /**
