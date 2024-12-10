@@ -6,6 +6,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+/**
+ * An extension of GridPanelImpl that renders hints when the hint mode is enabled.
+ */
 public class GrindPanelWithHints extends GridPanelImpl {
 
   /**

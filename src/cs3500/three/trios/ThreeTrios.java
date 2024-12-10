@@ -19,12 +19,10 @@ public class ThreeTrios {
    * The main method to run a game of three trios.
    */
   public static void main(String[] args) {
-//    if (args.length != 4) {
-//      throw new IllegalArgumentException(
-//          "args must have two elements: redPlayerType, bluePlayerType, and GameTypes");
-//    }
-//    boolean hintsRed = args[2].equals("HINTS");
-//    boolean hintsBlue = args[3].equals("HINTS");
+    if (args.length != 2) {
+      throw new IllegalArgumentException(
+          "args must have two elements: redPlayerType, bluePlayerType");
+    }
 
     ThreeTriosModel model = ThreeTriosModelExamples.create3x5ModelWith9CardCells();
     ObservableThreeTriosModel observableModel = new ObservableThreeTriosModelImpl(model);

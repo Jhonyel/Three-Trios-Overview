@@ -7,7 +7,6 @@ import cs3500.three.trios.model.ReadOnlyThreeTriosModel;
 import cs3500.three.trios.model.card.PlayerCard;
 import cs3500.three.trios.util.Requirements;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
