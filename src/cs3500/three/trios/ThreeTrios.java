@@ -19,15 +19,18 @@ public class ThreeTrios {
    * The main method to run a game of three trios.
    */
   public static void main(String[] args) {
-    if (args.length != 2) {
+    if (args.length != 3) {
       throw new IllegalArgumentException(
-          "args must have two elements: redPlayerType and bluePlayerType");
+          "args must have two elements: redPlayerType, bluePlayerType, and GameType");
     }
+    boolean hints = args[2].equals("HINTS");
 
-    ThreeTriosModel model = ThreeTriosModelExamples.create5x7ModelWith15CardCells();
+    ThreeTriosModel model = ThreeTriosModelExamples.create3x3ModelWith9CardCells();
     ObservableThreeTriosModel observableModel = new ObservableThreeTriosModelImpl(model);
-    ThreeTriosGUIViewFrame redView = new ThreeTriosGUIViewFrame(observableModel, PlayerColor.RED);
-    ThreeTriosGUIViewFrame blueView = new ThreeTriosGUIViewFrame(observableModel, PlayerColor.BLUE);
+    ThreeTriosGUIViewFrame redView = new ThreeTriosGUIViewFrame(observableModel, PlayerColor.RED,
+            hints);
+    ThreeTriosGUIViewFrame blueView = new ThreeTriosGUIViewFrame(observableModel, PlayerColor.BLUE,
+            hints);
     Player redPlayer = PlayerFactory.fromPlayerType(args[0], observableModel, PlayerColor.RED);
     Player bluePlayer = PlayerFactory.fromPlayerType(args[1], observableModel, PlayerColor.BLUE);
     ThreeTriosController redController = new ThreeTriosController(

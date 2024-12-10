@@ -22,6 +22,7 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
   private final HandPanel blueHandPanel;
   private final GridPanel gridPanel;
   private final PlayerColor playerColor;
+  private final boolean hintModeEnabled;
 
   /**
    * Creates a new ThreeTriosGUIViewFrame to visualize the given model. Places the frame in the
@@ -30,10 +31,12 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
    *
    * @throws IllegalArgumentException if any argument is null.
    */
-  public ThreeTriosGUIViewFrame(ReadOnlyThreeTriosModel model, PlayerColor playerColor) {
+  public ThreeTriosGUIViewFrame(ReadOnlyThreeTriosModel model, PlayerColor playerColor, boolean hintModeEnabled) {
     Requirements.requireNonNull(model);
     Requirements.requireNonNull(playerColor);
+    Requirements.requireNonNull(hintModeEnabled);
     this.playerColor = playerColor;
+    this.hintModeEnabled = hintModeEnabled;
 
     setTitle(String.format(
             "Player: %s | Current Player: %s",
@@ -46,16 +49,18 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
     redHandPanel = new HandPanelImpl(model, PlayerColor.RED);
     add((Component) redHandPanel, getLeftHandPanelConstraints());
 
-    gridPanel = new GridPanelImpl(model);
+    gridPanel = new GridPanelImpl(model, this);
     add((Component) gridPanel, getGridPanelConstraints());
 
     blueHandPanel = new HandPanelImpl(model, PlayerColor.BLUE);
     add((Component) blueHandPanel, getRightHandPanelConstraints());
 
     setDefaultCloseOperation(EXIT_ON_CLOSE);
-    setMinimumSize(new Dimension(400, 300));
-    setSize(new Dimension(400, 300));
-    centerOnScreen();
+    setMinimumSize(new Dimension(600, 400));
+    setSize(new Dimension(600, 400));
+    if (playerColor == PlayerColor.RED) {
+      centerOnScreen();
+    }
   }
 
   /**
@@ -172,5 +177,10 @@ public class ThreeTriosGUIViewFrame extends JFrame implements ThreeTriosGUIView 
     } catch (IllegalStateException ignored) {
       return false;
     }
+  }
+
+  @Override
+  public boolean getHintModeEnabled() {
+    return hintModeEnabled;
   }
 }
