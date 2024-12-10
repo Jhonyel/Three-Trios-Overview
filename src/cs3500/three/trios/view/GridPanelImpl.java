@@ -65,7 +65,7 @@ public class GridPanelImpl extends JPanel implements GridPanel {
    * Draws the cell at the given location on the grid.
    */
   private void drawCell(int colIndex, int rowIndex, Graphics2D g2d) {
-    boolean areNumFlipsHintsEnabled = true;
+    boolean areNumFlipsHintsEnabled = view.getHintModeEnabled();
 
     int cellX = colIndex * LOGICAL_CELL_SIZE;
     int cellY = rowIndex * LOGICAL_CELL_SIZE;
