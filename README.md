@@ -10,9 +10,23 @@ Both of these game settings are determined via the command-line when the game st
 ## Game Interaction ## 
 When the game starts two windows will appear, one for each player. To make a move a user must click a card from their and hand a valid board cell to play to. If playing against AI, a move will automatically be played, else the user must wait for the other player to make a move. 
 
-## Running Three Trios ##
-1. Download ThreeTrios.jar, found in src/cs3500/threetrios/
-2. Open terminal
-3. cd into directory with ThreeTrios.jar
-4. run the following command `java -jar ThreeTrios.jar`
+## Playing the game
+
+- In order to play the game, you must run the Hw7.jar file; i.e. run the following in a terminal
+
+```
+java -jar Hw7.jar <red player type> <blue player type> 
+```
+
+- The next section describes the command line arguments in the above command
+
+### Command line arguments
+
+- The main method expects 2 command line arguments.
+- The first argument is the red player type.
+    - One of "HUMAN" "CORNER_MOVE" or "MAX_NUM_FLIPS"
+- The second argument is the blue player type.
+    - One of "HUMAN" "CORNER_MOVE" or "MAX_NUM_FLIPS"
+- If there are not 2 command line arguments, or any of the command line arguments are not valid
+  values, an illegal argument exception is thrown
 
