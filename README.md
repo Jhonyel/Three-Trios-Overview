@@ -10,6 +10,9 @@ Both of these game settings are determined via the command-line when the game st
 ## Game Interaction ## 
 When the game starts two windows will appear, one for each player. To make a move a user must click a card from their and hand a valid board cell to play to. If playing against AI, a move will automatically be played, else the user must wait for the other player to make a move. 
 
+## Access to Code
+Please note that the code for this project is private due to class policies. If you want access to the code, feel free to reach out, and it can be provided upon request.
+
 ## Playing the game
 
 - In order to play the game, you must run the Hw7.jar file; i.e. run the following in a terminal
