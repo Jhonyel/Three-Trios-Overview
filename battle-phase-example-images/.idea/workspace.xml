@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0b472e2b-142c-438b-b741-6f88aef6c235" name="Changes" comment="Wrote tests for the exceptions that should be thrown by the constructor of the model">
+      <change beforePath="$PROJECT_DIR$/HW9.zip" beforeDir="false" afterPath="$PROJECT_DIR$/HW9.zip" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="Jhonyel" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="JhonyelHW9" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Jhonyel&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/kb578432/Hw5-CS3500.git&quot;,
+    &quot;accountId&quot;: &quot;166c606d-dd7a-454f-b5e8-9b069cf7daa4&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2nm5OSnYW4Nxhi8aFUZVGGNJ6jt" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.ThreeTrios.executor": "Run",
+    "JUnit.All in Hw5.executor": "Run",
+    "JUnit.TestCardListFactory.executor": "Run",
+    "JUnit.TestCornerMoveStrategy.executor": "Run",
+    "JUnit.TestCornerMoveStrategy.testGetMoveChecksAllCorners.executor": "Run",
+    "JUnit.TestCornerMoveStrategy.testGetMoveWithClearNorthEastWinner.executor": "Run",
+    "JUnit.TestCornerMoveStrategy.testGetMoveWithTie.executor": "Run",
+    "JUnit.TestCornerMoveStrategy.testGetMovesThrowsWhenGameIsOver.executor": "Run",
+    "JUnit.TestCornerMoveStrategy.testGetMovesThrowsWithNoCards.executor": "Run",
+    "JUnit.TestCornerMoveStrategy.testGetMovesThrowsWithNullModel.executor": "Run",
+    "JUnit.TestMaxNumFlipsStrategy.executor": "Run",
+    "JUnit.TestMaxNumFlipsStrategy.testMaxNumFlipsOnWithEmptyBoard.executor": "Run",
+    "JUnit.TestMaxNumFlipsStrategy.testMaxNumFlipsWhenGameIsOver.executor": "Run",
+    "JUnit.TestMaxNumFlipsStrategy.testMaxNumFlipsWithCorrectMove.executor": "Debug",
+    "JUnit.TestMaxNumFlipsStrategy.testMaxNumFlipsWithTie.executor": "Run",
+    "JUnit.TestMaxNumFlipsStrategy.testStrategyWithLoggingMock.executor": "Run",
+    "JUnit.TestPlayerFactory.testPlayerFactory.executor": "Run",
+    "JUnit.TestPlayerFactory.testPlayerFactoryThrowsWithPlayerType.executor": "Run",
+    "JUnit.TestPlayerFactory.testPlayerFactoryWithPlayerType.executor": "Run",
+    "JUnit.TestThreeTriosModel.executor": "Run",
+    "JUnit.TestThreeTriosModel.testBattleWithTwoComboPhases.executor": "Run",
+    "JUnit.TestThreeTriosModel.testGetHeight.executor": "Run",
+    "JUnit.TestThreeTriosModel.testGetNumFlippedCardsMultiple.executor": "Run",
+    "JUnit.TestThreeTriosModel.testGetNumFlippedCardsMultipleDirections.executor": "Run",
+    "JUnit.TestThreeTriosModel.testGetNumFlippedInvalidIndex.executor": "Run",
+    "JUnit.TestThreeTriosModel.testGetScore.executor": "Run",
+    "JUnit.TestThreeTriosModel.testGetWidth.executor": "Run",
+    "JUnit.TestThreeTriosModel.testIsMoveLegal.executor": "Run",
+    "JUnit.TestThreeTriosModel.testIsMoveLegalInvalidIndex.executor": "Run",
+    "JUnit.TestThreeTriosModel.testIsMoveLegalWhenGameIsOver.executor": "Run",
+    "JUnit.TestThreeTriosModel.testSetScore.executor": "Run",
+    "JUnit.TestThreeTriosModel.testSimpleBattleDoesNotFlipOwnCard.executor": "Run",
+    "JUnit.TestThreeTriosModel.testSimpleBattleFlipsTwoDirectionsAtOnce.executor": "Run",
+    "JUnit.TestThreeTriosModel.testSimpleBattlePlacedCardWins.executor": "Run",
+    "JUnit.TestThreeTriosTextView.executor": "Run",
+    "JUnit.TestThreeTriosTextView.testRender5x3With9CardCellsAfterPlayingCard.executor": "Run",
+    "JUnit.TestThreeTriosTextView.testRender5x3With9CardCellsAfterPlayingCards.executor": "Run",
+    "JUnit.TestThreeTriosTextView.testTieEndScreen.executor": "Run",
+    "JUnit.TestThreeTriosTextView.testWinEndScreen.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "hw9",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/jhony/OOD/Lab3",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\jhony\Documents\GitHub\Hw5-CS3500\configuration-files" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.ThreeTrios">
+    <configuration name="ThreeTrios" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="cs3500.three.trios.ThreeTrios" />
+      <module name="Hw5" />
+      <option name="PROGRAM_PARAMETERS" value="HUMAN MAX_NUM_FLIPS HINTS BASIC" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cs3500.three.trios.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in Hw5" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Hw5" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestPlayerFactory.testPlayerFactory" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Hw5" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cs3500.three.trios.player.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="cs3500.three.trios.player" />
+      <option name="MAIN_CLASS_NAME" value="cs3500.three.trios.player.TestPlayerFactory" />
+      <option name="METHOD_NAME" value="testPlayerFactory" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestPlayerFactory.testPlayerFactoryThrowsWithPlayerType" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Hw5" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cs3500.three.trios.player.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="cs3500.three.trios.player" />
+      <option name="MAIN_CLASS_NAME" value="cs3500.three.trios.player.TestPlayerFactory" />
+      <option name="METHOD_NAME" value="testPlayerFactoryThrowsWithPlayerType" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestPlayerFactory.testPlayerFactoryWithPlayerType" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Hw5" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cs3500.three.trios.player.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="cs3500.three.trios.player" />
+      <option name="MAIN_CLASS_NAME" value="cs3500.three.trios.player.TestPlayerFactory" />
+      <option name="METHOD_NAME" value="testPlayerFactoryWithPlayerType" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.ThreeTrios" />
+      <item itemvalue="JUnit.All in Hw5" />
+      <item itemvalue="JUnit.TestPlayerFactory.testPlayerFactory" />
+      <item itemvalue="JUnit.TestPlayerFactory.testPlayerFactoryThrowsWithPlayerType" />
+      <item itemvalue="JUnit.TestPlayerFactory.testPlayerFactoryWithPlayerType" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.ThreeTrios" />
+        <item itemvalue="JUnit.All in Hw5" />
+        <item itemvalue="JUnit.TestPlayerFactory.testPlayerFactoryThrowsWithPlayerType" />
+        <item itemvalue="JUnit.TestPlayerFactory.testPlayerFactoryWithPlayerType" />
+        <item itemvalue="JUnit.TestPlayerFactory.testPlayerFactory" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.145" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0b472e2b-142c-438b-b741-6f88aef6c235" name="Changes" comment="" />
+      <created>1729565378621</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1729565378621</updated>
+      <workItem from="1729565379753" duration="642000" />
+      <workItem from="1729615049630" duration="283000" />
+      <workItem from="1729791765615" duration="715000" />
+      <workItem from="1729813326864" duration="4680000" />
+      <workItem from="1729978528430" duration="2165000" />
+      <workItem from="1730063826300" duration="3433000" />
+      <workItem from="1730081595386" duration="943000" />
+      <workItem from="1730082555825" duration="12160000" />
+      <workItem from="1730248710885" duration="2214000" />
+      <workItem from="1730317738738" duration="4921000" />
+      <workItem from="1730396966531" duration="3131000" />
+      <workItem from="1730579848521" duration="2457000" />
+      <workItem from="1731004872810" duration="19132000" />
+      <workItem from="1731118072570" duration="697000" />
+      <workItem from="1731464881186" duration="13429000" />
+      <workItem from="1731530238857" duration="2693000" />
+      <workItem from="1731974234402" duration="8985000" />
+      <workItem from="1732072705303" duration="142000" />
+      <workItem from="1732307975613" duration="2794000" />
+      <workItem from="1732337798942" duration="1109000" />
+      <workItem from="1732640652130" duration="144000" />
+      <workItem from="1733175214761" duration="1724000" />
+      <workItem from="1733180754168" duration="421000" />
+      <workItem from="1733181253405" duration="2113000" />
+      <workItem from="1733790718324" duration="6607000" />
+      <workItem from="1733798501624" duration="19000" />
+    </task>
+    <task id="LOCAL-00001" summary="Wrote tests for the exceptions that should be thrown by the constructor of the model">
+      <option name="closed" value="true" />
+      <created>1729816187083</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1729816187083</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Wrote tests for the exceptions that should be thrown by the constructor of the model">
+      <option name="closed" value="true" />
+      <created>1730066116330</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1730066116330</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Wrote tests for the exceptions that should be thrown by the constructor of the model" />
+    <option name="LAST_COMMIT_MESSAGE" value="Wrote tests for the exceptions that should be thrown by the constructor of the model" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.StackOverflowError" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="JUnit">
+        <watch expression="new ThreeTriosTextView(this, new StringBuilder());" language="JAVA" custom="cs3500.three.trios.view.ThreeTriosTextView" />
+      </configuration>
+    </watches-manager>
+  </component>
+</project>
